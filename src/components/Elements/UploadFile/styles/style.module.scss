@@ -1,0 +1,111 @@
+@import '_cores/styles/_assets.scss';
+
+.upload {
+  $uc: &;
+  position: relative;
+  padding: 32px 16px 24px;
+  width: 100%;
+  height: 252px;
+  background-color: color(neutral, 2) !important;
+  border: 1px dashed color(neutral, 4);
+  @include radius(1);
+  &.disabled {
+    #{$uc} {
+      &-edit {
+        display: none;
+      }
+    }
+  }
+  &Uploading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background-color: color(neutral, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 24px;
+    .uploadText {
+      margin-bottom: 0;
+    }
+  }
+  &Progress {
+    margin-bottom: 24px !important;
+  }
+  &Edit {
+    position: absolute !important;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    width: 32px !important;
+    height: 32px !important;
+    @include font-size(h6);
+    .disabled & {
+      cursor: not-allowed;
+    }
+  }
+  &Btn {
+    height: 36px !important;
+    padding-inline: 16px;
+    .disabled & {
+      cursor: not-allowed;
+    }
+  }
+  &Icon {
+    margin-bottom: 24px;
+    @include font-size(icon-upload);
+  }
+  &Text {
+    margin-bottom: 12px;
+  }
+  &Hint {
+    @include font-size(button-small);
+    margin-bottom: 24px;
+  }
+  &File {
+    position: absolute !important;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    bottom: 14px;
+    z-index: 2;
+    background-color: color(neutral, 2);
+    overflow: hidden;
+    @include radius(1);
+    &Item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+    }
+    &Image {
+      display: block;
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+    }
+    &Name {
+      margin: 24px 0 0;
+      @include font-size(button-small);
+      color: color(neutral, 7);
+      text-align: center;
+    }
+  }
+  :global {
+    .ant-upload-wrapper {
+      .ant-upload-drag {
+        border: 0 !important;
+        background-color: color(neutral, 2) !important;
+        .ant-upload {
+          padding: 0 !important;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+@import '_cores/styles/_assets.scss';
+
+.card {
+  margin-bottom: 20px !important;
+  :global {
+    .ant-card-head {
+      font-weight: fw(regular) !important;
+    }
+    .ant-checkbox-group,
+    .ant-flex {
+      width: 100%;
+    }
+  }
+}
+
+.checkbox {
+  width: 100%;
+  :global {
+    .ant-checkbox-wrapper {
+      width: 100%;
+    }
+    .ant-checkbox-label {
+      flex: 1;
+    }
+  }
+}

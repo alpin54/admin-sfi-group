@@ -1,0 +1,143 @@
+@import '_cores/styles/_assets.scss';
+
+.print {
+  &Wrapper {
+    width: 408px;
+    background: #fff;
+    font-family: sans-serif;
+    margin: 16px auto;
+  }
+  &Head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    img {
+      object-fit: contain;
+      &:last-child {
+        object-fit: cover;
+      }
+    }
+  }
+  &Head,
+  &Barcode,
+  &Info {
+    margin-bottom: 12px;
+    border: 1px solid color(neutral, 4);
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  &Barcode {
+    text-align: center;
+  }
+  &Info {
+    display: flex;
+    gap: 12px;
+    &Item {
+      flex: 1;
+    }
+    &Title {
+      @include font-size(small);
+      margin-bottom: 8px;
+    }
+    &List {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      li {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 4px;
+        @include font-size(small);
+        color: color(neutral, 6);
+        &:last-child {
+          margin-bottom: 0;
+        }
+        :global(.anticon) {
+          color: color(primary, 6);
+        }
+      }
+    }
+  }
+  &Product {
+    :global(.ant-table-cell) {
+      padding: 8px !important;
+      @include font-size(small);
+    }
+  }
+}
+
+/* Print layout: force page size to width=100mm and height=150mm (portrait)
+   and make the .printWrapper match those dimensions for an exact label size. */
+@page {
+  /* width height -> 100mm x 150mm */
+  size: 100mm 150mm;
+  /* small margin so content isn't clipped; adjust as needed */
+  margin: 4mm;
+}
+
+/* Adjustments specifically for print output */
+@media print {
+  .print {
+    /* ensure the browser uses the expected physical size */
+    width: 100mm;
+    height: 150mm;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact; /* preserve colors */
+    print-color-adjust: exact;
+    background: #fff;
+  }
+
+  /* Match wrapper exactly to page size (subtract page margin if you prefer full-bleed) */
+  .printWrapper {
+    width: 100mm;
+    height: 150mm;
+    max-width: 100mm;
+    max-height: 150mm;
+    box-sizing: border-box;
+    margin: 0; /* keep aligned to page */
+    overflow: hidden;
+    /* avoid page breaks inside the label */
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Make sure header, barcode, info and product areas don't overflow the page */
+  .printHead,
+  .printBarcode,
+  .printInfo,
+  .printProduct {
+    box-sizing: border-box;
+    /* reduce spacing slightly for print legibility */
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* Ensure Ant table uses available width and small text */
+  .printProduct :global(.ant-table) {
+    width: 100%;
+    table-layout: fixed;
+  }
+  .printProduct :global(.ant-table-cell) {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* Hide everything else on the page while printing */
+  body *:not(.printWrapper):not(.printWrapper *) {
+    visibility: hidden;
+  }
+
+  /* Make the print wrapper and its children visible */
+  .printWrapper,
+  .printWrapper * {
+    visibility: visible;
+  }
+
+  /* Optional: if you want the label centered on the sheet (when page margins are larger) */
+  @bottom-left {
+    content: '';
+  }
+}

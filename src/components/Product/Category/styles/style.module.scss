@@ -1,0 +1,72 @@
+@import '_cores/styles/_assets.scss';
+
+.menu {
+  padding: 16px;
+  :global(.ant-list-item) {
+    padding: 12px 24px !important;
+    margin: 0 !important;
+  }
+  :global(.ant-collapse-header) {
+    align-items: center !important;
+  }
+  :global(.ant-list-item-meta-title) {
+    @include font-size(caption);
+    color: color(neutral, 6);
+    margin: 0 !important;
+    font-weight: fw(regular);
+  }
+  :global(.ant-collapse-content-box) {
+    padding: 0 !important;
+  }
+  :global(.ant-list-item-action) {
+    margin-left: 8px !important;
+  }
+}
+
+.categoryCollapse {
+  background: transparent;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 8px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.catName {
+  @include font-size(caption);
+  color: color(neutral, 6);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  span {
+    @include font-size(caption);
+    color: color(neutral, 6);
+  }
+}
+
+.countText {
+  font-size: 13px;
+}
+
+.childItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid color(neutral, 3);
+}
+
+.childCount {
+  color: color(neutral, 6);
+  @include font-size(caption);
+}

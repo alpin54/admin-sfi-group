@@ -1,0 +1,107 @@
+@import '_cores/styles/_assets.scss';
+
+.sidebar {
+  position: sticky !important;
+  top: 0;
+  height: 100vh;
+  inset-inline-start: 0;
+  flex: 0 0 240px !important;
+  max-width: 240px !important;
+  min-width: 240px !important;
+  width: 240px !important;
+  background-color: color(neutral, 2) !important;
+  &:global(.ant-layout-sider-collapsed) {
+    flex: 0 0 96px !important;
+    max-width: 96px !important;
+    min-width: 96px !important;
+    width: 96px !important;
+  }
+  &:global(.ant-layout-sider-collapsed .ant-menu-title-content) {
+    visibility: hidden;
+    opacity: 0;
+  }
+  &:global(.ant-layout-sider-collapsed .ant-menu-submenu-arrow) {
+    opacity: 1 !important;
+    left: 50%;
+  }
+  :global {
+    .ant-menu {
+      height: calc(100% - 128px);
+      padding-bottom: 128px;
+      overflow: auto;
+      border-inline-end: 0 !important;
+      scrollbar-width: thin;
+      scrollbar-gutter: stable;
+      background-color: color(neutral, 2) !important;
+    }
+    .ant-menu-item {
+      width: auto !important;
+      overflow: visible !important;
+      margin: 8px 16px !important;
+      border: solid 1px transparent;
+      border-radius: 6px !important;
+      padding: 16px !important;
+      &:hover,
+      &.ant-menu-item-selected {
+        color: color(primary, 6) !important;
+        background-color: color(primary, 1) !important;
+      }
+      &.ant-menu-item-selected {
+        border-color: color(primary, 6) !important;
+      }
+      .ant-menu-item-icon {
+        font-size: 20px !important;
+      }
+      a {
+        transition: none;
+      }
+    }
+    .ant-menu-logout {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: auto;
+      padding: 16px 0;
+      background-color: color(neutral, 2) !important;
+      .ant-menu-item {
+        padding: 0 16px !important;
+        color: color(danger, 7) !important;
+        &:hover,
+        &.ant-menu-item-selected {
+          background-color: color(danger, 2) !important;
+          color: color(danger, 7) !important;
+        }
+        &.ant-menu-item-selected {
+          border-color: color(danger, 7) !important;
+        }
+      }
+    }
+  }
+}
+
+.logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 16px 24px;
+  transition: all 0.35s ease;
+  &Link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+  &Img {
+    display: block;
+    width: 104px;
+    height: 64px;
+    object-fit: contain;
+  }
+  &Text {
+    @include font-size(h3);
+    font-weight: fw(medium);
+  }
+}

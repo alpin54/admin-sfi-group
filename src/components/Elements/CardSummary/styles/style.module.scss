@@ -1,0 +1,37 @@
+@import '_cores/styles/_assets.scss';
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  @include font-size(body);
+  color: color(neutral, 7);
+  margin-bottom: 24px;
+  :global(.anticon) {
+    margin-right: 8px;
+    @include font-size(h6);
+    color: color(primary, 6);
+  }
+}
+
+.label {
+  color: color(neutral, 7);
+  margin-bottom: 12px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  :global {
+    .ant-tag {
+      margin-right: 8px !important;
+      .anticon {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+.desc {
+  @include font-size(small);
+  margin-bottom: 0;
+}

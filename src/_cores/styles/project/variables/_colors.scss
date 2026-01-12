@@ -1,0 +1,128 @@
+/* ==========================================================================
+   Variable: Colors
+   ========================================================================== */
+
+// colors
+$colors: (
+  primary: (
+    1: #f8eccd,
+    2: #fdf9f1,
+    3: #f1d796,
+    4: #eabc5f,
+    5: #e5a63a,
+    6: #dc8622,
+    7: #c3661c,
+    8: #a2491b,
+    9: #843a1c
+  ),
+
+  // Curious Blue Color
+  curious-blue: (
+      1: #f1fafe,
+      2: #e1f4fd,
+      3: #bce9fb,
+      4: #81d8f8,
+      5: #3fc4f1,
+      6: #15ade2,
+      7: #0991c7,
+      8: #086f9c,
+      9: #0b5f81
+    ),
+
+  // Sunflower Color
+  sunflower: (
+      1: #fcfee8,
+      2: #f7ff89,
+      3: #fbff45,
+      4: #fff100,
+      5: #ded105,
+      6: #ccb002,
+      7: #a37f05,
+      8: #86630d,
+      9: #725111
+    ),
+
+  // Functional Color - Success (greens)
+  success: (
+      1: #edf5f1,
+      2: #cbdfd5,
+      3: #acccbd,
+      4: #85b9a0,
+      5: #4da27e,
+      6: #058f64,
+      7: #04805a,
+      8: #046f4e,
+      9: #035a3f
+    ),
+
+  // Functional Color - Info (blue variants)
+  info: (
+      1: #e7eafb,
+      2: #cdd4f8,
+      3: #aebbf4,
+      4: #899ef1,
+      5: #547aed,
+      6: #235ee0,
+      7: #2054c9,
+      8: #1b49ae,
+      9: #163c8e
+    ),
+
+  // Functional Color - Warning (amber/yellow)
+  warning: (
+      1: #fef5e7,
+      2: #fde5c0,
+      3: #fcd796,
+      4: #fcd288,
+      5: #fbbf24,
+      6: #efb622,
+      7: #d6a31f,
+      8: #b98d1b,
+      9: #977316
+    ),
+
+  // Functional Color - Danger (reds)
+  danger: (
+      1: #fff5f5,
+      2: #f3cdcd,
+      3: #edaeae,
+      4: #e68989,
+      5: #df5555,
+      6: #d22424,
+      7: #bc2020,
+      8: #a31c1c,
+      9: #851717
+    ),
+
+  // Neutral Color (white -> black)
+  neutral: (
+      1: #ffffff,
+      2: #f9f9f9,
+      3: #ebebeb,
+      4: #e4e4e4,
+      5: #b7b7b7,
+      6: #525252,
+      7: #404040,
+      8: #262626,
+      9: #171717
+    ),
+
+  // Opacity Color
+  opacity: (
+      1: rgba(23, 23, 23, 0.24),
+      2: rgba(23, 23, 23, 0.4)
+    ),
+
+  // Social Media Color
+  social-media: (
+      facebook: #1877f2,
+      instagram: #405de6,
+      linkedin: #0077b5,
+      spotify: #1db954,
+      twitter: #1da1f2,
+      tiktok: #000000,
+      whatsapp: #25d366,
+      x: #000000,
+      youtube: #ff0000
+    )
+);

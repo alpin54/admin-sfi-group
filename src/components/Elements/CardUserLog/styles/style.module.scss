@@ -1,0 +1,39 @@
+@import '_cores/styles/_assets.scss';
+
+.card {
+  margin-top: 24px !important;
+  :global {
+    .ant-card-body {
+      padding: 0 !important;
+    }
+  }
+}
+.item {
+  padding: 16px;
+  border-bottom: solid 1px color(neutral, 3);
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+.date {
+  @include font-size(small);
+  margin-bottom: 4px;
+}
+.action {
+  color: color(neutral, 7);
+  @include font-size(caption);
+  margin-bottom: 12px;
+}
+.avatar {
+  display: flex;
+  align-items: center;
+  :global {
+    .ant-avatar {
+      margin-right: 8px;
+    }
+  }
+}
+.name {
+  @include font-size(small);
+  margin-bottom: 0;
+}

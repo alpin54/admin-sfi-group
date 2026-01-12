@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./src",
+		"paths": {
+			//-- API
+			"@api/*": ["api/*"],
+			//-- CORES
+			"@assets/*": ["_cores/assets/*"],
+			"@configs/*": ["_cores/configs/*"],
+			"@hooks/*": ["_cores/hooks/*"],
+			"@models/*": ["_cores/models/*"],
+			"@persists/*": ["_cores/persists/*"],
+			"@states/*": ["_cores/states/*"],
+			"@styles/*": ["_cores/styles/*"],
+			"@types/*": ["_cores/types/*"],
+			"@utils/*": ["_cores/utils/*"],
+			//-- COMPONENTS
+			"@components/*": ["components/*"],
+			"@elements/*": ["components/Elements/*"]
+		}
+	}
+}

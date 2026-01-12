@@ -1,0 +1,29 @@
+/* ==========================================================================
+   Variable: z-index
+   ========================================================================== */
+
+$z-index: (
+  header: 9,
+  header-bg: 1,
+  header-bg-before: 2,
+  header-contact: 6,
+  header-menu: 3,
+  header-menu-before: 2,
+  burger-menu: 6,
+  banner-img: 1,
+  banner-txt: 2,
+  fi-alert: 1,
+  floating-chat: 8,
+  crypto-link: 2,
+  crypto-btn: 1,
+  start-mining-before: 1,
+  start-mining-box: 1,
+  start-mining-box-before: -1,
+  start-mining-box-after: -1,
+  footer: 1,
+  footer-payment-img: 1,
+  footer-sosmed-icon: 1,
+  footer-nav-item-after: 1,
+  features-icon: 1,
+  floating-btn: 10
+);

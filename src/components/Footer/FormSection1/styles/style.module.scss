@@ -1,0 +1,19 @@
+@import '_cores/styles/_assets.scss';
+
+.sectionSubtitle {
+  color: color(neutral, 8);
+  font-weight: fw(regular);
+  margin-bottom: 16px;
+  @include font-size(body);
+}
+
+.col {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.wrapper {
+  flex: 1;
+  min-width: 0;
+}

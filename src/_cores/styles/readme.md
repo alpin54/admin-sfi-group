@@ -1,0 +1,1 @@
+Styles directory berisi code style secara default, variable, mixin, function SCSS

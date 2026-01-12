@@ -1,0 +1,14 @@
+@import '_cores/styles/_assets.scss';
+
+.title {
+  @include font-size(body);
+  font-weight: fw(regular);
+  color: color(neutral, 8);
+  margin: 0;
+}
+
+.customSelect {
+  :global(.ant-select-item-option-active) {
+    background: #fbf2e6;
+  }
+}

@@ -1,0 +1,185 @@
+@import '_cores/styles/_assets.scss';
+
+.card {
+  :global {
+    .ant-card-head {
+      padding: 20px 20px 0 !important;
+      min-height: initial !important;
+      border-bottom: 0 !important;
+    }
+    .ant-card-body {
+      padding: 20px !important;
+    }
+  }
+}
+
+.orderInfo,
+.paymentInfo {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  li {
+    position: relative;
+    @include font-size(body);
+    color: color(neutral, 6);
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+    :global {
+      .anticon {
+        margin: 0 8px 2px 0;
+      }
+    }
+    &::after {
+      content: '.';
+      position: absolute;
+      right: -10px;
+      bottom: 5px;
+    }
+    &:last-child {
+      margin-right: 0;
+      &::after {
+        display: none;
+      }
+    }
+  }
+}
+
+.paymentInfo {
+  li {
+    @include font-size(caption);
+  }
+}
+
+.date {
+  margin-bottom: 0;
+}
+
+.title {
+  @include font-size(caption);
+  font-weight: fw(regular);
+  color: color(neutral, 6);
+  margin-bottom: 12px;
+}
+
+.list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  li {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    @include font-size(caption);
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    :global {
+      .anticon {
+        flex: 0 0 18px;
+        font-size: 18px;
+        margin: 4px 8px 0 0;
+        color: color(primary, 6);
+      }
+    }
+    span {
+      flex: 1;
+    }
+  }
+}
+
+.desc {
+  color: color(neutral, 7);
+  @include font-size(caption);
+  margin-bottom: 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.img {
+  background-color: color(neutral, 2);
+  width: 80px;
+  height: 80px;
+  margin-right: 12px;
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.text {
+  flex: 1;
+  :global {
+    .ant-select {
+      margin-right: 12px;
+    }
+  }
+}
+
+.name {
+  @include font-size(caption);
+  font-weight: fw(regular);
+  color: color(neutral, 8);
+  margin-bottom: 12px;
+}
+
+.price {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  text-align: right;
+  &Qty {
+    @include font-size(caption);
+    margin-right: 8px;
+    margin-bottom: 0;
+  }
+  &Text {
+    @include font-size(caption);
+    font-weight: fw(medium);
+    color: color(neutral, 8);
+    margin-bottom: 0;
+    del {
+      color: color(neutral, 5);
+      margin-right: 8px;
+    }
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 16px;
+  background-color: color(neutral, 2);
+  border: 1px solid color(neutral, 3);
+  border-radius: 6px;
+  cursor: pointer;
+  @include font-size(body);
+  font-weight: fw(medium);
+  color: color(neutral, 8);
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: color(neutral, 3);
+  }
+}
+
+.timeline {
+  margin-top: 18px !important;
+  .title {
+    margin-bottom: 24px;
+  }
+}

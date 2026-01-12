@@ -1,0 +1,223 @@
+const data = {
+  data: [
+    {
+      id: 24,
+      name: 'Rose Gold',
+      code: '#b76e79',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-06T09:24:19.694Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 23,
+      name: 'Gold',
+      code: '#d4b652',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-06T09:22:56.466Z',
+      updated_by: 1,
+      updated_at: '2025-12-09T02:31:57.035Z'
+    },
+    {
+      id: 22,
+      name: 'Dusty Pink',
+      code: '#d8a7b1',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-06T09:22:12.011Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 21,
+      name: 'Greige',
+      code: '#dcd6d0',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:48:57.425Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 20,
+      name: 'silver',
+      code: '#c0c0c0',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:48:10.301Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 19,
+      name: 'White',
+      code: '#fcfcfc',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:47:40.902Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 18,
+      name: 'Light Grey',
+      code: '#b2beb5',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:47:30.667Z',
+      updated_by: 1,
+      updated_at: '2025-12-04T08:48:31.137Z'
+    },
+    {
+      id: 17,
+      name: 'Dark Grey',
+      code: '#7e7e7e',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:47:20.059Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 16,
+      name: 'Champagne',
+      code: '#f7e6ca',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:47:03.226Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 15,
+      name: 'Bright Yellow',
+      code: '#fcdf20',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:46:37.108Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 14,
+      name: 'Fuchsia',
+      code: '#ff00ff',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:46:12.079Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 13,
+      name: 'Maroon',
+      code: '#800000',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:45:11.638Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 12,
+      name: 'Black manly',
+      code: '#252326',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:15:44.688Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 11,
+      name: 'Red qipao',
+      code: '#c9482b',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T08:14:47.540Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 9,
+      name: 'Dusty Green',
+      code: '#9caf88',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T06:38:37.511Z',
+      updated_by: 1,
+      updated_at: '2025-12-04T06:39:02.861Z'
+    },
+    {
+      id: 8,
+      name: 'Classic Gold',
+      code: '#d4a017',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T06:38:07.999Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 7,
+      name: 'Warm Nude',
+      code: '#d7a897',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-04T06:37:24.218Z',
+      updated_by: 0,
+      updated_at: null
+    },
+    {
+      id: 1,
+      name: 'Dusty Blue',
+      code: '#6b85ac',
+      status: true,
+      deleted_by: 0,
+      deleted_at: null,
+      created_by: 1,
+      created_at: '2025-12-02T09:31:45.933Z',
+      updated_by: 1,
+      updated_at: '2025-12-04T06:36:07.018Z'
+    }
+  ],
+  total: 18
+};
+
+export default data;

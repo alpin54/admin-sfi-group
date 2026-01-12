@@ -1,0 +1,58 @@
+@import '_cores/styles/_assets.scss';
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 32px;
+  @include small {
+    padding: 0 24px;
+  }
+  .image {
+    width: 144px;
+    height: 144px;
+    margin-bottom: 8px;
+    @include medium {
+      width: 120px;
+      height: 120px;
+    }
+    &El {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .icon {
+    margin-bottom: 56px;
+    @include x-small {
+      margin-bottom: 40px;
+    }
+    :global(.anticon) {
+      font-size: 80px;
+    }
+  }
+  .title {
+    margin-bottom: 16px;
+    color: color(neutral, 8);
+    @include medium {
+      @include font-size(h3);
+    }
+    @include small {
+      @include font-size(h5);
+    }
+  }
+  .desc {
+    @include font-size(h6);
+    color: color(neutral, 8);
+    margin-bottom: 0;
+    @include medium {
+      @include font-size(body);
+    }
+  }
+}

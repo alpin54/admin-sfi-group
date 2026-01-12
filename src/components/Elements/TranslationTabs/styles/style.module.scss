@@ -1,0 +1,22 @@
+@import '_cores/styles/_assets.scss';
+
+.tab {
+  &Label {
+    display: flex;
+    align-items: center;
+  }
+  &Image {
+    display: block;
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+		margin-right: 8px;
+  }
+}
+
+.antTabs {
+  :global(.ant-tabs-nav .ant-tabs-ink-bar) {
+    height: 1px !important;
+    width: 60% !important;
+  }
+}

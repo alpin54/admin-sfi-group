@@ -1,0 +1,121 @@
+@import '_cores/styles/_assets.scss';
+
+.search {
+  margin-bottom: 20px;
+}
+
+.list {
+  max-height: 400px;
+  @include scroll('y');
+}
+
+.item {
+  position: relative;
+  display: flex;
+  padding: 16px;
+  background-color: color(neutral, 1);
+  border: 1px solid color(neutral, 3);
+  @include radius(1);
+  margin-bottom: 16px;
+  transform: translate(0);
+  &:last-child {
+    margin-bottom: 0;
+  }
+  :global(.ant-checkbox-input) {
+    position: fixed !important;
+  }
+}
+
+.img {
+  width: 56px;
+  height: 56px;
+  margin-right: 16px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.text {
+  flex: 1;
+}
+
+.name {
+  @include font-size(caption);
+  font-weight: fw(regular);
+  color: color(neutral, 8);
+  margin-bottom: 4px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  @include font-size(caption);
+  font-weight: fw(medium);
+  color: color(neutral, 8);
+  margin-bottom: 0;
+  del {
+    color: color(neutral, 5);
+    margin-right: 8px;
+  }
+  a {
+    position: relative;
+    z-index: 8;
+  }
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 200px;
+  padding: 40px 0;
+}
+
+.popover {
+  min-width: 300px;
+  &Head {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    &Text {
+      flex: 3;
+      padding: 8px 4px;
+      font-weight: fw(medium);
+      @include font-size(small);
+      margin-bottom: 0;
+      &:last-child {
+        flex: 2;
+        text-align: center;
+      }
+    }
+  }
+  &Row {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid color(neutral, 3);
+    @include font-size(body);
+    &:last-child {
+      border-bottom: 1px solid color(neutral, 3);
+    }
+    &Text {
+      flex: 3;
+      padding: 8px 4px;
+      @include font-size(small);
+      margin-bottom: 0;
+      &:first-child {
+        word-break: break-word;
+      }
+      &:last-child {
+        flex: 2;
+        text-align: center;
+      }
+    }
+  }
+}

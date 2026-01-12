@@ -1,0 +1,227 @@
+@import '_cores/styles/_assets.scss';
+
+.upload {
+  $uc: &;
+  position: relative;
+  padding: 32px 16px 24px;
+  height: 252px;
+  min-width: 368px;
+  max-width: 536px;
+  background-color: color(neutral, 2) !important;
+  border: 1px dashed color(neutral, 4);
+  @include radius(1);
+  &.disabled {
+    #{$uc} {
+      &-edit {
+        display: none;
+      }
+    }
+  }
+  &Uploading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background-color: color(neutral, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 24px;
+    .simple & {
+      padding: 0;
+    }
+    .uploadText {
+      margin-bottom: 0;
+    }
+  }
+  &Progress {
+    margin-bottom: 24px !important;
+    .simple & {
+      margin-bottom: 0 !important;
+      :global {
+        .ant-progress-text {
+          font-size: 8px !important;
+          .anticon {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+  &Edit {
+    position: absolute !important;
+    right: 16px;
+    bottom: 16px;
+    z-index: 3;
+    width: 32px !important;
+    height: 32px !important;
+    @include font-size(h6);
+    .simple & {
+      right: 0;
+      bottom: 0;
+      width: 100% !important;
+      height: 100% !important;
+      opacity: 0;
+    }
+    .disabled & {
+      cursor: not-allowed;
+    }
+  }
+  &Btn {
+    height: 36px !important;
+    padding-inline: 16px;
+  }
+  &Wrapper {
+    display: flex;
+    @include large {
+      flex-direction: column;
+    }
+  }
+  &List {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-left: 10px;
+    @include scroll('x', 'touch', 'hide');
+    @include large {
+      padding: 20px 0 0;
+    }
+  }
+  &Item {
+    flex: 0 0 auto;
+    width: 212px;
+    padding: 0 10px;
+    @include large {
+      width: 25%;
+    }
+  }
+  &Icon {
+    margin-bottom: 24px;
+    @include font-size(icon-upload);
+    line-height: 1 !important;
+    .simple & {
+      @include font-size(h4);
+      margin-bottom: 0;
+    }
+  }
+  &Text {
+    margin-bottom: 12px;
+  }
+  &Hint {
+    @include font-size(button-small);
+    margin-bottom: 24px;
+  }
+  :global {
+    .ant-image {
+      position: absolute !important;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      bottom: 14px;
+      z-index: 2;
+      background-color: color(neutral, 2);
+      overflow: hidden;
+      @include radius(1);
+      .ant-image-img {
+        display: block;
+        height: 100% !important;
+        object-fit: contain;
+      }
+    }
+    .ant-upload-wrapper {
+      .ant-upload-drag {
+        border: 0 !important;
+        background-color: color(neutral, 2) !important;
+        .ant-upload {
+          padding: 0 !important;
+        }
+      }
+    }
+  }
+}
+
+.slot {
+  margin-top: 12px;
+  display: flex;
+  margin-left: -6px;
+  margin-right: -6px;
+  &Item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-basis: 25%;
+    margin: 0 6px;
+    overflow: hidden;
+    background-color: color(neutral, 2);
+    border: 1px dashed color(neutral, 4);
+    cursor: pointer;
+    .disabled & {
+      cursor: not-allowed;
+    }
+    &:hover {
+      .slotEdit {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+  &Edit {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    color: color(neutral, 1) !important;
+    background-color: rgba(color(neutral, 9), 0.4) !important;
+    font-size: 16px !important;
+    border-radius: 0 !important;
+    border: 0 !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  &Icon {
+    padding: 24px 20px;
+    @include font-size(h4);
+  }
+  &Image {
+    display: block;
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+  }
+  :global {
+    .ant-image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.simple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  :global {
+    .ant-image {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .ant-upload-wrapper {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

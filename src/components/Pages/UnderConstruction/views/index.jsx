@@ -1,0 +1,153 @@
+// --library
+import { useEffect, useState } from 'react';
+import { Breadcrumb, Card, Button, Form, Input, Space } from 'antd';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+// -- hooks
+import useConfirmationModal from '@hooks/useConfirmationModal';
+import useNotification from '@hooks/useNotification';
+
+// -- utils
+import LocalStorage from '@utils/localStorage';
+
+// -- elements
+import CardUserLogWidget from '@components/Elements/CardUserLog/views';
+
+const UnderConstructionView = (props) => {
+  const { method, data, ready, loading, message, onSubmit } = props;
+  const { confirm, contextHolder: confirmHolder } = useConfirmationModal();
+  const { notify, contextHolder: notificationHolder } = useNotification();
+  const [isEdit, setIsEdit] = useState(false);
+  const [formInstance] = Form.useForm();
+  const { TextArea } = Input;
+  const router = useRouter();
+  const user = LocalStorage.get('user');
+
+  useEffect(() => {
+    if (method === 'edit') {
+      setIsEdit(true);
+    }
+  }, [method]);
+
+  useEffect(() => {
+    if (data) {
+      formInstance?.setFieldsValue(data);
+    }
+  }, [data, formInstance]);
+
+  useEffect(() => {
+    if (message) {
+      notify({
+        type: 'error',
+        message: `Failed`,
+        description: message
+      });
+    }
+  }, [message, notify]);
+
+  const handleEnableForm = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsEdit(true);
+  };
+
+  const handleFinish = async (values) => {
+    try {
+      const payload = {
+        ...values,
+        updated_by: user?.id
+      };
+      // Submit form data
+      const response = await onSubmit(payload);
+
+      if (response && response.data) {
+        notify({
+          type: 'success',
+          message: 'Data updated successfully'
+        });
+
+        router.push('/pages');
+      } else {
+        notify({
+          type: 'error',
+          message: 'Data failed to updated'
+        });
+      }
+    } catch (err) {
+      console.log('Error:', err);
+
+      notify({
+        type: 'error',
+        message: 'Data failed to updated',
+        description: err?.message ?? 'Unknown error'
+      });
+    }
+  };
+  return (
+    <>
+      {confirmHolder}
+      {notificationHolder}
+      <section>
+        <div className='row-container'>
+          <Breadcrumb
+            items={[
+              { title: <Link href='/pages'>Pages</Link> },
+              { title: method === 'edit' ? 'Edit Under Construction' : 'Under Construction' }
+            ]}
+          />
+        </div>
+
+        <div className='row-container'>
+          <Card>
+            <Form
+              form={formInstance}
+              id='form-under-construction'
+              layout='vertical'
+              onFinish={handleFinish}
+              autoComplete='off'>
+              <Form.Item name='id' hidden>
+                <Input />
+              </Form.Item>
+              <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+
+              <Form.Item
+                name='description'
+                label='Description'
+                rules={[{ required: true, message: 'Description is required' }]}>
+                <TextArea allowClear rows={3} readOnly={!isEdit} />
+              </Form.Item>
+              <Form.Item>
+                <Space size={16}>
+                  <Button color='primary' variant='outlined' href='/pages'>
+                    Cancel
+                  </Button>
+                  {isEdit ? (
+                    <Button type='primary' htmlType='submit' form='form-under-construction' loading={loading}>
+                      Save
+                    </Button>
+                  ) : (
+                    <Button type='primary' htmlType='button' onClick={handleEnableForm}>
+                      Edit
+                    </Button>
+                  )}
+                </Space>
+              </Form.Item>
+            </Form>
+          </Card>
+        </div>
+      </section>
+
+      <CardUserLogWidget
+        created_by={1}
+        updated_by={1}
+        created_at={'2025-08-15T06:06:51.338Z'}
+        updated_at={'2025-08-15T06:06:51.338Z'}
+      />
+    </>
+  );
+};
+
+export default UnderConstructionView;

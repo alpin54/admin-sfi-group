@@ -1,0 +1,76 @@
+@import '_cores/styles/_assets.scss';
+
+.card {
+  height: 100%;
+  max-height: 800px;
+  @include scroll(y, touch, hide);
+  border: 0 !important;
+  &Head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  &Title {
+    display: flex;
+    align-items: center;
+    @include font-size(body);
+    margin-bottom: 0;
+    :global(.anticon) {
+      color: color(primary, 6);
+      margin-right: 8px;
+    }
+  }
+  :global(.ant-card-body) {
+    padding: 0 !important;
+  }
+  :global(.ant-table-title) {
+    padding: 24px 20px !important;
+    border: 1px solid color(neutral, 3);
+  }
+  &Table {
+    table {
+      width: 100%;
+      margin-bottom: 0;
+      td {
+        padding: 8px 4px;
+        @include font-size(caption);
+        &.textRight {
+          text-align: right;
+        }
+        :global(.anticon) {
+          margin-left: 16px;
+        }
+      }
+    }
+  }
+}
+.chart {
+  position: relative;
+  // canvas {
+  //   width: 100%;
+  //   height: 312px !important;
+  //   max-height: 312px;
+  //   display: flex;
+  //   justify-content: center;
+  //   text-align: center;
+  // }
+  :global {
+    .g2-tooltip {
+      background-color: color(neutral, 2) !important;
+      border: 1px solid color(neutral, 3) !important;
+      &-list-item {
+        margin-bottom: 8px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+        &-marker {
+          margin-right: 8px !important;
+          width: 4px !important;
+          height: 12px !important;
+          border-radius: 8px !important;
+        }
+      }
+    }
+  }
+}

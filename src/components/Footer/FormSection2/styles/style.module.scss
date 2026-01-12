@@ -1,0 +1,8 @@
+@import '_cores/styles/_assets.scss';
+
+.sectionSubtitle {
+  color: color(neutral, 8);
+  font-weight: fw(regular);
+  margin-bottom: 16px;
+  @include font-size(body);
+}

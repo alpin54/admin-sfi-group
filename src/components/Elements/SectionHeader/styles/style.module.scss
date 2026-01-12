@@ -1,0 +1,15 @@
+@import '_cores/styles/_assets.scss';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  @include font-size(body);
+  font-weight: fw(regular);
+  color: color(neutral, 8);
+  margin-bottom: 0;
+}

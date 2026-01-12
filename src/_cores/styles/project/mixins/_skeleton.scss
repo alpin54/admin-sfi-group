@@ -1,0 +1,17 @@
+/* ==========================================================================
+   Mixin: Skeleton
+   ========================================================================== */
+
+@mixin skeleton {
+  background-color: rgba(color(neutral, 1), 0.1);
+  animation: shine 1s linear infinite alternate;
+
+  @keyframes shine {
+    0% {
+      background-color: rgba(color(neutral, 1), 0.1);
+    }
+    100% {
+      background-color: rgba(color(neutral, 1), 0.2);
+    }
+  }
+}

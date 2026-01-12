@@ -1,0 +1,149 @@
+@import '_cores/styles/_assets.scss';
+
+/* toolbar look like the example */
+.rteWrapper {
+  background: color(neutral, 1);
+  border: 1px solid color(neutral, 3);
+  border-radius: 6px;
+}
+
+/* Toolbar area */
+.rteToolbar {
+  padding: 8px 12px;
+  border-bottom: 1px solid color(neutral, 3);
+  display: flex;
+  align-items: center;
+}
+
+/* Slightly smaller buttons like article editors */
+.rteToolbar .ant-btn {
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 4px;
+}
+
+/* Editor content area */
+.rteEditor {
+  width: 100%;
+  overflow-x: auto;
+}
+.editorContent {
+  @include font-size(caption);
+  &-focussed {
+    outline: none;
+  }
+  :global(.ProseMirror) {
+    min-height: 314px;
+    outline: none;
+    padding: 12px;
+    color: #0f172a;
+    line-height: 1.6;
+    background: color(neutral, 1);
+  }
+}
+
+/* Basic table reset for consistent look */
+.editorContent {
+  p {
+    @include font-size(caption);
+    margin-bottom: 16px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+.editorContent table,
+.ProseMirror table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* or fixed if you prefer fixed columns */
+  margin: 12px 0;
+  background: color(neutral, 1);
+}
+
+/* Cell borders and padding */
+.editorContent th,
+.editorContent td,
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid color(neutral, 3);
+  padding: 10px 12px;
+  vertical-align: top;
+  text-align: left;
+  @include font-size(caption);
+}
+
+/* Header row styling */
+.editorContent thead th,
+.ProseMirror thead th {
+  background: color(neutral, 2);
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Zebra stripes for readability */
+.editorContent tbody tr:nth-child(odd) td,
+.ProseMirror tbody tr:nth-child(odd) td {
+  background: color(neutral, 1);
+}
+.editorContent tbody tr:nth-child(even) td,
+.ProseMirror tbody tr:nth-child(even) td {
+  background: color(neutral, 1);
+}
+
+/* Make table more visible in editor: subtle shadow and rounded corners */
+.editorContent table {
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgba(16, 24, 40, 0.02);
+}
+
+/* Highlight selected cell(s) (covers common class names) */
+.editorContent td.is-selected,
+.editorContent th.is-selected,
+.editorContent td.selected,
+.editorContent th.selected,
+.ProseMirror td.is-selected,
+.ProseMirror th.is-selected {
+  outline: 2px solid rgba(24, 144, 255, 0.15);
+  background: rgba(24, 144, 255, 0.03);
+}
+
+/* Ensure images or long content inside table cells wrap or scroll */
+.editorContent td img,
+.ProseMirror td img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Make table controls (if any) visible — you may not have control elements,
+   but these classes help if toolbar adds buttons inside table cells */
+.editorContent .table-controls,
+.ProseMirror .table-controls {
+  display: flex;
+  gap: 6px;
+}
+
+/* Responsive: reduce padding on very small screens */
+@media (max-width: 480px) {
+  .editorContent th,
+  .editorContent td,
+  .ProseMirror th,
+  .ProseMirror td {
+    padding: 8px;
+    font-size: 13px;
+  }
+}
+
+/* Footer */
+.editorFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  color: #6b7280;
+  font-size: 12px;
+  border-top: 1px solid color(neutral, 3);
+  background: color(neutral, 1);
+}

@@ -1,0 +1,69 @@
+/* ==========================================================================
+   Init Icons
+   ========================================================================== */
+
+.fi {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'fashion-icons' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+$icons: (
+  add: unquote('"\\e900"'),
+  arrow-up-right: unquote('"\\e901"'),
+  arrows-out: unquote('"\\e902"'),
+  caret-down: unquote('"\\e903"'),
+  caret-left: unquote('"\\e904"'),
+  caret-right: unquote('"\\e905"'),
+  caret-up: unquote('"\\e906"'),
+  check-light: unquote('"\\e907"'),
+  check-empty-2-path1: unquote('"\\e908"'),
+  check-empty-2-path2: unquote('"\\e909"'),
+  check-bold: unquote('"\\e90a"'),
+  check-circle-fill: unquote('"\\e90b"'),
+  check-circle: unquote('"\\e90c"'),
+  check-empty: unquote('"\\e90d"'),
+  check-fill: unquote('"\\e90e"'),
+  close: unquote('"\\e90f"'),
+  copy: unquote('"\\e910"'),
+  edit: unquote('"\\e911"'),
+  email: unquote('"\\e912"'),
+  eye-slash: unquote('"\\e913"'),
+  eye: unquote('"\\e914"'),
+  facebook: unquote('"\\e915"'),
+  google: unquote('"\\e916"'),
+  location: unquote('"\\e917"'),
+  mines: unquote('"\\e918"'),
+  paint-brush: unquote('"\\e919"'),
+  phone: unquote('"\\e91a"'),
+  radio-btn-fill: unquote('"\\e91b"'),
+  radio-btn: unquote('"\\e91c"'),
+  search-1: unquote('"\\e91d"'),
+  search: unquote('"\\e91e"'),
+  shopping-bag-open: unquote('"\\e91f"'),
+  sign-out: unquote('"\\e920"'),
+  sliders-horizontal: unquote('"\\e921"'),
+  sort: unquote('"\\e922"'),
+  tag-fill: unquote('"\\e923"'),
+  tag-simple: unquote('"\\e924"'),
+  tag: unquote('"\\e925"'),
+  trash-simple: unquote('"\\e926"'),
+  trash: unquote('"\\e927"'),
+  user-log: unquote('"\\e928"'),
+  user: unquote('"\\e929"')
+);
+
+@each $name, $code in $icons {
+  .fi-#{$name}::before {
+    content: $code;
+  }
+}

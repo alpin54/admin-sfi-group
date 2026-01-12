@@ -1,0 +1,25 @@
+@import '_cores/styles/_assets.scss';
+
+.checkbox {
+  display: block;
+  :global {
+    .ant-checkbox-wrapper {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: flex-end;
+      background-color: color(neutral, 2);
+      @include radius(1);
+      padding: 12px !important;
+      min-width: 214px;
+      width: 100%;
+      transition: all 0.35s ease;
+      .ant-checkbox-label {
+        margin-right: auto;
+      }
+      .anticon {
+        margin-right: 8px;
+      }
+    }
+  }
+}

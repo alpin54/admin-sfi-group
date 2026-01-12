@@ -1,0 +1,62 @@
+/* ==========================================================================
+   Mixin Sosmed
+   ========================================================================== */
+
+@mixin sosmed($facebook: '', $instagram: '', $youtube: '', $tiktok: '', $twitter: '', $linkedin: '', $telegram: '') {
+  @if ($facebook == 'facebook') {
+    :global(.facebook) {
+      &:hover {
+        background-color: color(social-media, facebook);
+        color: color(neutral, 1);
+      }
+    }
+  }
+  @if ($instagram == 'instagram') {
+    :global(.instagram) {
+      &:hover {
+        background-color: color(social-media, instagram);
+        color: color(neutral, 1);
+      }
+    }
+  }
+  @if ($youtube == 'youtube') {
+    :global(.youtube) {
+      &:hover {
+        background-color: color(social-media, youtube);
+        color: color(neutral, 1);
+      }
+    }
+  }
+  @if ($twitter == 'twitter') {
+    :global(.twitter) {
+      &:hover {
+        background-color: color(social-media, twitter);
+        color: color(neutral, 1);
+      }
+    }
+  }
+  @if ($linkedin == 'linkedin') {
+    :global(.linkedin) {
+      &:hover {
+        background-color: color(social-media, linkedin);
+        color: color(neutral, 1);
+      }
+    }
+  }
+  @if ($tiktok == 'tiktok') {
+    :global(.tiktok) {
+      &:hover {
+        background-color: color(social-media, tiktok);
+        color: color(neutral, 1);
+      }
+    }
+  }
+  @if ($telegram == 'telegram') {
+    :global(.telegram) {
+      &:hover {
+        background-color: color(social-media, telegram);
+        color: color(neutral, 1);
+      }
+    }
+  }
+}

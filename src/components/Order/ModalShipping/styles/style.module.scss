@@ -1,0 +1,101 @@
+@import '_cores/styles/_assets.scss';
+
+.search {
+  margin-bottom: 20px;
+}
+
+.list {
+  max-height: 400px;
+  @include scroll('y');
+}
+
+.item {
+  position: relative;
+  display: flex;
+  padding: 16px;
+  background-color: color(neutral, 1);
+  border: 1px solid color(neutral, 3);
+  @include radius(1);
+  margin-bottom: 16px;
+  transform: translate(0);
+  &:last-child {
+    margin-bottom: 0;
+  }
+  :global(.ant-checkbox-input) {
+    position: fixed !important;
+  }
+}
+
+.img {
+  width: 56px;
+  height: 56px;
+  margin-right: 16px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.text {
+  flex: 1;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.name {
+  position: relative;
+  @include font-size(caption);
+  font-weight: fw(medium);
+  color: color(neutral, 8);
+  margin-bottom: 0;
+  margin-right: 12px;
+  padding-right: 12px;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 10px;
+    background-color: color(neutral, 4);
+  }
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  @include font-size(caption);
+  font-weight: fw(medium);
+  color: color(neutral, 8);
+  margin-bottom: 0;
+  del {
+    color: color(neutral, 5);
+    margin-right: 8px;
+  }
+}
+
+.desc {
+  @include font-size(caption);
+  font-weight: fw(regular);
+  color: color(neutral, 6);
+  margin-bottom: 0;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 200px;
+  padding: 40px 0;
+}

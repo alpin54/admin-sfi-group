@@ -1,0 +1,15 @@
+@import '_cores/styles/_assets.scss';
+
+.summaryWork {
+  display: flex;
+  align-items: center;
+  &Item {
+    margin-right: 48px;
+    @include font-size(caption);
+    color: color(neutral, 6);
+    span {
+      margin-right: 4px;
+      @include font-size(body);
+    }
+  }
+}
