@@ -1,5 +1,12 @@
 @import '_cores/styles/_assets.scss';
 
+.secondary {
+  :global(.ant-card-body) {
+    display: flex;
+    align-items: center;
+  }
+}
+
 .title {
   display: inline-flex;
   align-items: center;
@@ -11,11 +18,21 @@
     @include font-size(h6);
     color: color(primary, 6);
   }
+  .secondary & {
+    margin-bottom: 0;
+    width: 50%;
+  }
 }
 
 .label {
   color: color(neutral, 7);
   margin-bottom: 12px;
+  .secondary & {
+    @include font-size(body);
+    color: color(neutral, 7);
+    font-weight: fw(regular);
+    margin-bottom: 0;
+  }
 }
 
 .row {

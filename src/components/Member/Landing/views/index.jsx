@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import { Button, Table, Space, Tooltip, Row, Col, Input, DatePicker } from 'antd';
 import Link from 'next/link';
+import Image from 'next/image';
 import dayjs from 'dayjs';
 
 // -- icons
@@ -24,6 +25,7 @@ import useNotification from '@hooks/useNotification';
 import usePermission from '@hooks/usePermission';
 
 // -- utils
+import Currency from '@utils/currency';
 import LocalStorage from '@utils/localStorage';
 
 // -- elements
@@ -53,10 +55,13 @@ const MemberLanding = (props) => {
   const transformSummaryData = (summary) => {
     if (!summary || summary.length === 0) return [];
 
-    const item = summary[0];
+    const item = summary;
     const label = item.label || '';
 
-    const keys = [{ key: 'total_member', icon: <UserAddOutlined />, title: 'Total Member', lg: 24 }];
+    const keys = [
+      { key: 'total_member', icon: <UserAddOutlined />, title: 'Total Member' },
+      { key: 'total_revenue_member', icon: <UserAddOutlined />, title: 'Total Revenue Member' }
+    ];
 
     return keys.map((entry) => {
       const value = item[entry.key] ?? { total: 0, previous: 0, percentage_change: 0 };
@@ -64,9 +69,7 @@ const MemberLanding = (props) => {
       const baseData = {
         icon: entry.icon,
         title: entry.title,
-        value: value.total ?? 0,
-        lg: entry.lg,
-        xl: entry.xl
+        value: value.total ?? 0
       };
 
       return {
@@ -90,15 +93,47 @@ const MemberLanding = (props) => {
         return;
       }
 
+      let passwordInput = '';
+
       confirm({
         icon: <DeleteOutlined />,
-        content: `Are you sure you want to delete ${record.name.toLocaleLowerCase()}?`,
+        content: (
+          <>
+            <p>
+              Are you sure you want to delete the guest named <strong>{record.name}</strong>?
+            </p>
+            <Input.Password
+              allowClear
+              placeholder='Enter your password'
+              onChange={(e) => {
+                passwordInput = e.target.value;
+              }}
+            />
+          </>
+        ),
         onSuccess: async () => {
-          notify({
-            type: 'success',
-            message: 'Data deleted successfully'
-          });
-          await onDelete(record.id);
+          if (!passwordInput) {
+            notify({
+              type: 'error',
+              message: 'Password required',
+              description: 'Please enter your password to confirm deletion'
+            });
+            return;
+          }
+
+          try {
+            await onDelete(record.id, passwordInput);
+            notify({
+              type: 'success',
+              message: 'Data deleted successfully'
+            });
+          } catch (error) {
+            notify({
+              type: 'error',
+              message: 'Failed to delete data',
+              description: error.message || 'An error occurred'
+            });
+          }
         }
       });
     },
@@ -138,26 +173,28 @@ const MemberLanding = (props) => {
   const dataColumns = [
     {
       title: 'Date',
-      dataIndex: 'created_at'
+      dataIndex: 'created_at',
+      width: 180
     },
     {
       title: 'Full Name',
       dataIndex: 'name',
       render: (_, record) => (
         <div className={style.profile}>
-          {/* <div className={style.avatar}>
-            <Image src={record. image} alt={record.name} className={style.avatar} width={40} height={40} />
-          </div> */}
+          <div className={style.avatar}>
+            <Image src={record.image} alt={record.name} className={style.avatar} width={40} height={40} />
+          </div>
           <div className={style.text}>
             <span className={style.name}>{record.name}</span>
           </div>
         </div>
       )
     },
-    { title: 'Phone Number', dataIndex: 'phone' },
+    { title: 'Phone Number', dataIndex: 'phone', width: 140 },
     { title: 'Email', dataIndex: 'email' },
-    // { title: 'Total Order', dataIndex: 'total_order', render: (val) => Currency.formatRp(val) },
-    // { title: 'Total Spending', dataIndex: 'total_spending', render: (val) => Currency.formatRp(val) },
+    { title: 'Points', dataIndex: 'point' },
+    { title: 'Total Order', dataIndex: 'total_order', render: (val) => Currency.formatRp(val) },
+    { title: 'Total Spending', dataIndex: 'total_spending', render: (val) => Currency.formatRp(val) },
     {
       title: 'Action',
       dataIndex: 'action',
@@ -217,7 +254,7 @@ const MemberLanding = (props) => {
         {/* Summary */}
         <Row gutter={[16, 16]} className='row-container'>
           {transformSummaryData(summary).map((val, idx) => (
-            <Col lg={val.lg} xl={val.xl} key={`summ-${idx}`}>
+            <Col span={12} key={`summ-${idx}`}>
               <CardSummary {...val} />
             </Col>
           ))}

@@ -3,11 +3,11 @@ import metaTag from '@utils/metaTag';
 import schema from '@utils/schema';
 
 // -- modules
-import TermsCondition from './modules';
+import TermsConditions from './modules';
 
 // -- metadata
 const metadata = metaTag.dynamic({
-  page: 'Detail Terms Condition',
+  page: 'Detail Terms Conditions',
   link: 'pages/terms-condition'
 });
 
@@ -15,12 +15,12 @@ const metadata = metaTag.dynamic({
 const schemadata = schema.dynamic();
 
 // ==================
-// TermsConditionPage
+// TermsConditionsPage
 // ==================
 
-const TermsConditionPage = async () => {
-  return <TermsCondition />;
+const TermsConditionsPage = async () => {
+  return <TermsConditions />;
 };
 
 export { metadata, schemadata };
-export default TermsConditionPage;
+export default TermsConditionsPage;

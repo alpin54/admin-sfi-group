@@ -1,6 +1,6 @@
 // -- libraries
 import { useEffect, useState } from 'react';
-import { Button, Modal, Form, Input, Space, Checkbox, Spin, Empty } from 'antd';
+import { Button, Drawer, Form, Input, Space, Checkbox, Spin, Empty } from 'antd';
 
 // -- icons
 import { SearchOutlined } from '@ant-design/icons';
@@ -52,7 +52,7 @@ const ModalCategoryView = (props) => {
   );
 
   return (
-    <Modal
+    <Drawer
       title='Category'
       width={600}
       onClose={onClose}
@@ -60,8 +60,7 @@ const ModalCategoryView = (props) => {
       footer={footerComponent}
       onCancel={onClose}
       closable={true}
-      className='modal-form'
-      size='large'>
+      className='drawer-form'>
       <div className={style.search}>
         <Input
           placeholder='Search ...'
@@ -103,7 +102,7 @@ const ModalCategoryView = (props) => {
           )}
         </div>
       </Form>
-    </Modal>
+    </Drawer>
   );
 };
 

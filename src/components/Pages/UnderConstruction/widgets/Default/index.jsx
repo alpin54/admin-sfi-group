@@ -10,23 +10,26 @@ import useFirstLoad from '@hooks/useFirstLoad';
 // -- components
 import UnderConstructionView from '@components/Pages/UnderConstruction/views';
 
+// -- data
+import data from '@components/Pages/UnderConstruction/data';
+
 const UnderConstructionWidget = (props) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
   // Only fetch role data if slug exists
-  const { data, ready, refetch } = useFirstLoad(useCallback(() => underConstructionModel.single(), []));
+  // const { data, ready, refetch } = useFirstLoad(useCallback(() => underConstructionModel.single(), []));
 
   const handleSubmit = async (formData, method) => {
     setLoading(true);
     setMessage('');
 
     try {
-      const { data, error } = await underConstructionModel.submit(formData, method);
+      // const { data, error } = await underConstructionModel.submit(formData, method);
 
-      if (error) {
-        setMessage(error.message);
-      }
+      // if (error) {
+      //   setMessage(error.message);
+      // }
 
       return data;
     } catch (err) {
@@ -40,8 +43,8 @@ const UnderConstructionWidget = (props) => {
   return (
     <UnderConstructionView
       {...props}
-      data={data?.data}
-      ready={!ready}
+      data={data}
+      ready={false}
       loading={loading}
       message={message}
       onSubmit={handleSubmit}

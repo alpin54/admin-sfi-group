@@ -11,7 +11,7 @@ import useFirstLoad from '@hooks/useFirstLoad';
 import VoucherUsageView from '@components/Voucher/Usage/views';
 
 // -- data
-// import data from '@components/Voucher/Usage/data';
+import dummyData from '@components/Voucher/Usage/data';
 
 const VoucherUsageWidget = (props) => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
@@ -24,10 +24,10 @@ const VoucherUsageWidget = (props) => {
   );
 
   // Create a dynamic fetcher, depending on parameters
-  const fetcher = useCallback(() => voucherModel.list(props.slug, fetchParams), [props.slug, fetchParams]);
+  // const fetcher = useCallback(() => voucherModel.list(props.slug, fetchParams), [props.slug, fetchParams]);
 
   // Hook to fetch data and refetch
-  const { ready, data } = useFirstLoad(fetcher);
+  // const { ready, data } = useFirstLoad(fetcher);
 
   // Handle pagination (from View)
   const handlePageChange = (page, limit) => {
@@ -43,11 +43,12 @@ const VoucherUsageWidget = (props) => {
   return (
     <VoucherUsageView
       slug={props.slug ?? null}
-      data={data}
-      loading={!ready}
+      summary={dummyData?.summary}
+      data={dummyData?.data}
+      loading={false}
       pagination={pagination}
       filters={filters}
-      totalPage={data?.total}
+      totalPage={dummyData?.total}
       onPageChange={handlePageChange}
       onFilterChange={handleFilterChange}
     />

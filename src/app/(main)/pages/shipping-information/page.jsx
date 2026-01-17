@@ -3,7 +3,7 @@ import metaTag from '@utils/metaTag';
 import schema from '@utils/schema';
 
 // -- modules
-import ShippingReturn from './modules';
+import ShippingInformation from './modules';
 
 // -- metadata
 const metadata = metaTag.dynamic({
@@ -15,12 +15,12 @@ const metadata = metaTag.dynamic({
 const schemadata = schema.dynamic();
 
 // ==================
-// ShippingReturnPage
+// ShippingInformationPage
 // ==================
 
-const ShippingReturnPage = async () => {
-  return <ShippingReturn />;
+const ShippingInformationPage = async () => {
+  return <ShippingInformation />;
 };
 
 export { metadata, schemadata };
-export default ShippingReturnPage;
+export default ShippingInformationPage;

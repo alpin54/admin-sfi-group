@@ -7,9 +7,11 @@ import { WarningOutlined } from '@ant-design/icons';
 
 // -- utils
 import LocalStorage from '@utils/localStorage';
+import FormData from '@utils/formdata';
 
 // -- elements
 import SectionHeader from '@elements/SectionHeader/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
 const FormContactUsSection1View = (props) => {
   const { method, confirm, notify, data, ready, loading, message, onPublish, onSubmit } = props;
@@ -25,7 +27,11 @@ const FormContactUsSection1View = (props) => {
 
   useEffect(() => {
     if (data) {
-      formInstance?.setFieldsValue(data);
+      formInstance?.setFieldsValue({
+        ...data,
+        en: { title: data?.title?.en || '' },
+        id: { title: data?.title?.id || '' }
+      });
     }
   }, [data, formInstance]);
 
@@ -50,11 +56,12 @@ const FormContactUsSection1View = (props) => {
       const title = record.status ? 'Unpublish' : 'Publish';
       const status = record.status ? false : true;
       const payload = { id: record.id, status: status, updated_by: user?.id };
+      const formData = FormData(payload);
       confirm({
         icon: <WarningOutlined />,
-        content: `Are you sure you want to ${title.toLowerCase()} ${record.title.toLocaleLowerCase()}?`,
+        content: `Are you sure you want to ${title.toLowerCase()} ${record.title.en.toLocaleLowerCase()}?`,
         onSuccess: async () => {
-          const response = await onPublish(payload);
+          const response = await onPublish(formData);
           if (response && !response.error) {
             notify({
               type: 'success',
@@ -78,9 +85,9 @@ const FormContactUsSection1View = (props) => {
         ...values,
         updated_by: user?.id
       };
+      const formData = FormData(payload);
       // Submit form data
-      const response = await onSubmit(payload);
-
+      const response = await onSubmit(formData);
       if (response && response.data) {
         notify({
           type: 'success',
@@ -105,7 +112,7 @@ const FormContactUsSection1View = (props) => {
 
   return (
     <Card loading={ready}>
-      <SectionHeader title='Contact' publish={data?.status} onPublish={() => handlePublish(data)} />
+      <SectionHeader title='Form' publish={data?.status} onPublish={() => handlePublish(data)} />
       <Form
         form={formInstance}
         id='form-contact-us-section1'
@@ -115,9 +122,18 @@ const FormContactUsSection1View = (props) => {
         <Form.Item name='id' hidden>
           <Input />
         </Form.Item>
-        <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
-        </Form.Item>
+        <TranslationTabs>
+          {(lang) => (
+            <>
+              <Form.Item
+                name={[lang, 'title']}
+                label='Title'
+                rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+            </>
+          )}
+        </TranslationTabs>
 
         <Form.Item>
           <Space size={16}>

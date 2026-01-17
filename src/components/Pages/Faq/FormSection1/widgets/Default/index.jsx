@@ -18,19 +18,19 @@ const FormFaqSection1Widget = (props) => {
   const [message, setMessage] = useState('');
 
   // Only fetch role data if slug exists
-  const { data, ready, refetch } = useFirstLoad(useCallback(() => formFaqSection1Model.single(), []));
+  // const { data, ready, refetch } = useFirstLoad(useCallback(() => formFaqSection1Model.single(), []));
 
   // Handle publish then refetch
   const handlePublish = async (payload) => {
-    const { error: errorPublish } = await formFaqSection1Model.publish(payload);
-    if (!errorPublish) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorPublish?.message
-      };
-    }
+    // const { error: errorPublish } = await formFaqSection1Model.publish(payload);
+    // if (!errorPublish) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorPublish?.message
+    //   };
+    // }
   };
 
   const handleSubmit = async (formData, method) => {
@@ -38,11 +38,11 @@ const FormFaqSection1Widget = (props) => {
     setMessage('');
 
     try {
-      const { data, error } = await formFaqSection1Model.submit(formData, method);
+      // const { data, error } = await formFaqSection1Model.submit(formData, method);
 
-      if (error) {
-        setMessage(error.message);
-      }
+      // if (error) {
+      //   setMessage(error.message);
+      // }
 
       if (data) {
         refetch();
@@ -61,8 +61,8 @@ const FormFaqSection1Widget = (props) => {
   return (
     <FormFaqSection1View
       {...props}
-      data={data?.data}
-      ready={!ready}
+      data={data}
+      ready={false}
       loading={loading}
       message={message}
       onPublish={handlePublish}

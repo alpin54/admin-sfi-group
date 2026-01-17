@@ -11,15 +11,17 @@ import useNotification from '@hooks/useNotification';
 
 // -- utils
 import LocalStorage from '@utils/localStorage';
+import FormData from '@utils/formdata';
 
 // -- components
-import ModalImage from '@components/Pages/Career/ModalImage/widgets/Default';
+import ModalBenefit from '@components/Pages/Career/ModalBenefit/widgets/Default';
 
 // -- elements
 import SectionHeader from '@elements/SectionHeader/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
 const FormCareerSection2View = (props) => {
-  const { data, loading, onStatus, refetch, onDelete } = props;
+  const { data, loading, onStatus, refetch, onDelete, onPublish } = props;
   const { confirm, contextHolder: confirmHolder } = useConfirmationModal();
   const { notify, contextHolder: notificationHolder } = useNotification();
   const [isEdit, setIsEdit] = useState(false);
@@ -53,12 +55,40 @@ const FormCareerSection2View = (props) => {
     setOpen(false);
   }, [formInstance]);
 
+  const handlePublish = useCallback(
+    (record) => {
+      const title = record.status ? 'Unpublish' : 'Publish';
+      const status = record.status ? 0 : 1;
+      const payload = { id: record.id, status: status, updated_by: user?.id };
+      const formData = FormData(payload);
+      confirm({
+        icon: <WarningOutlined />,
+        content: `Are you sure you want to ${title.toLowerCase()} ${record.title.toLocaleLowerCase()}?`,
+        onSuccess: async () => {
+          const response = await onPublish(formData);
+          if (response && !response.error) {
+            notify({
+              type: 'success',
+              message: `Data ${title.toLowerCase()} successfully`
+            });
+          } else {
+            notify({
+              type: 'error',
+              message: response.error || `Failed to ${title.toLowerCase()} data`
+            });
+          }
+        }
+      });
+    },
+    [confirm, notify, onPublish, user]
+  );
+
   // Table actions
   const handleDelete = useCallback(
     (item) => {
       confirm({
         icon: <DeleteOutlined />,
-        content: `Are you sure you want to delete `,
+        content: `Are you sure you want to delete ${item.title.en.toLocaleLowerCase()}?`,
         onSuccess: async () => {
           const response = await onDelete(item.id);
           if (response && !response.error) {
@@ -83,12 +113,13 @@ const FormCareerSection2View = (props) => {
       const title = item.status ? 'Hide' : 'Unhide';
       const status = item.status ? false : true;
       const payload = { id: item.id, status: status, updated_by: user.id };
+      const formData = FormData(payload);
 
       confirm({
         icon: <WarningOutlined />,
-        content: `Are you sure you want to `,
+        content: `Are you sure you want to ${title.toLowerCase()} ${item.title.en.toLocaleLowerCase()}?`,
         onSuccess: async () => {
-          const response = await onStatus(payload);
+          const response = await onStatus(formData);
           if (response && !response.error) {
             notify({
               type: 'success',
@@ -106,14 +137,14 @@ const FormCareerSection2View = (props) => {
     [confirm, notify, onStatus, user]
   );
 
-  const dataSource = Array.isArray(data) ? data : [];
+  const dataSource = Array.isArray(data.list) ? data.list : [];
 
   // helper: build columns for a given language key ('en' or 'id')
   const buildColumns = useCallback(
     (lang) => {
       const cols = [
         {
-          title: 'Image',
+          title: 'Icon',
           dataIndex: 'image',
           key: `image`,
           width: 80,
@@ -124,10 +155,10 @@ const FormCareerSection2View = (props) => {
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Image
                   src={src}
-                  width={40}
-                  height={32}
+                  width={24}
+                  height={24}
                   alt={`img-${record.id}`}
-                  style={{ objectFit: 'cover', borderRadius: 4 }}
+                  style={{ objectFit: 'contain', borderRadius: 4 }}
                 />
               </div>
             );
@@ -135,12 +166,23 @@ const FormCareerSection2View = (props) => {
         },
         {
           title: 'Title',
-          dataIndex: 'title',
+          dataIndex: ['title', lang],
           key: `title_${lang}`,
-          render: (title) => {
-            if (!title) return '-';
-            if (typeof title === 'string') return title;
-            return title[lang] ?? '-';
+          render: (value, record) => {
+            return record?.title?.[lang] || '-';
+          }
+        },
+        {
+          title: 'Description',
+          dataIndex: ['description', lang],
+          key: `description_${lang}`,
+          render: (value, record) => {
+            const txt = record?.description?.[lang] || '-';
+            return (
+              <div style={{ maxWidth: 480, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {txt}
+              </div>
+            );
           }
         }
       ];
@@ -194,12 +236,14 @@ const FormCareerSection2View = (props) => {
       {confirmHolder}
       {notificationHolder}
       <Card>
-        <SectionHeader title='Image' />
-        <Table dataSource={dataSource} columns={buildColumns()} rowKey='id' pagination={false} />
+        <SectionHeader title='Benefit' publish={data?.status} onPublish={() => handlePublish(data)} />
+        <TranslationTabs>
+          {(lang) => <Table dataSource={dataSource} columns={buildColumns(lang)} rowKey='id' pagination={false} />}
+        </TranslationTabs>
         <div style={{ marginTop: 12 }}>
           {isEdit ? (
             <Button type='primary' onClick={() => handleShowModal('add')} style={{ marginLeft: 8 }}>
-              Add Recruitment Process
+              Add Benefit
             </Button>
           ) : (
             <Button type='primary' onClick={() => setIsEdit(true)} style={{ marginLeft: 8 }}>
@@ -210,7 +254,7 @@ const FormCareerSection2View = (props) => {
       </Card>
 
       {open && (
-        <ModalImage
+        <ModalBenefit
           method={method}
           setMethod={() => setMethod('edit')}
           open={open}

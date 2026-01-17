@@ -1,12 +1,15 @@
 // -- libraries
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Card, Button, Form, Input, Space } from 'antd';
 
 // -- utils
 import LocalStorage from '@utils/localStorage';
+import FormData from '@utils/formdata';
 
 // -- elements
 import SectionHeader from '@elements/SectionHeader/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
+import UploadImage from '@elements/UploadImage/views';
 
 const FormFaqSection2View = (props) => {
   const { method, confirm, notify, data, ready, loading, message, onSubmit } = props;
@@ -22,7 +25,17 @@ const FormFaqSection2View = (props) => {
 
   useEffect(() => {
     if (data) {
-      formInstance?.setFieldsValue(data);
+      formInstance?.setFieldsValue({
+        ...data,
+        en: {
+          title: data?.title?.en || '',
+          description: data?.description?.en || ''
+        },
+        id: {
+          title: data?.title?.id || '',
+          description: data?.description?.id || ''
+        }
+      });
     }
   }, [data, formInstance]);
 
@@ -48,8 +61,9 @@ const FormFaqSection2View = (props) => {
         ...values,
         updated_by: user?.id
       };
+      const formData = FormData(payload);
       // Submit form data
-      const response = await onSubmit(payload);
+      const response = await onSubmit(formData);
 
       if (response && response.data) {
         notify({
@@ -78,18 +92,28 @@ const FormFaqSection2View = (props) => {
         <Form.Item name='id' hidden>
           <Input />
         </Form.Item>
-        <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
+        <Form.Item name='image' label='Image' valuePropName='file' getValueFromEvent={(e) => e} help='1440px x 800px'>
+          <UploadImage value={{ url: data?.image }} disabled={!isEdit} />
         </Form.Item>
-        <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
-        </Form.Item>
-        <Form.Item
-          name='description'
-          label='Description'
-          rules={[{ required: true, message: 'Description is required' }]}>
-          <Input.TextArea allowClear readOnly={!isEdit} />
-        </Form.Item>
+        <TranslationTabs>
+          {(lang) => (
+            <>
+              <Form.Item
+                name={[lang, 'title']}
+                label='Title'
+                rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+
+              <Form.Item
+                name={[lang, 'description']}
+                label='Description'
+                rules={[{ required: true, message: 'Description is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+            </>
+          )}
+        </TranslationTabs>
 
         <Form.Item>
           <Space size={16}>

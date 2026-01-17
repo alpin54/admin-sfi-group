@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 
 // -- models
-import contactUsFormSection2Model from '@components/Pages/ContactUs/FormSection2/models';
+import contactUsModel from '@components/Pages/ContactUs/FormSection2/models';
 
 // --hooks
 import useFirstLoad from '@hooks/useFirstLoad';
@@ -14,34 +14,23 @@ import FormContactUsSection2View from '@components/Pages/ContactUs/FormSection2/
 import data from '@components/Pages/ContactUs/FormSection2/data';
 
 const FormContactUsSection2Widget = (props) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState();
   const [message, setMessage] = useState('');
 
   // Only fetch role data if slug exists
-  const { data, ready, refetch } = useFirstLoad(useCallback(() => contactUsFormSection2Model.single(), []));
+  // const { data, ready, refetch } = useFirstLoad(useCallback(() => contactUsModel.single(), []));
 
+  // Handle publish then refetch
   const handlePublish = async (payload) => {
-    const { error: errorPublish } = await contactUsFormSection2Model.publish(payload);
-    if (!errorPublish) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorPublish?.message
-      };
-    }
-  };
-
-  const handleStatus = async (payload) => {
-    const { error: errorStatus } = await contactUsFormSection2Model.status(payload);
-    if (!errorStatus) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorStatus?.message
-      };
-    }
+    // const { error: errorPublish } = await contactUsModel.publish(payload);
+    // if (!errorPublish) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorPublish?.message
+    //   };
+    // }
   };
 
   const handleSubmit = async (formData, method) => {
@@ -49,11 +38,11 @@ const FormContactUsSection2Widget = (props) => {
     setMessage('');
 
     try {
-      const { data, error } = await contactUsFormSection2Model.submit(formData, method);
+      // const { data, error } = await contactUsModel.submit(formData, method);
 
-      if (error) {
-        setMessage(error.message);
-      }
+      // if (error) {
+      //   setMessage(error.message);
+      // }
 
       if (data) {
         refetch();
@@ -72,14 +61,12 @@ const FormContactUsSection2Widget = (props) => {
   return (
     <FormContactUsSection2View
       {...props}
-      data={data?.data}
-      ready={!ready}
+      data={data}
+      ready={false}
       loading={loading}
       message={message}
-      onSubmit={handleSubmit}
       onPublish={handlePublish}
-      onStatus={handleStatus}
-      refetch={refetch}
+      onSubmit={handleSubmit}
     />
   );
 };

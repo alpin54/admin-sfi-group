@@ -15,42 +15,42 @@ import data from '@components/Pages/Faq/FormSection3/data';
 
 const FormFaqSection3Widget = (props) => {
   // Only fetch role data if slug exists
-  const { data, ready, refetch } = useFirstLoad(useCallback(() => formFaqSection3Model.list(), []));
+  // const { data, ready, refetch } = useFirstLoad(useCallback(() => formFaqSection3Model.list(), []));
 
   // Handle delete then refetch
   const handleDelete = async (id) => {
-    const { error: errorDelete } = await formFaqSection3Model.delete(id);
-    if (!errorDelete) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorDelete?.message
-      };
-    }
+    // const { error: errorDelete } = await formFaqSection3Model.delete(id);
+    // if (!errorDelete) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorDelete?.message
+    //   };
+    // }
   };
 
   // Handle Status then refetch
   const handleStatus = async (payload) => {
-    const { error: errorStatus } = await formFaqSection3Model.status(payload);
-    if (!errorStatus) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorStatus?.message
-      };
-    }
+    // const { error: errorStatus } = await formFaqSection3Model.status(payload);
+    // if (!errorStatus) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorStatus?.message
+    //   };
+    // }
   };
 
   return (
     <FormFaqSection3View
       {...props}
-      data={data?.data}
-      ready={!ready}
+      data={data}
+      ready={false}
       onDelete={handleDelete}
       onStatus={handleStatus}
-      refetch={refetch}
+      // refetch={refetch}
     />
   );
 };

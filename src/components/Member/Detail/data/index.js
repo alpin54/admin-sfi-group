@@ -2,13 +2,52 @@ import shippingImage from '@assets/image/dummy/jne.svg';
 import paymentImage from '@assets/image/dummy/bca.svg';
 
 const data = {
-  user: {
+  data: {
     name: 'Alex Putra',
     phone: '+62 812 3456 7890',
-    registered: '12 Aug 2025, 10.00',
     email: 'alex@gmail.com',
-    dob: '30 December 1989',
-    gender: 'Male'
+    date_of_birth: '2000-01-22T12:40:04.648Z',
+    gender: 'Male',
+    created_at: '2026-01-22T12:40:04.648Z',
+    updated_at: '2026-02-10T09:20:15.123Z',
+    addresses: [
+      {
+        id: 1,
+        label: 'Home',
+        name: 'Alex Putra',
+        phone: '+62 812 3456 7890',
+        email: 'alex@gmail.com',
+        province_id: 6,
+        province_name: 'DKI Jakarta',
+        city_id: 151,
+        city_name: 'Jakarta Barat',
+        district_id: 2089,
+        district_name: 'Kalideres',
+        subdistrict_id: 17480,
+        subdistrict_name: 'Kalideres',
+        postal_code: '12430',
+        address: 'Jl. Melati No. 12',
+        is_default: true
+      },
+      {
+        id: 2,
+        label: 'Office',
+        name: 'Alex Putra',
+        phone: '+62 812 3456 7890',
+        email: 'alex@gmail.com',
+        province_id: 6,
+        province_name: 'DKI Jakarta',
+        city_id: 151,
+        city_name: 'Jakarta Barat',
+        district_id: 2089,
+        district_name: 'Kalideres',
+        subdistrict_id: 17482,
+        subdistrict_name: 'Pegadungan',
+        postal_code: '12430',
+        address: 'Jl. Kenanga No. 34',
+        is_default: false
+      }
+    ]
   },
   account: {
     password_updated: '2 Dec 2024',

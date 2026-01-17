@@ -5,30 +5,30 @@ import ENDPOINT from '@api/endPoint';
 const handleSingle = async () => {
   return await httpRequest({
     method: 'get',
-    url: ENDPOINT.FOOTER_MENU
+    url: ENDPOINT.CONTACT_US_INFO
   });
 };
 
-const handleSubmit = async (payload, method) => {
-  return await httpRequest({
-    method: method,
-    url: ENDPOINT.FOOTER_MENU,
-    data: payload
-  });
-};
-
-const handleStatus = async (payload) => {
+const handlePublish = async (payload) => {
   return await httpRequest({
     method: 'put',
-    url: ENDPOINT.FOOTER_MENU,
+    url: ENDPOINT.CONTACT_US_INFO,
     data: payload
   });
 };
 
-const aboutValuesModel = {
-  single: handleSingle,
-  submit: handleSubmit,
-  status: handleStatus
+const handleSubmit = async (payload) => {
+  return await httpRequest({
+    method: 'put',
+    url: ENDPOINT.CONTACT_US_INFO,
+    data: payload
+  });
 };
 
-export default aboutValuesModel;
+const contactUsInfoModel = {
+  single: handleSingle,
+  publish: handlePublish,
+  submit: handleSubmit
+};
+
+export default contactUsInfoModel;

@@ -3,24 +3,24 @@ import metaTag from '@utils/metaTag';
 import schema from '@utils/schema';
 
 // -- modules
-import ShippingReturnEdit from './modules';
+import ShippingInformationnEdit from './modules';
 
 // -- metadata
 const metadata = metaTag.dynamic({
   page: 'Edit Shipping Information',
-  link: 'pages/shipping-return/edit'
+  link: 'pages/shipping-information/edit'
 });
 
 // -- schemadata
 const schemadata = schema.dynamic();
 
 // ==================
-// ShippingReturnEditPage
+// ShippingInformationnEditPage
 // ==================
 
-const ShippingReturnEditPage = async () => {
-  return <ShippingReturnEdit />;
+const ShippingInformationnEditPage = async () => {
+  return <ShippingInformationnEdit />;
 };
 
 export { metadata, schemadata };
-export default ShippingReturnEditPage;
+export default ShippingInformationnEditPage;

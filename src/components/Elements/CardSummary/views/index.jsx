@@ -9,10 +9,10 @@ import Currency from '@utils/currency';
 import style from '@elements/CardSummary/styles/style.module.scss';
 
 const CardSummary = (props) => {
-  const { icon, title, value, description, percentage, traffic } = props;
+  const { icon, title, value, description, percentage, traffic, variant = 'primary' } = props;
 
   return (
-    <Card>
+    <Card className={`${style.card} ${style[variant]}`}>
       <p className={style.title}>
         {icon ? (
           <>

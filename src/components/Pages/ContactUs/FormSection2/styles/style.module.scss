@@ -1,8 +1,8 @@
 @import '_cores/styles/_assets.scss';
 
 .title {
-  color: color(neutral, 8);
-  font-weight: fw(regular);
-  margin: 0;
   @include font-size(body);
+  font-weight: fw(regular);
+  color: color(neutral, 8);
+  margin: 0;
 }

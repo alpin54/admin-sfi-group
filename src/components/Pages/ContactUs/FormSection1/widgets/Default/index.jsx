@@ -10,24 +10,27 @@ import useFirstLoad from '@hooks/useFirstLoad';
 // -- components
 import FormContactUsSection1View from '@components/Pages/ContactUs/FormSection1/views';
 
+// -- data
+import data from '@components/Pages/ContactUs/FormSection1/data';
+
 const FormContactUsSection1Widget = (props) => {
   const [loading, setLoading] = useState();
   const [message, setMessage] = useState('');
 
   // Only fetch role data if slug exists
-  const { data, ready, refetch } = useFirstLoad(useCallback(() => contactUsModel.single(), []));
+  // const { data, ready, refetch } = useFirstLoad(useCallback(() => contactUsModel.single(), []));
 
   // Handle publish then refetch
   const handlePublish = async (payload) => {
-    const { error: errorPublish } = await contactUsModel.publish(payload);
-    if (!errorPublish) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorPublish?.message
-      };
-    }
+    // const { error: errorPublish } = await contactUsModel.publish(payload);
+    // if (!errorPublish) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorPublish?.message
+    //   };
+    // }
   };
 
   const handleSubmit = async (formData, method) => {
@@ -35,11 +38,11 @@ const FormContactUsSection1Widget = (props) => {
     setMessage('');
 
     try {
-      const { data, error } = await contactUsModel.submit(formData, method);
+      // const { data, error } = await contactUsModel.submit(formData, method);
 
-      if (error) {
-        setMessage(error.message);
-      }
+      // if (error) {
+      //   setMessage(error.message);
+      // }
 
       if (data) {
         refetch();
@@ -58,8 +61,8 @@ const FormContactUsSection1Widget = (props) => {
   return (
     <FormContactUsSection1View
       {...props}
-      data={data?.data}
-      ready={!ready}
+      data={data}
+      ready={false}
       loading={loading}
       message={message}
       onPublish={handlePublish}

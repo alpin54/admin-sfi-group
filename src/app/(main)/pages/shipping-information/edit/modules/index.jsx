@@ -7,9 +7,9 @@ import { useEffect } from 'react';
 import useStateMenu from '@components/Sidebar/states';
 
 // -- components
-import ShippingReturnWidgets from '@components/Pages/ShippingReturn/widgets/Default';
+import ShippingInformationWidgets from '@components/Pages/ShippingInformation/Landing/widgets/Default';
 
-const ShippingReturn = () => {
+const ShippingInformation = () => {
   // set menu
   const { setMenu } = useStateMenu();
 
@@ -17,7 +17,7 @@ const ShippingReturn = () => {
     setMenu('pages');
   }, [setMenu]);
 
-  return <ShippingReturnWidgets method='edit' />;
+  return <ShippingInformationWidgets method='edit' />;
 };
 
-export default ShippingReturn;
+export default ShippingInformation;

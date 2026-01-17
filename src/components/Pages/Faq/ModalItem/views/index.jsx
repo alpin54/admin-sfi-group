@@ -7,6 +7,7 @@ import LocalStorage from '@utils/localStorage';
 
 // -- elements
 import TextEditor from '@components/Elements/TextEditor/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
 const ModalItemView = (props) => {
   const { method, open, onClose, initialValues, formInstance, notify, onSubmit, message, loading, refetch } = props;
@@ -18,13 +19,22 @@ const ModalItemView = (props) => {
   useEffect(() => {
     if (open) {
       if (methodType === 'add') {
-        formInstance.resetFields();
+        formInstance?.resetFields();
       } else if (initialValues) {
-        formInstance.setFieldsValue(initialValues);
+        // Lakukan Mapping
+        const mappedFields = {
+          en: {
+            title: initialValues?.title?.en || '',
+            description: initialValues?.description?.en || ''
+          },
+          id: {
+            title: initialValues?.title?.id || '',
+            description: initialValues?.description?.id || ''
+          }
+        };
+
+        formInstance?.setFieldsValue(mappedFields);
       }
-    } else {
-      // reset saat modal ditutup agar form internal bersih
-      formInstance.resetFields();
     }
   }, [open, methodType, initialValues, formInstance]);
 
@@ -42,25 +52,50 @@ const ModalItemView = (props) => {
     try {
       const payload = {
         ...values,
-        ...(methodType === 'post' ? { status: true, created_by: user?.id } : { updated_by: user?.id })
+        status: 1,
+        ...(methodType === 'post' ? { created_by: user?.id } : { updated_by: user?.id })
       };
-      // Submit form data
-      const response = await onSubmit(payload, methodType);
 
-      if (response && response.data) {
-        notify({
-          type: 'success',
-          message: `Data ${msg} successfully`
-        });
-        formInstance.resetFields();
-        onClose();
-        refetch();
-      } else {
+      // Validasi field multi bahasa
+      const checkEn = payload.en && payload.en.title && !!payload.en.title.trim();
+      const checkId = payload.id && payload.id.title && !!payload.id.title.trim();
+
+      if (!checkEn) {
         notify({
           type: 'error',
-          message: `Data failed to ${msg}`
+          message: `${title} failed`,
+          description: 'Please fill in Title at EN language tab'
         });
+        return;
       }
+      if (!checkId) {
+        notify({
+          type: 'error',
+          message: `${title} failed`,
+          description: 'Please fill in Title at ID language tab'
+        });
+        return;
+      }
+
+      // INTEGRASI: submit ke API (comment di sini saat static)
+      const formData = FormData(payload);
+      // const response = await onSubmit(formData, methodType);
+      // if (response) {
+      //   notify({
+      //     type: 'success',
+      //     message: `Data ${msg} successfully`
+      //   });
+      //   formInstance?.resetFields();
+      //   onClose();
+      //   refetch();
+      // }
+      // ----
+
+      // Untuk versi static, langsung show sukses dialog
+      notify({
+        type: 'success',
+        message: `Data ${msg} successfully`
+      });
     } catch (err) {
       notify({
         type: 'error',
@@ -101,15 +136,24 @@ const ModalItemView = (props) => {
         <Form.Item name='id' hidden>
           <Input />
         </Form.Item>
-        <Form.Item name='title' label='Title ' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name='description'
-          label='Description '
-          rules={[{ required: true, message: 'Description is required' }]}>
-          <TextEditor rows='3' />
-        </Form.Item>
+        <TranslationTabs>
+          {(lang) => (
+            <>
+              <Form.Item
+                label='Title'
+                name={[lang, 'title']}
+                rules={[{ required: true, message: 'Please input title!' }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label='Description'
+                name={[lang, 'description']}
+                rules={[{ required: true, message: 'Please input description!' }]}>
+                <TextEditor />
+              </Form.Item>
+            </>
+          )}
+        </TranslationTabs>
       </Form>
     </Modal>
   );

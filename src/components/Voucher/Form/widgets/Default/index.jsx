@@ -10,14 +10,17 @@ import useFirstLoad from '@hooks/useFirstLoad';
 // -- components
 import VoucherFormView from '@components/Voucher/Form/views';
 
+// -- data
+import dummyData from '@components/Voucher/Form/data';
+
 const VoucherFormWidget = (props) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
   // Only fetch Voucher data if slug exists
-  const { data, refetch } = useFirstLoad(
-    useCallback(() => (props.slug ? formVoucherModel.single(props.slug) : []), [props.slug])
-  );
+  // const { data, refetch } = useFirstLoad(
+  //   useCallback(() => (props.slug ? formVoucherModel.single(props.slug) : []), [props.slug])
+  // );
 
   // handle submit
   const handleSubmit = async (payload, method) => {
@@ -45,10 +48,10 @@ const VoucherFormWidget = (props) => {
     <VoucherFormView
       slug={props.slug ?? null}
       action={props.action ?? null}
-      data={data?.data ?? null}
+      data={dummyData?.data ?? null}
       loading={loading}
       message={message}
-      refetch={refetch}
+      refetch={() => {}}
       onSubmit={handleSubmit}
     />
   );

@@ -15,19 +15,19 @@ import dummyData from '@components/Voucher/Landing/data';
 
 const VoucherLandingWidget = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
-  const [filters, setFilters] = useState({ start_date: null, end_date: null, status: null, keyword: '' });
+  const [filters, setFilters] = useState({ start_date: null, end_date: null, type: null, status: null, keyword: '' });
 
   // Combine parameters for API
-  const fetchParams = useMemo(
-    () => ({ page: pagination.page, limit: pagination.limit, ...filters }),
-    [pagination.page, pagination.limit, filters]
-  );
+  // const fetchParams = useMemo(
+  //   () => ({ page: pagination.page, limit: pagination.limit, ...filters }),
+  //   [pagination.page, pagination.limit, filters]
+  // );
 
-  // Create a dynamic fetcher, depending on parameters
-  const fetcher = useCallback(() => voucherModel.list(fetchParams), [fetchParams]);
+  // // Create a dynamic fetcher, depending on parameters
+  // const fetcher = useCallback(() => voucherModel.list(fetchParams), [fetchParams]);
 
-  // Hook to fetch data and refetch
-  const { ready, data, refetch } = useFirstLoad(fetcher);
+  // // Hook to fetch data and refetch
+  // const { ready, data, refetch } = useFirstLoad(fetcher);
 
   // Handle pagination (from View)
   const handlePageChange = (page, limit) => {
@@ -42,24 +42,24 @@ const VoucherLandingWidget = () => {
 
   // Handle delete then refetch
   const handleDelete = async (type, id) => {
-    const { error: errorDelete } = await voucherModel.delete(type, id);
-    if (!errorDelete) refetch();
+    // const { error: errorDelete } = await voucherModel.delete(type, id);
+    // if (!errorDelete) refetch();
   };
 
   // Handle suspend then refetch
   const handleSuspend = async (type, id) => {
-    const { error: errorSuspend } = await voucherModel.suspend(type, id);
-    if (!errorSuspend) refetch();
+    // const { error: errorSuspend } = await voucherModel.suspend(type, id);
+    // if (!errorSuspend) refetch();
   };
 
   return (
     <VoucherLandingView
       summary={dummyData.summary}
-      data={data?.data}
-      loading={!ready}
+      data={dummyData.data}
+      loading={false}
       pagination={pagination}
       filters={filters}
-      totalPage={data?.total}
+      totalPage={dummyData.total}
       onPageChange={handlePageChange}
       onFilterChange={handleFilterChange}
       onDelete={handleDelete}

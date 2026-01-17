@@ -1,25 +1,34 @@
-// -- libraries
-import { useEffect, useState } from 'react';
-import { Card, Button, Form, Input, Space } from 'antd';
+import { useCallback, useEffect, useState, useMemo } from 'react';
+import { Card, Button, Tooltip, Table, Space, Switch, Form, App } from 'antd';
+import Image from 'next/image';
+
+// -- icons
+import { EditOutlined, EyeOutlined, DeleteOutlined, EyeInvisibleOutlined, WarningOutlined } from '@ant-design/icons';
 
 // -- hooks
-import useNotification from '@hooks/useNotification';
 import useConfirmationModal from '@hooks/useConfirmationModal';
+import useNotification from '@hooks/useNotification';
 
 // -- utils
 import LocalStorage from '@utils/localStorage';
+import FormData from '@utils/formdata';
+
+// -- components
+import ModalRecruitment from '@components/Pages/Career/ModalRecruitment/widgets/Default';
 
 // -- elements
-import TranslationTabsWidget from '@components/Elements/TranslationTabs/views';
-import SectionHeader from '@components/Elements/SectionHeader/views';
+import SectionHeader from '@elements/SectionHeader/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
 const FormCareerSection3View = (props) => {
-  const { method, data, ready, loading, message, onSubmit } = props;
+  const { data, loading, onStatus, refetch, onDelete, onPublish } = props;
   const { confirm, contextHolder: confirmHolder } = useConfirmationModal();
   const { notify, contextHolder: notificationHolder } = useNotification();
   const [isEdit, setIsEdit] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [method, setMethod] = useState('add');
+  const [dataForm, setDataForm] = useState(undefined);
   const [formInstance] = Form.useForm();
-  const { TextArea } = Input;
   const user = LocalStorage.get('user');
 
   useEffect(() => {
@@ -28,98 +37,222 @@ const FormCareerSection3View = (props) => {
     }
   }, [method]);
 
-  useEffect(() => {
-    if (data) {
-      formInstance?.setFieldsValue(data);
-    }
-  }, [data, formInstance]);
+  // Show modal (Add, Edit, View)
+  const handleShowModal = useCallback(
+    (type, record) => {
+      formInstance.resetFields();
+      setMethod(type);
+      setDataForm(type === 'add' ? undefined : record);
+      setOpen(true);
+    },
+    [formInstance]
+  );
 
-  useEffect(() => {
-    if (message) {
-      notify({
-        type: 'error',
-        message: `Failed`,
-        description: message
+  // Close modal & reset form
+  const handleCloseModal = useCallback(() => {
+    formInstance.resetFields();
+    setDataForm(undefined);
+    setOpen(false);
+  }, [formInstance]);
+
+  // -- handle publish
+  const handlePublish = useCallback(
+    (record) => {
+      const title = record.status ? 'Unpublish' : 'Publish';
+      const status = record.status ? 0 : 1;
+      const payload = { id: record.id, status: status, updated_by: user?.id };
+      const formData = FormData(payload);
+      confirm({
+        icon: <WarningOutlined />,
+        content: `Are you sure you want to ${title.toLowerCase()} ${record.title.en.toLocaleLowerCase()}?`,
+        onSuccess: async () => {
+          const response = await onPublish(formData);
+          if (response && !response.error) {
+            notify({
+              type: 'success',
+              message: `Data ${title.toLowerCase()} successfully`
+            });
+          } else {
+            notify({
+              type: 'error',
+              message: response.error || `Failed to ${title.toLowerCase()} data`
+            });
+          }
+        }
       });
-    }
-  }, [message, notify]);
+    },
+    [confirm, notify, onPublish, user]
+  );
 
-  const handleEnableForm = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsEdit(true);
-  };
+  // Table actions
+  const handleDelete = useCallback(
+    (item) => {
+      confirm({
+        icon: <DeleteOutlined />,
+        content: `Are you sure you want to delete `,
+        onSuccess: async () => {
+          const response = await onDelete(item.id);
+          if (response && !response.error) {
+            notify({
+              type: 'success',
+              message: 'Data deleted successfully'
+            });
+          } else {
+            notify({
+              type: 'error',
+              message: response.error || 'Failed to delete data'
+            });
+          }
+        }
+      });
+    },
+    [confirm, notify, onDelete]
+  );
 
-  const handleFinish = async (values) => {
-    try {
-      const payload = {
-        ...values,
-        updated_by: user?.id
-      };
-      // Submit form data
-      const response = await onSubmit(payload);
+  const handleStatus = useCallback(
+    (item) => {
+      const title = item.status ? 'Hide' : 'Unhide';
+      const status = item.status ? false : true;
+      const payload = { id: item.id, status: status, updated_by: user.id };
+      const formData = FormData(payload);
 
-      if (response && response.data) {
-        formInstance?.setFieldsValue(response.data);
-        setIsEdit(false);
-        notify({
-          type: 'success',
-          message: 'Data updated successfully'
-        });
+      confirm({
+        icon: <WarningOutlined />,
+        content: `Are you sure you want to `,
+        onSuccess: async () => {
+          const response = await onStatus(formData);
+          if (response && !response.error) {
+            notify({
+              type: 'success',
+              message: `Data ${title.toLowerCase()} successfully`
+            });
+          } else {
+            notify({
+              type: 'error',
+              message: response.error || `Failed to ${title.toLowerCase()} data`
+            });
+          }
+        }
+      });
+    },
+    [confirm, notify, onStatus, user]
+  );
 
-        // router.push('/pages/sign-in');
-      } else {
-        notify({
-          type: 'error',
-          message: 'Data failed to updated'
+  const dataSource = Array.isArray(data.list) ? data.list : [];
+
+  // helper: build columns for a given language key ('en' or 'id')
+  const buildColumns = useCallback(
+    (lang) => {
+      const cols = [
+        {
+          title: 'Image',
+          dataIndex: 'image',
+          key: `image`,
+          width: 80,
+          render: (image, record) => {
+            const src = image?.url ?? image ?? record?.image?.url ?? record?.image ?? '';
+            if (!src) return null;
+            return (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Image
+                  src={src}
+                  width={40}
+                  height={32}
+                  alt={`img-${record.id}`}
+                  style={{ objectFit: 'cover', borderRadius: 4 }}
+                />
+              </div>
+            );
+          }
+        },
+        {
+          title: 'Title',
+          dataIndex: ['title', lang],
+          key: `title_${lang}`,
+          render: (value, record) => {
+            return record?.title?.[lang] || '-';
+          }
+        }
+      ];
+
+      if (isEdit) {
+        cols.push({
+          title: 'Actions',
+          key: 'actions',
+          align: 'center',
+          width: 200,
+          render: (_, record) => (
+            <Space>
+              <Tooltip
+                key={record.status ? 'suspend' : 'unsuspend'}
+                title={record.status ? 'Suspend' : 'Unsuspend'}
+                placement='top'>
+                <Button
+                  size='small'
+                  type='text'
+                  icon={record.status ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                  onClick={() => handleStatus(record)}
+                />
+              </Tooltip>
+
+              <Tooltip key='edit' title='Edit' placement='top'>
+                <Button
+                  size='small'
+                  type='text'
+                  icon={<EditOutlined />}
+                  onClick={() => handleShowModal('edit', record)}
+                />
+              </Tooltip>
+
+              <Tooltip key='delete' title='Delete' placement='top'>
+                <Button size='small' type='text' danger onClick={() => handleDelete(record)}>
+                  <DeleteOutlined />
+                </Button>
+              </Tooltip>
+            </Space>
+          )
         });
       }
-    } catch (err) {
-      console.log('Error:', err);
 
-      notify({
-        type: 'error',
-        message: 'Data failed to updated',
-        description: err?.message ?? 'Unknown error'
-      });
-    }
-  };
+      return cols;
+    },
+    [isEdit, handleStatus, handleShowModal, handleDelete]
+  );
 
   return (
     <>
       {confirmHolder}
       {notificationHolder}
       <Card>
-        <SectionHeader title='Career Empty' />
-        <Form form={formInstance} id='form-career-empty' layout='vertical' onFinish={handleFinish} autoComplete='off'>
-          <Form.Item name='id' hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Title is required' }]}>
-            <Input allowClear readOnly={!isEdit} />
-          </Form.Item>
-
-          <Form.Item
-            name='description'
-            label='Description'
-            rules={[{ required: true, message: 'Description is required' }]}>
-            <TextArea allowClear rows={3} readOnly={!isEdit} />
-          </Form.Item>
-          <Form.Item>
-            <Space size={16}>
-              {isEdit ? (
-                <Button type='primary' htmlType='submit' form='form-career-empty' loading={loading}>
-                  Save
-                </Button>
-              ) : (
-                <Button type='primary' htmlType='button' onClick={handleEnableForm}>
-                  Edit
-                </Button>
-              )}
-            </Space>
-          </Form.Item>
-        </Form>
+        <SectionHeader title='Recruitment Process' publish={data?.status} onPublish={() => handlePublish(data)} />
+        <TranslationTabs>
+          {(lang) => <Table dataSource={dataSource} columns={buildColumns(lang)} rowKey='id' pagination={false} />}
+        </TranslationTabs>
+        <div style={{ marginTop: 12 }}>
+          {isEdit ? (
+            <Button type='primary' onClick={() => handleShowModal('add')} style={{ marginLeft: 8 }}>
+              Add Recruitment Process
+            </Button>
+          ) : (
+            <Button type='primary' onClick={() => setIsEdit(true)} style={{ marginLeft: 8 }}>
+              Edit
+            </Button>
+          )}
+        </div>
       </Card>
+
+      {open && (
+        <ModalRecruitment
+          method={method}
+          setMethod={() => setMethod('edit')}
+          open={open}
+          onClose={handleCloseModal}
+          initialValues={dataForm}
+          formInstance={formInstance}
+          notify={notify}
+          refetch={refetch}
+        />
+      )}
     </>
   );
 };

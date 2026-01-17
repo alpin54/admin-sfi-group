@@ -1,17 +1,21 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Card, Button, Tooltip, Table, Space, Form } from 'antd';
+
+// -- icons
 import { EditOutlined, EyeOutlined, DeleteOutlined, EyeInvisibleOutlined, WarningOutlined } from '@ant-design/icons';
 
 // -- utils
 import LocalStorage from '@utils/localStorage';
+import FormData from '@utils/formdata';
 
 // -- elements
 import SectionHeader from '@elements/SectionHeader/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
 // -- components
-import ModalBanner from '@components/Pages/Faq/ModalItem/widgets/Default';
+import ModalItem from '@components/Pages/Faq/ModalItem/widgets/Default';
 
-const FormFaqSsection3View = (props) => {
+const FormFaqSection3View = (props) => {
   const { method, confirm, notify, data, ready, message, onStatus, onDelete, refetch } = props;
   const [isEdit, setIsEdit] = useState(false);
   const [open, setOpen] = useState(false);
@@ -89,12 +93,13 @@ const FormFaqSsection3View = (props) => {
       const title = record.status ? 'Hide' : 'Unhide';
       const status = record.status ? false : true;
       const payload = { id: record.id, status: status, updated_by: user?.id };
+      const formData = FormData(payload, 'Hide');
 
       confirm({
         icon: <WarningOutlined />,
         content: `Are you sure you want to ${title.toLowerCase()} ${record.title.toLocaleLowerCase()}?`,
         onSuccess: async () => {
-          const response = await onStatus(payload);
+          const response = await onStatus(formData);
           if (response && !response.error) {
             notify({
               type: 'success',
@@ -113,78 +118,84 @@ const FormFaqSsection3View = (props) => {
   );
 
   // helper: build columns for a given language key ('en' or 'id')
-  const buildColumns = useCallback(() => {
-    const cols = [
-      {
-        title: 'Title',
-        dataIndex: 'title',
-        key: `title`,
-        render: (title) => {
-          if (!title) return '-';
-          if (typeof title === 'string') return title;
-          return title ?? '-';
+  const buildColumns = useCallback(
+    (lang) => {
+      const cols = [
+        {
+          title: 'Title',
+          dataIndex: ['title', lang],
+          key: `title_${lang}`,
+          render: (value, record) => {
+            return record?.title?.[lang] || '-';
+          }
+        },
+        {
+          title: 'Description',
+          dataIndex: ['description', lang],
+          key: `description_${lang}`,
+          render: (value, record) => {
+            const txt = record?.description?.[lang] || '-';
+            return (
+              <div style={{ maxWidth: 480, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {txt}
+              </div>
+            );
+          }
         }
-      },
-      {
-        title: 'Description',
-        dataIndex: 'description',
-        key: `description`,
-        render: (description) => {
-          if (!description) return '-';
-          if (typeof description === 'string') return description;
-          return (
-            <div style={{ maxWidth: 480, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {description[lang] ?? '-'}
-            </div>
-          );
-        }
+      ];
+
+      if (isEdit) {
+        cols.push({
+          title: 'Actions',
+          key: 'actions',
+          align: 'center',
+          width: 200,
+          render: (_, record) => (
+            <Space>
+              <Tooltip
+                key={record.status ? 'hide' : 'unhide'}
+                title={record.status ? 'Hide' : 'Unhide'}
+                placement='top'>
+                <Button
+                  size='small'
+                  type='text'
+                  icon={record.status ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                  onClick={() => handleStatus(record)}
+                />
+              </Tooltip>
+
+              <Tooltip key='edit' title='Edit' placement='top'>
+                <Button
+                  size='small'
+                  type='text'
+                  icon={<EditOutlined />}
+                  onClick={() => handleShowModal('edit', record)}
+                />
+              </Tooltip>
+
+              <Tooltip key='delete' title='Delete' placement='top'>
+                <Button size='small' type='text' danger onClick={() => handleDelete(record)}>
+                  <DeleteOutlined />
+                </Button>
+              </Tooltip>
+            </Space>
+          )
+        });
       }
-    ];
 
-    if (isEdit) {
-      cols.push({
-        title: 'Actions',
-        key: 'actions',
-        align: 'center',
-        width: 200,
-        render: (_, record) => (
-          <Space>
-            <Tooltip key={record.status ? 'hide' : 'unhide'} title={record.status ? 'Hide' : 'Unhide'} placement='top'>
-              <Button
-                size='small'
-                type='text'
-                icon={record.status ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                onClick={() => handleStatus(record)}
-              />
-            </Tooltip>
-
-            <Tooltip key='edit' title='Edit' placement='top'>
-              <Button
-                size='small'
-                type='text'
-                icon={<EditOutlined />}
-                onClick={() => handleShowModal('edit', record)}
-              />
-            </Tooltip>
-
-            <Tooltip key='delete' title='Delete' placement='top'>
-              <Button size='small' type='text' danger onClick={() => handleDelete(record)}>
-                <DeleteOutlined />
-              </Button>
-            </Tooltip>
-          </Space>
-        )
-      });
-    }
-
-    return cols;
-  }, [handleDelete, handleStatus, handleShowModal, isEdit]);
+      return cols;
+    },
+    [handleDelete, handleStatus, handleShowModal, isEdit]
+  );
 
   return (
     <>
       <Card loading={ready}>
         <SectionHeader title='FAQ Item' />
-        <Table dataSource={data || []} columns={buildColumns()} rowKey='id' pagination={false} />
+        <TranslationTabs>
+          {(lang) => <Table dataSource={data || []} columns={buildColumns(lang)} rowKey='id' pagination={false} />}
+        </TranslationTabs>
+
         <Space size={16}>
           {isEdit ? (
             <>
@@ -204,7 +215,7 @@ const FormFaqSsection3View = (props) => {
       </Card>
 
       {open && (
-        <ModalBanner
+        <ModalItem
           method={methodForm}
           setMethod={() => setMethodForm('edit')}
           open={open}
@@ -219,4 +230,4 @@ const FormFaqSsection3View = (props) => {
   );
 };
 
-export default FormFaqSsection3View;
+export default FormFaqSection3View;

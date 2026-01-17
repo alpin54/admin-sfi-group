@@ -1,5 +1,5 @@
 // -- libraries
-import { Breadcrumb, Table, Row, Col, Input, DatePicker } from 'antd';
+import { Breadcrumb, Table, Row, Col, Input, DatePicker, Badge } from 'antd';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -14,20 +14,24 @@ dayjs.locale('id');
 import {
   TagOutlined,
   SearchOutlined,
-  TagsOutlined,
   BookOutlined,
   BarcodeOutlined,
-  CalendarOutlined
+  CalendarOutlined,
+  PieChartOutlined,
+  IssuesCloseOutlined,
+  StockOutlined,
+  QuestionOutlined,
+  UserSwitchOutlined,
+  AppstoreAddOutlined
 } from '@ant-design/icons';
 
 // -- elements
 import CardSummary from '@components/Elements/CardSummary/views';
 import Currency from '@utils/currency';
+import App from 'next/app';
 
 const VoucherUsage = (props) => {
-  const { data, loading, filters, pagination, totalPage, onPageChange, onFilterChange } = props;
-  const dataSummary = data?.summary;
-  const dataList = data?.data;
+  const { data, summary, loading, filters, pagination, totalPage, onPageChange, onFilterChange } = props;
   const { RangePicker } = DatePicker;
 
   // range presets
@@ -56,6 +60,21 @@ const VoucherUsage = (props) => {
       render: (value) => value?.name || '-'
     },
     {
+      title: 'Type',
+      dataIndex: 'customer',
+      width: 120,
+      render: (val) => {
+        const roleMap = {
+          Guest: { label: 'Guest', color: 'success' },
+          Member: { label: 'Member', color: 'processing' },
+          Dealer: { label: 'Dealer', color: 'warning' }
+        };
+        const role = roleMap[val.role_name] || { label: 'Unknown', color: 'error' };
+
+        return <Badge status={role.color} text={role.label} />;
+      }
+    },
+    {
       title: 'Total',
       dataIndex: 'total_amount',
       render: (value) => Currency.formatRp(value)
@@ -75,35 +94,66 @@ const VoucherUsage = (props) => {
           items={[
             { title: <Link href='/voucher'>Voucher</Link> },
             {
-              title: dataSummary?.name
+              title: summary?.name
             }
           ]}
         />
       </div>
       {/* Summary */}
       <Row gutter={[16, 16]} className='row-container'>
-        <Col span={8}>
-          <CardSummary title='Voucher' value={dataSummary?.name} icon={<BookOutlined />} />
+        <Col span={12}>
+          <CardSummary title='Total Voucher' value={summary?.totalVoucher ?? 0} icon={<TagOutlined />} />
         </Col>
-        <Col span={8}>
-          <CardSummary title='Code' value={dataSummary?.code} icon={<BarcodeOutlined />} />
+        <Col span={12}>
+          <CardSummary title='Total Voucher Usage' value={summary?.totalUses ?? 0} icon={<PieChartOutlined />} />
         </Col>
-        <Col span={8}>
+        <Col span={12}>
+          <CardSummary variant='secondary' title='Voucher Name' value={summary?.name} icon={<BookOutlined />} />
+        </Col>
+        <Col span={12}>
           <CardSummary
+            variant='secondary'
+            title='Conditions'
+            value={summary?.conditions}
+            icon={<IssuesCloseOutlined />}
+          />
+        </Col>
+        <Col span={12}>
+          <CardSummary variant='secondary' title='Voucher Code' value={summary?.code} icon={<BarcodeOutlined />} />
+        </Col>
+        <Col span={12}>
+          <CardSummary variant='secondary' title='Visibility' value={summary?.visibility} icon={<StockOutlined />} />
+        </Col>
+        <Col span={12}>
+          <CardSummary
+            variant='secondary'
+            title='Apply Discount To'
+            value={summary?.applyDiscountTo}
+            icon={<QuestionOutlined />}
+          />
+        </Col>
+        <Col span={12}>
+          <CardSummary variant='secondary' title='Type' value={summary?.type} icon={<UserSwitchOutlined />} />
+        </Col>
+        <Col span={12}>
+          <CardSummary
+            variant='secondary'
             title='Validity Period'
             value={
-              dataSummary?.valid_from && dataSummary?.valid_until
-                ? `${dayjs(dataSummary.valid_from).format('DD MMM')} - ${dayjs(dataSummary.valid_until).format('DD MMM YYYY')}`
+              summary?.valid_from && summary?.valid_until
+                ? `${dayjs(summary.valid_from).format('DD MMM')} - ${dayjs(summary.valid_until).format('DD MMM YYYY')}`
                 : '-'
             }
             icon={<CalendarOutlined />}
           />
         </Col>
         <Col span={12}>
-          <CardSummary title='Total Voucher' value={dataSummary?.totalVoucher ?? 0} icon={<TagOutlined />} />
-        </Col>
-        <Col span={12}>
-          <CardSummary title='Total Voucher Usage' value={dataSummary?.totalUses ?? 0} icon={<TagsOutlined />} />
+          <CardSummary
+            variant='secondary'
+            title='Quantity'
+            value={summary?.remainingQuantity}
+            icon={<AppstoreAddOutlined />}
+          />
         </Col>
       </Row>
       {/* Filter */}
@@ -139,7 +189,7 @@ const VoucherUsage = (props) => {
       {/* Table */}
       <Table
         columns={dataColumns}
-        dataSource={dataList ?? []}
+        dataSource={data ?? []}
         rowKey='id'
         loading={loading}
         pagination={
@@ -147,8 +197,9 @@ const VoucherUsage = (props) => {
             current: pagination.page,
             pageSize: pagination.limit,
             total: totalPage,
-            position: ['bottomCenter'],
-            onChange: (page, pageSize) => onPageChange(page, pageSize)
+            onChange: (page, pageSize) => onPageChange(page, pageSize),
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '20', '50', '100']
           }
         }
       />

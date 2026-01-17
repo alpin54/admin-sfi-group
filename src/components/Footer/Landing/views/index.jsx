@@ -12,6 +12,9 @@ import CardUserLogWidget from '@components/Elements/CardUserLog/views';
 // -- components
 import FormFooterSection1Widget from '@components/Footer/FormSection1/widgets/Default';
 import FormFooterSection2Widget from '@components/Footer/FormSection2/widgets/Default';
+import FormFooterSection3Widget from '@components/Footer/FormSection3/widgets/Default';
+import FormFooterSection4Widget from '@components/Footer/FormSection4/widgets/Default';
+import FormFooterSection5Widget from '@components/Footer/FormSection5/widgets/Default';
 
 const FooterView = (props) => {
   const { method } = props;
@@ -32,6 +35,15 @@ const FooterView = (props) => {
         </div>
         <div className='row-container'>
           <FormFooterSection2Widget method={method} confirm={confirm} notify={notify} />
+        </div>
+        <div className='row-container'>
+          <FormFooterSection3Widget method={method} confirm={confirm} notify={notify} />
+        </div>
+        <div className='row-container'>
+          <FormFooterSection4Widget method={method} confirm={confirm} notify={notify} />
+        </div>
+        <div className='row-container'>
+          <FormFooterSection5Widget method={method} confirm={confirm} notify={notify} />
         </div>
       </section>
       <CardUserLogWidget

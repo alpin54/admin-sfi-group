@@ -1,0 +1,58 @@
+@import '_cores/styles/_assets.scss';
+
+.titleSummary {
+  @include font-size(body);
+  font-weight: fw(regular);
+  color: color(neutral, 8);
+  margin-bottom: 20px;
+}
+
+.titleTotal {
+  @include font-size(h4);
+  font-weight: fw(medium);
+  color: color(neutral, 7);
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 0px;
+}
+
+.infoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color(primary, 6);
+  font-size: 14px;
+}
+
+.infoImg {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.infoLabel {
+  display: flex;
+  align-items: center;
+}
+
+.infoLabelText {
+  @include font-size(small);
+  margin: 0;
+}
+
+.infoValue {
+  display: flex;
+  align-items: center;
+  @include font-size(small);
+}
+
+.infoValueText {
+  font-size: 13px;
+}

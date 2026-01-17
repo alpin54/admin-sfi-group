@@ -13,6 +13,8 @@ import LocalStorage from '@utils/localStorage';
 
 // -- elements
 import CardUserLogWidget from '@components/Elements/CardUserLog/views';
+import UploadImage from '@elements/UploadImage/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
 const UnderConstructionView = (props) => {
   const { method, data, ready, loading, message, onSubmit } = props;
@@ -32,7 +34,18 @@ const UnderConstructionView = (props) => {
 
   useEffect(() => {
     if (data) {
-      formInstance?.setFieldsValue(data);
+      const mappedFields = {
+        ...data,
+        en: {
+          title: data?.title?.en || '',
+          description: data?.description?.en || ''
+        },
+        id: {
+          title: data?.title?.id || '',
+          description: data?.description?.id || ''
+        }
+      };
+      formInstance?.setFieldsValue(mappedFields);
     }
   }, [data, formInstance]);
 
@@ -109,16 +122,34 @@ const UnderConstructionView = (props) => {
               <Form.Item name='id' hidden>
                 <Input />
               </Form.Item>
-              <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Title is required' }]}>
-                <Input allowClear readOnly={!isEdit} />
+              <Form.Item
+                name='image'
+                label='Image'
+                valuePropName='file'
+                getValueFromEvent={(e) => e}
+                help='1440px x 800px'>
+                <UploadImage value={{ url: data?.image }} disabled={!isEdit} />
               </Form.Item>
 
-              <Form.Item
-                name='description'
-                label='Description'
-                rules={[{ required: true, message: 'Description is required' }]}>
-                <TextArea allowClear rows={3} readOnly={!isEdit} />
-              </Form.Item>
+              <TranslationTabs>
+                {(lang) => (
+                  <>
+                    <Form.Item
+                      name={[lang, 'title']}
+                      label='Title'
+                      rules={[{ required: true, message: 'Title is required' }]}>
+                      <Input allowClear readOnly={!isEdit} />
+                    </Form.Item>
+
+                    <Form.Item
+                      name={[lang, 'description']}
+                      label='Description'
+                      rules={[{ required: true, message: 'Description is required' }]}>
+                      <TextArea allowClear rows={3} readOnly={!isEdit} />
+                    </Form.Item>
+                  </>
+                )}
+              </TranslationTabs>
               <Form.Item>
                 <Space size={16}>
                   <Button color='primary' variant='outlined' href='/pages'>

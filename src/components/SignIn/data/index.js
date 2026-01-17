@@ -103,11 +103,11 @@ const data = {
       sorting: 3,
       menus: [
         {
-          menu_id: 7,
+          menu_id: 6,
           role_id: 1,
-          icon: 'member',
-          name: 'Member',
-          route: '/member',
+          icon: 'guest',
+          name: 'Guest',
+          route: '/guest',
           group_id: 3,
           sorting: 2,
           is_navigation: true,
@@ -117,11 +117,53 @@ const data = {
           can_delete: true
         },
         {
+          menu_id: 7,
+          role_id: 1,
+          icon: 'member',
+          name: 'Member',
+          route: '/member',
+          group_id: 3,
+          sorting: 3,
+          is_navigation: true,
+          can_view: true,
+          can_create: true,
+          can_edit: true,
+          can_delete: true
+        },
+        {
           menu_id: 8,
           role_id: 1,
-          icon: 'subscriber',
-          name: 'Subscriber',
-          route: '/subscriber',
+          icon: 'dealer',
+          name: 'Dealer',
+          route: '/dealer',
+          group_id: 3,
+          sorting: 3,
+          is_navigation: true,
+          can_view: true,
+          can_create: true,
+          can_edit: true,
+          can_delete: true
+        },
+        {
+          menu_id: 9,
+          role_id: 1,
+          icon: 'member-rewards',
+          name: 'Member Rewards',
+          route: '/member-rewards',
+          group_id: 3,
+          sorting: 3,
+          is_navigation: true,
+          can_view: true,
+          can_create: true,
+          can_edit: true,
+          can_delete: true
+        },
+        {
+          menu_id: 10,
+          role_id: 1,
+          icon: 'dealer-rewards',
+          name: 'Dealer Rewards',
+          route: '/dealer-rewards',
           group_id: 3,
           sorting: 3,
           is_navigation: true,
@@ -138,7 +180,7 @@ const data = {
       sorting: 4,
       menus: [
         {
-          menu_id: 9,
+          menu_id: 11,
           role_id: 1,
           icon: 'pages',
           name: 'Pages',
@@ -152,7 +194,35 @@ const data = {
           can_delete: true
         },
         {
-          menu_id: 11,
+          menu_id: 12,
+          role_id: 1,
+          icon: 'email',
+          name: 'Email',
+          route: '/email',
+          group_id: 4,
+          sorting: 3,
+          is_navigation: true,
+          can_view: true,
+          can_create: true,
+          can_edit: true,
+          can_delete: true
+        },
+        {
+          menu_id: 13,
+          role_id: 1,
+          icon: 'menu',
+          name: 'Menu',
+          route: '/menu',
+          group_id: 4,
+          sorting: 3,
+          is_navigation: true,
+          can_view: true,
+          can_create: true,
+          can_edit: true,
+          can_delete: true
+        },
+        {
+          menu_id: 14,
           role_id: 1,
           icon: 'footer',
           name: 'Footer',
@@ -166,7 +236,21 @@ const data = {
           can_delete: true
         },
         {
-          menu_id: 13,
+          menu_id: 15,
+          role_id: 1,
+          icon: 'popup',
+          name: 'Pop Up',
+          route: '/popup',
+          group_id: 4,
+          sorting: 3,
+          is_navigation: true,
+          can_view: true,
+          can_create: true,
+          can_edit: true,
+          can_delete: true
+        },
+        {
+          menu_id: 16,
           role_id: 1,
           icon: 'meta',
           name: 'Meta',
@@ -187,7 +271,7 @@ const data = {
       sorting: 5,
       menus: [
         {
-          menu_id: 14,
+          menu_id: 17,
           role_id: 1,
           icon: 'career',
           name: 'Career',
@@ -201,7 +285,7 @@ const data = {
           can_delete: true
         },
         {
-          menu_id: 15,
+          menu_id: 18,
           role_id: 1,
           icon: 'form-submission',
           name: 'Form Submission',
@@ -222,7 +306,7 @@ const data = {
       sorting: 6,
       menus: [
         {
-          menu_id: 16,
+          menu_id: 19,
           role_id: 1,
           icon: 'admin',
           name: 'Admin',
@@ -236,7 +320,7 @@ const data = {
           can_delete: true
         },
         {
-          menu_id: 17,
+          menu_id: 20,
           role_id: 1,
           icon: 'user-log',
           name: 'User Log',

@@ -10,6 +10,9 @@ import useFirstLoad from '@hooks/useFirstLoad';
 // -- components
 import ModalProductView from '@components/Voucher/ModalProduct/views';
 
+// -- dummy data
+import dummyData from '@components/Product/Landing/data';
+
 const ModalProductWidget = (props) => {
   // Pagination: current page, limit per page
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
@@ -29,10 +32,10 @@ const ModalProductWidget = (props) => {
   );
 
   // Fetcher function
-  const fetcher = useCallback(() => modalProductModel.list(fetchParams), [fetchParams]);
+  // const fetcher = useCallback(() => modalProductModel.list(fetchParams), [fetchParams]);
 
-  // UseFirstLoad: ready, loading, data
-  const { ready, loading, data } = useFirstLoad(fetcher);
+  // // UseFirstLoad: ready, loading, data
+  // const { ready, loading, data } = useFirstLoad(fetcher);
 
   // Reset products & pagination saat filter berubah
   useEffect(() => {
@@ -42,43 +45,43 @@ const ModalProductWidget = (props) => {
   }, [filters]);
 
   // Set products setiap kali data berubah
-  useEffect(() => {
-    if (ready && data) {
-      // Untuk halaman pertama, ganti list
-      if (pagination.page === 1) {
-        setProducts(data?.data || []);
-      } else {
-        // Untuk halaman berikutnya, gabung
-        setProducts((prev) => [...prev, ...(data?.data || [])]);
-      }
-      // Cek apakah sudah halaman terakhir
-      setHasMore((data?.data || []).length === pagination.limit);
-    }
-  }, [ready, data, pagination.page, pagination.limit]);
+  // useEffect(() => {
+  //   if (ready && data) {
+  //     // Untuk halaman pertama, ganti list
+  //     if (pagination.page === 1) {
+  //       setProducts(data?.data || []);
+  //     } else {
+  //       // Untuk halaman berikutnya, gabung
+  //       setProducts((prev) => [...prev, ...(data?.data || [])]);
+  //     }
+  //     // Cek apakah sudah halaman terakhir
+  //     setHasMore((data?.data || []).length === pagination.limit);
+  //   }
+  // }, [ready, data, pagination.page, pagination.limit]);
 
-  // Scroll handler: Tambah page jika scroll dekat bawah
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!listRef.current || loading || !hasMore) return;
-      const { scrollTop, scrollHeight, clientHeight } = listRef.current;
-      if (scrollHeight - scrollTop - clientHeight < 100) {
-        setPagination((prev) => {
-          // Hindari double increment page
-          if (loading) return prev;
-          return { ...prev, page: prev.page + 1 };
-        });
-      }
-    };
-    const ref = listRef.current;
-    if (ref) {
-      ref.addEventListener('scroll', handleScroll);
-    }
-    return () => {
-      if (ref) {
-        ref.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [loading, hasMore]);
+  // // Scroll handler: Tambah page jika scroll dekat bawah
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (!listRef.current || loading || !hasMore) return;
+  //     const { scrollTop, scrollHeight, clientHeight } = listRef.current;
+  //     if (scrollHeight - scrollTop - clientHeight < 100) {
+  //       setPagination((prev) => {
+  //         // Hindari double increment page
+  //         if (loading) return prev;
+  //         return { ...prev, page: prev.page + 1 };
+  //       });
+  //     }
+  //   };
+  //   const ref = listRef.current;
+  //   if (ref) {
+  //     ref.addEventListener('scroll', handleScroll);
+  //   }
+  //   return () => {
+  //     if (ref) {
+  //       ref.removeEventListener('scroll', handleScroll);
+  //     }
+  //   };
+  // }, [loading, hasMore]);
 
   // Handle filter dari View
   const handleFilterChange = (newFilters) => {
@@ -92,9 +95,9 @@ const ModalProductWidget = (props) => {
   return (
     <ModalProductView
       {...props}
-      products={products}
+      products={dummyData.data}
       filters={filters}
-      loading={loading}
+      loading={false}
       onFilterChange={handleFilterChange}
       listRef={listRef}
     />

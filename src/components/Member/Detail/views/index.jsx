@@ -41,7 +41,8 @@ import {
   CalendarOutlined,
   MailOutlined,
   EnvironmentOutlined,
-  RightOutlined
+  RightOutlined,
+  EditOutlined
 } from '@ant-design/icons';
 
 // -- image
@@ -59,7 +60,10 @@ import Currency from '@utils/currency';
 import LocalStorage from '@utils/localStorage';
 
 // -- components
-import DrawerMemberDetailWidget from '@components/Member/Drawer/widgets/Default';
+import DrawerDetailDetailWidget from '@components/Member/DrawerDetail/widgets/Default';
+import DrawerShippingDetailWidget from '@components/Member/DrawerShipping/widgets/Default';
+import ModalPasswordDetailWidget from '@components/Member/ModalPassword/widgets/Default';
+import ModalAddressDetailWidget from '@components/Member/ModalAddress/widgets/Default';
 import PrintLabel, { getPaymentLogo, getShippingLogo } from '@components/Order/Landing/views/print';
 
 // -- elements
@@ -80,23 +84,28 @@ const MemberDetail = (props) => {
   const { notify, contextHolder: notificationHolder } = useNotification();
 
   // Drawer state for shipping details
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [drawerRecord, setDrawerRecord] = useState(null);
+  const [detailMethod, setDetailMethod] = useState('detail');
+  const [openDrawerDetail, setOpenDrawerDetail] = useState(false);
+  const [openDrawerShipping, setOpenDrawerShipping] = useState(false);
+  const [openModalPassword, setOpenModalPassword] = useState(false);
+  const [openModalAddress, setOpenModalAddress] = useState(false);
+  const [dataAddress, setDataAddress] = useState(null);
 
   // Modal state for print
   const [printModalOpen, setPrintModalOpen] = useState(false);
   const [printData, setPrintData] = useState(null);
   const printRef = useRef(null);
 
-  const openShippingDrawer = useCallback((record) => {
-    setDrawerRecord(record ?? null);
-    setDrawerOpen(true);
+  const handleOpenDetail = useCallback((method) => {
+    setDetailMethod(method);
+    setOpenDrawerDetail(true);
   }, []);
 
-  const closeDrawer = useCallback(() => {
-    setDrawerOpen(false);
-    setDrawerRecord(null);
-  }, []);
+  const handleOpenAddress = (data) => {
+    setOpenModalAddress(true);
+    setDataAddress(data);
+    console.log('data', data);
+  };
 
   // Print handler
   const handlePrint = useCallback((record) => {
@@ -292,7 +301,24 @@ const MemberDetail = (props) => {
 
         {/* Top cards:  User Information */}
         <div className='row-container'>
-          <Card className={style.card} title='User Information'>
+          <Card
+            className={style.card}
+            title='User Information'
+            extra={
+              <>
+                <Tooltip title='View Member'>
+                  <Button
+                    size='small'
+                    type='text'
+                    icon={<ZoomInOutlined />}
+                    onClick={() => handleOpenDetail('detail')}
+                  />
+                </Tooltip>
+                <Tooltip title='Edit Member'>
+                  <Button size='small' type='text' icon={<EditOutlined />} onClick={() => handleOpenDetail('edit')} />
+                </Tooltip>
+              </>
+            }>
             <Row gutter={[24, 12]}>
               <Col span={12}>
                 <InfoRow icon={<UserOutlined />} label='Full Name' value={data?.name ?? '-'} />
@@ -313,7 +339,11 @@ const MemberDetail = (props) => {
               </Col>
 
               <Col span={12}>
-                <InfoRow icon={<CalendarOutlined />} label='Date of Birth' value={data?.date_of_birth ?? '-'} />
+                <InfoRow
+                  icon={<CalendarOutlined />}
+                  label='Date of Birth'
+                  value={dayjs(data.date_of_birth).format('DD MMMM YYYY') ?? '-'}
+                />
               </Col>
               <Col span={12}>
                 <InfoRow icon={<UserOutlined />} label='Gender' value={data?.gender ?? '-'} />
@@ -327,7 +357,25 @@ const MemberDetail = (props) => {
           <Col span={24}>
             <Card className={style.card} title='Account & Shipping Details'>
               <Row justify='start' align='middle' gutter={[24, 12]}>
-                <Col span={23}>
+                <Col span={11}>
+                  <InfoRow
+                    icon={<SearchOutlined />}
+                    label='Password'
+                    value={`Last Update: ${(data?.updated_at ?? data?.created_at) ? dayjs(data?.updated_at || data?.created_at).format('DD MMM YYYY') : '-'}`}
+                  />
+                </Col>
+                <Col span={1}>
+                  <Tooltip title='Edit Password'>
+                    <Button
+                      size='small'
+                      type='text'
+                      icon={<EditOutlined />}
+                      onClick={() => setOpenModalPassword(true)}
+                      aria-label='open-shipping-account'
+                    />
+                  </Tooltip>
+                </Col>
+                <Col span={11}>
                   <InfoRow
                     icon={<EnvironmentOutlined />}
                     label='Shipping'
@@ -340,7 +388,7 @@ const MemberDetail = (props) => {
                       size='small'
                       type='text'
                       icon={<RightOutlined />}
-                      onClick={() => openShippingDrawer(null)}
+                      onClick={() => setOpenDrawerShipping(true)}
                       aria-label='open-shipping-account'
                     />
                   </Tooltip>
@@ -439,8 +487,49 @@ const MemberDetail = (props) => {
         </Row>
       </section>
 
+      {/* Drawer for Detail */}
+      {openDrawerDetail && (
+        <DrawerDetailDetailWidget
+          method={detailMethod}
+          setMethod={setDetailMethod}
+          open={openDrawerDetail}
+          onClose={() => setOpenDrawerDetail(false)}
+          data={data}
+          notify={notify}
+        />
+      )}
+
       {/* Drawer for Shipping details */}
-      <DrawerMemberDetailWidget open={drawerOpen} onClose={closeDrawer} initialValues={data} />
+      {openDrawerShipping && (
+        <DrawerShippingDetailWidget
+          open={openDrawerShipping}
+          onClose={() => setOpenDrawerShipping(false)}
+          openAddress={handleOpenAddress}
+          data={data}
+          notify={notify}
+          confirm={confirm}
+        />
+      )}
+
+      {/* Password Modal */}
+      {openModalPassword && (
+        <ModalPasswordDetailWidget
+          open={openModalPassword}
+          onClose={() => setOpenModalPassword(false)}
+          data={data}
+          notify={notify}
+        />
+      )}
+
+      {/* Address Modal */}
+      {openModalAddress && (
+        <ModalAddressDetailWidget
+          open={openModalAddress}
+          onClose={() => setOpenModalAddress(false)}
+          data={dataAddress}
+          notify={notify}
+        />
+      )}
 
       {/* Print Modal */}
       <Modal

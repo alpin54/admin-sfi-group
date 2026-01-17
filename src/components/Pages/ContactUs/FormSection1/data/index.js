@@ -3,8 +3,8 @@ const data = {
   section: 'Main Section Contact Us',
   status: true,
   title: {
-    en: 'Contact us',
-    id: 'Hubungi kami'
+    en: 'How Can We Help ?',
+    id: 'Bagaimana Kami Dapat Membantu ?'
   }
 };
 

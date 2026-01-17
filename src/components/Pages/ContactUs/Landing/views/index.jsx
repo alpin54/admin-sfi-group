@@ -16,6 +16,8 @@ import CardUserLogWidget from '@components/Elements/CardUserLog/views';
 import FormCareerSection1Widget from '@components/Pages/ContactUs/FormSection1/widgets/Default';
 import FormCareerSection2Widget from '@components/Pages/ContactUs/FormSection2/widgets/Default';
 import FormCareerSection3Widget from '@components/Pages/ContactUs/FormSection3/widgets/Default';
+import FormCareerSection4Widget from '@components/Pages/ContactUs/FormSection4/widgets/Default';
+import FormCareerSection5Widget from '@components/Pages/ContactUs/FormSection5/widgets/Default';
 
 const CareerView = (props) => {
   const { method } = props;
@@ -44,6 +46,12 @@ const CareerView = (props) => {
         </div>
         <div className='row-container'>
           <FormCareerSection3Widget method={method} confirm={confirm} notify={notify} />
+        </div>
+        <div className='row-container'>
+          <FormCareerSection4Widget method={method} confirm={confirm} notify={notify} />
+        </div>
+        <div className='row-container'>
+          <FormCareerSection5Widget method={method} confirm={confirm} notify={notify} />
         </div>
       </section>
       <CardUserLogWidget

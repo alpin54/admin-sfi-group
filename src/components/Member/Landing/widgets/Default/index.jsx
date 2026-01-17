@@ -19,16 +19,16 @@ const MemberLandingWidget = () => {
   const [filters, setFilters] = useState({ keyword: '' });
 
   // Combine parameters for API
-  const fetchParams = useMemo(
-    () => ({ page: pagination.page, limit: pagination.limit, ...filters }),
-    [pagination.page, pagination.limit, filters]
-  );
+  // const fetchParams = useMemo(
+  //   () => ({ page: pagination.page, limit: pagination.limit, ...filters }),
+  //   [pagination.page, pagination.limit, filters]
+  // );
 
-  // Create a dynamic fetcher, depending on parameters
-  const fetcher = useCallback(() => memberModel.list(fetchParams), [fetchParams]);
+  // // Create a dynamic fetcher, depending on parameters
+  // const fetcher = useCallback(() => memberModel.list(fetchParams), [fetchParams]);
 
-  // Hook to fetch data and refetch
-  const { ready, data, refetch } = useFirstLoad(fetcher);
+  // // Hook to fetch data and refetch
+  // const { ready, data, refetch } = useFirstLoad(fetcher);
 
   // Handle pagination (from View)
   const handlePageChange = (page, limit) => {
@@ -43,37 +43,38 @@ const MemberLandingWidget = () => {
 
   // Handle delete then refetch
   const handleDelete = async (id) => {
-    const { error: errorDelete } = await memberModel.delete(id);
-    if (!errorDelete) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorDelete?.message
-      };
-    }
+    // const { error: errorDelete } = await memberModel.delete(id);
+    // if (!errorDelete) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorDelete?.message
+    //   };
+    // }
   };
 
   // Handle suspend then refetch
   const handleSuspend = async (payload) => {
-    const { error: errorSuspend } = await memberModel.suspend(payload);
-    if (!errorSuspend) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorSuspend?.message
-      };
-    }
+    // const { error: errorSuspend } = await memberModel.suspend(payload);
+    // if (!errorSuspend) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorSuspend?.message
+    //   };
+    // }
   };
+
   return (
     <MemberLandingView
       summary={summary}
-      data={data?.data}
-      loading={!ready}
+      data={dummyData?.data}
+      loading={false}
       pagination={pagination}
       filters={filters}
-      totalPage={data?.total}
+      totalPage={dummyData?.total}
       onPageChange={handlePageChange}
       onFilterChange={handleFilterChange}
       onDelete={handleDelete}

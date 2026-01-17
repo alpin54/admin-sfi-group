@@ -1,0 +1,93 @@
+@import '_cores/styles/_assets.scss';
+
+.drawerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Each address card */
+.addressCard {
+  position: relative;
+  background: color(white);
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 16px 64px 16px 16px;
+  box-shadow: none;
+}
+
+/* header containing the small tag */
+.addressHeader {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.addressAction {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Tag override to match pill look */
+.labelTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 18px;
+  background: #fff7e6;
+  color: #b36b00;
+  border: 1px solid rgba(243, 176, 52, 0.12);
+  font-size: 12px;
+  height: auto;
+}
+
+/* body rows */
+.addressBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* meta row: icon + text */
+.metaRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+/* icon container */
+.metaIcon {
+  width: 20px;
+  color: #f39019; /* warm orange */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  font-size: 16px;
+}
+
+/* text area */
+.metaText {
+  flex: 1;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* long address wraps nicely */
+.addressText {
+  white-space: normal;
+}
+
+/* small helper when no data */
+.empty {
+  color: #888;
+  text-align: center;
+  padding: 20px 0;
+}

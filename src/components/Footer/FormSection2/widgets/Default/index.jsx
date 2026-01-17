@@ -2,32 +2,46 @@
 import { useState, useCallback } from 'react';
 
 // -- models
-import footerSection2Model from '@components/Footer/FormSection2/models';
+import FooterFormSection2Model from '@components/Footer/FormSection2/models';
 
-// -- hooks
+// --hooks
 import useFirstLoad from '@hooks/useFirstLoad';
 
 // -- components
 import FormFooterSection2View from '@components/Footer/FormSection2/views';
 
-const FormFooterSection2Widget = (props) => {
+// -- data
+import data from '@components/Footer/FormSection2/data';
+
+const FormFooterSectio2nWidget = (props) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
   // Only fetch role data if slug exists
-  const { data, ready, refetch } = useFirstLoad(useCallback(() => footerSection2Model.single(), []));
+  // const { data, ready, refetch } = useFirstLoad(useCallback(() => FooterFormSection2Model.single(), []));
 
-  // Handle Status then refetch
+  const handlePublish = async (payload) => {
+    // const { error: errorPublish } = await FooterFormSection2Model.publish(payload);
+    // if (!errorPublish) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorPublish?.message
+    //   };
+    // }
+  };
+
   const handleStatus = async (payload) => {
-    const { error: errorStatus } = await footerSection2Model.status(payload);
-    if (!errorStatus) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorStatus?.messag
-      };
-    }
+    // const { error: errorStatus } = await FooterFormSection2Model.status(payload);
+    // if (!errorStatus) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorStatus?.message
+    //   };
+    // }
   };
 
   const handleSubmit = async (formData, method) => {
@@ -35,11 +49,11 @@ const FormFooterSection2Widget = (props) => {
     setMessage('');
 
     try {
-      const { data, error } = await footerSection2Model.submitForm(formData, method);
+      // const { data, error } = await FooterFormSection2Model.submit(formData, method);
 
-      if (error) {
-        setMessage(error.message);
-      }
+      // if (error) {
+      //   setMessage(error.message);
+      // }
 
       if (data) {
         refetch();
@@ -58,15 +72,16 @@ const FormFooterSection2Widget = (props) => {
   return (
     <FormFooterSection2View
       {...props}
-      data={data?.data}
-      ready={!ready}
+      data={data}
+      ready={false}
       loading={loading}
       message={message}
-      onStatus={handleStatus}
       onSubmit={handleSubmit}
-      refetch={refetch}
+      onPublish={handlePublish}
+      onStatus={handleStatus}
+      // refetch={refetch}
     />
   );
 };
 
-export default FormFooterSection2Widget;
+export default FormFooterSectio2nWidget;

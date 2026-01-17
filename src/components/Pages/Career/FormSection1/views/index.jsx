@@ -7,9 +7,12 @@ import { WarningOutlined } from '@ant-design/icons';
 
 // -- utils
 import LocalStorage from '@utils/localStorage';
+import FormData from '@utils/formdata';
 
 // -- elements
 import SectionHeader from '@elements/SectionHeader/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
+import UploadImage from '@elements/UploadImage/views';
 
 const FormCareerSection1View = (props) => {
   const { method, confirm, notify, data, ready, loading, message, onPublish, onSubmit } = props;
@@ -25,7 +28,17 @@ const FormCareerSection1View = (props) => {
 
   useEffect(() => {
     if (data) {
-      formInstance?.setFieldsValue(data);
+      formInstance?.setFieldsValue({
+        ...data,
+        en: {
+          title: data?.title?.en || '',
+          description: data?.description?.en || ''
+        },
+        id: {
+          title: data?.title?.id || '',
+          description: data?.description?.id || ''
+        }
+      });
     }
   }, [data, formInstance]);
 
@@ -50,11 +63,12 @@ const FormCareerSection1View = (props) => {
       const title = record.status ? 'Unpublish' : 'Publish';
       const status = record.status ? false : true;
       const payload = { id: record.id, status: status, updated_by: user?.id };
+      const formData = FormData(payload);
       confirm({
         icon: <WarningOutlined />,
-        content: `Are you sure you want to ${title.toLowerCase()} ${record.title.toLocaleLowerCase()}?`,
+        content: `Are you sure you want to ${title.toLowerCase()} ${record.title.en.toLocaleLowerCase()}?`,
         onSuccess: async () => {
-          const response = await onPublish(payload);
+          const response = await onPublish(formData);
           if (response && !response.error) {
             notify({
               type: 'success',
@@ -78,8 +92,9 @@ const FormCareerSection1View = (props) => {
         ...values,
         updated_by: user?.id
       };
+      const formData = FormData(payload);
       // Submit form data
-      const response = await onSubmit(payload);
+      const response = await onSubmit(formData);
 
       if (response && response.data) {
         notify({
@@ -110,9 +125,28 @@ const FormCareerSection1View = (props) => {
         <Form.Item name='id' hidden>
           <Input />
         </Form.Item>
-        <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
+        <Form.Item name='image' label='Image' valuePropName='file' getValueFromEvent={(e) => e}>
+          <UploadImage value={{ url: data?.image }} disabled={!isEdit} />
         </Form.Item>
+        <TranslationTabs>
+          {(lang) => (
+            <>
+              <Form.Item
+                name={[lang, 'title']}
+                label='Title'
+                rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+
+              <Form.Item
+                name={[lang, 'description']}
+                label='Description'
+                rules={[{ required: true, message: 'Description is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+            </>
+          )}
+        </TranslationTabs>
 
         <Form.Item>
           <Space size={16}>

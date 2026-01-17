@@ -19,21 +19,22 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 12px;
+  height: 100%;
   border: 1px solid color(neutral, 3);
-  background-color: color(neutral, 2);
-  border-radius: 4px;
+  background-color: color(neutral, 1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .box {
   display: flex;
+  height: 100%;
   margin-right: 8px;
 }
 
 .img {
-  width: 52px;
-  height: 52px;
-  margin-right: 12px;
+  width: 96px;
+  height: 96px;
   img {
     display: block;
     width: 100%;
@@ -44,13 +45,21 @@
 
 .text {
   flex: 1;
+  padding: 12px 32px 12px 12px;
+}
+
+.label {
+  @include font-size(small);
+  color: color(neutral, 7);
+  margin-bottom: 4px;
 }
 
 .name {
   @include font-size(caption);
   font-weight: fw(regular);
   color: color(neutral, 8);
-  margin-bottom: 4px;
+  @include multiline-ellipsis(2);
+  margin-bottom: 0;
 }
 
 .price {
@@ -71,6 +80,9 @@
 }
 
 .button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
   background-color: transparent;
   outline: 0;
   border: 0;

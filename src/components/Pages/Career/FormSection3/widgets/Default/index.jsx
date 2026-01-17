@@ -1,53 +1,71 @@
 // --library
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 // -- models
-import careerEmptyModel from '@components/Pages/Career/FormSection3/models';
+import careerBannerModel from '@components/Pages/Career/FormSection3/models';
 
 // -- hooks
 import useFirstLoad from '@hooks/useFirstLoad';
 
 // -- components
-import FormCareerSection3View from '@components/Pages/Career/FormSection3/views';
+import FormCareerSectionView from '@components/Pages/Career/FormSection3/views';
 
-const FormCareerWidget = (props) => {
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+// -- data
+import data from '@components/Pages/Career/FormSection3/data';
 
-  // Only fetch role data if slug exists
-  const { data, ready, refetch } = useFirstLoad(useCallback(() => careerEmptyModel.single(), []));
+const FormCareerSection3Widget = (props) => {
+  const fetcParams = useMemo(() => ({}), []);
 
-  const handleSubmit = async (formData) => {
-    setLoading(true);
-    setMessage('');
+  // const fetcher = useCallback(() => careerBannerModel.list(fetcParams), [fetcParams]);
 
-    try {
-      const { data, error } = await careerEmptyModel.submit(formData);
+  // const { data, ready, refetch } = useFirstLoad(fetcher);
 
-      if (error) {
-        setMessage(error.message);
-      }
+  const handlePublish = async (payload) => {
+    // const { error: errorPublish } = await formFaqSection1Model.publish(payload);
+    // if (!errorPublish) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorPublish?.message
+    //   };
+    // }
+  };
 
-      return data;
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'An unknown error occurred';
-      setMessage(msg);
-      return { error: msg };
-    } finally {
-      setLoading(false);
-    }
+  const handleStatus = async (payload) => {
+    // const { error: errorStatus } = await careerBannerModel.status(payload);
+    // if (!errorStatus) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorStatus?.message
+    //   };
+    // }
+  };
+
+  const handleDelete = async (id) => {
+    // const { error: errorDelete } = await careerBannerModel.delete(id);
+    // if (!errorDelete) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorDelete?.message
+    //   };
+    // }
   };
 
   return (
-    <FormCareerSection3View
+    <FormCareerSectionView
       {...props}
-      data={data?.data}
-      ready={ready}
-      loading={loading}
-      message={message}
-      onSubmit={handleSubmit}
+      data={data}
+      loading={false}
+      onDelete={handleDelete}
+      onStatus={handleStatus}
+      // refetch={refetch}
     />
   );
 };
 
-export default FormCareerWidget;
+export default FormCareerSection3Widget;

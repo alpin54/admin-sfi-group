@@ -121,6 +121,7 @@
     }
   }
   &-cell {
+    vertical-align: top !important;
     @include font-size(button-small);
     ul {
       list-style: none;
@@ -132,6 +133,16 @@
       margin-bottom: 6px;
       &:last-child {
         margin-bottom: 0;
+      }
+    }
+    p {
+      font-size: inherit !important;
+    }
+    a {
+      color: color(primary, 6) !important;
+      transition: all 0.3s ease;
+      &:hover {
+        color: color(primary, 7) !important;
       }
     }
   }
@@ -154,16 +165,17 @@
       top: 16px;
       right: 24px;
       .ant-modal-close-x {
-        @include font-size(h4);
+        @include font-size(h5);
+        color: color(neutral, 8);
       }
     }
     .ant-modal-header {
-      padding: 20px 32px;
+      padding: 20px 24px;
       margin-bottom: 0;
       border-bottom: solid 1px color(neutral, 3);
     }
     .ant-modal-body {
-      padding: 32px;
+      padding: 20px 24px;
       .ant-form-item {
         &:last-child {
           margin-bottom: 0;
@@ -173,8 +185,9 @@
     .ant-modal-footer {
       display: flex;
       gap: 16px;
-      padding: 16px 32px;
+      padding: 20px 24px;
       border-top: solid 1px color(neutral, 3);
+      margin-top: 0;
       .ant-btn {
         flex: 1;
         margin: 0 !important;
@@ -195,7 +208,7 @@
     align-items: center !important;
     text-align: center;
     margin-bottom: 40px;
-    .anticon {
+    > .anticon {
       font-size: 64px !important;
       margin: 0 0 24px !important;
       color: color(warning, 7) !important;
@@ -207,6 +220,10 @@
   .ant-modal-confirm-content {
     font-size: 18px !important;
   }
+  .ant-modal-confirm-paragraph {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
   .ant-modal-confirm-btns {
     display: flex;
     gap: 16px;
@@ -216,6 +233,9 @@
       margin: 0 !important;
     }
   }
+  strong {
+    color: color(primary, 6) !important;
+  }
 }
 
 // ant-form
@@ -224,6 +244,10 @@
   &::after {
     content: none !important;
   }
+}
+
+.ant-form-item-label .anticon {
+  color: color(primary, 6);
 }
 
 // ant-breadcrumb
@@ -372,7 +396,8 @@
   &-range {
     #dashboard-section &,
     #revenue-section &,
-    #customer-section &,
+    #member-section &,
+    #guest-section &,
     #pages-section &,
     #subscribe-section &,
     #order-section & {
@@ -380,7 +405,8 @@
     }
     #dashboard-section .ant-col &,
     #revenue-section .ant-col &,
-    #customer-section .ant-col &,
+    #member-section .ant-col &,
+    #guest-section .ant-col &,
     #pages-section .ant-col &,
     #subscribe-section .ant-col &,
     #order-section .ant-col & {
@@ -389,6 +415,7 @@
   }
 }
 
+.ant-input-number-affix-wrapper,
 .ant-input-number-group-wrapper {
   width: 100% !important;
 }
@@ -472,6 +499,8 @@
     }
     .ant-drawer-close {
       margin-right: 0;
+      @include font-size(h5);
+      color: color(neutral, 8);
     }
     .ant-drawer-header {
       border-bottom: solid 1px color(neutral, 3);

@@ -27,8 +27,10 @@ import {
   BgColorsOutlined,
   ClockCircleOutlined,
   MailOutlined,
-  BookOutlined,
-  WarningOutlined
+  WarningOutlined,
+  UsergroupAddOutlined,
+  StarOutlined,
+  GiftOutlined
 } from '@ant-design/icons';
 
 // -- assets
@@ -53,8 +55,13 @@ const iconMap = {
   order: <ShopOutlined />,
   product: <ShoppingOutlined />,
   voucher: <TagOutlined />,
+  guest: <UserOutlined />,
   member: <UserAddOutlined />,
+  dealer: <UsergroupAddOutlined />,
+  'member-rewards': <StarOutlined />,
+  'dealer-rewards': <GiftOutlined />,
   pages: <CopyOutlined />,
+  email: <MailOutlined />,
   menu: <UnorderedListOutlined />,
   footer: <DownloadOutlined />,
   popup: <BgColorsOutlined />,
@@ -62,9 +69,7 @@ const iconMap = {
   career: <AuditOutlined />,
   'form-submission': <FileDoneOutlined />,
   admin: <EditOutlined />,
-  'user-log': <ClockCircleOutlined />,
-  email: <MailOutlined />,
-  subscriber: <BookOutlined />
+  'user-log': <ClockCircleOutlined />
 };
 
 const Sidebar = ({ data }) => {

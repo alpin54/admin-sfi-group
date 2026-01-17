@@ -7,9 +7,9 @@ import { useEffect } from 'react';
 import useStateMenu from '@components/Sidebar/states';
 
 // -- components
-import TermsConditionWidgets from '@components/Pages/TermsCondition/widgets/Default';
+import TermsConditionsWidgets from '@components/Pages/TermsConditions/Landing/widgets/Default';
 
-const TermsCondition = () => {
+const TermsConditions = () => {
   // set menu
   const { setMenu } = useStateMenu();
 
@@ -17,7 +17,7 @@ const TermsCondition = () => {
     setMenu('pages');
   }, [setMenu]);
 
-  return <TermsConditionWidgets method='edit' />;
+  return <TermsConditionsWidgets method='edit' />;
 };
 
-export default TermsCondition;
+export default TermsConditions;

@@ -539,8 +539,7 @@ const OrderLanding = (props) => {
             Print
           </Button>
         ]}
-        centered
-        width={560}>
+        centered>
         <div ref={printRef}>
           <PrintLabel data={printData} />
         </div>

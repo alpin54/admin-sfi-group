@@ -12,6 +12,7 @@ import MemberDetailView from '@components/Member/Detail/views';
 
 // -- data
 import dummyData from '@components/Member/Detail/data';
+import orderData from '@components/Order/Landing/data';
 
 const MemberDetailWidget = ({ slug }) => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
@@ -24,7 +25,7 @@ const MemberDetailWidget = ({ slug }) => {
   });
 
   // Fetch category options
-  const { data } = useFirstLoad(useCallback(() => memberModel.detail(slug), [slug]));
+  // const { data } = useFirstLoad(useCallback(() => memberModel.detail(slug), [slug]));
 
   // Combine parameters for API
   const fetchParams = useMemo(
@@ -33,10 +34,10 @@ const MemberDetailWidget = ({ slug }) => {
   );
 
   // Create a dynamic fetcher, depending on parameters
-  const fetcher = useCallback(() => memberModel.orderList(fetchParams), [fetchParams]);
+  // const fetcher = useCallback(() => memberModel.orderList(fetchParams), [fetchParams]);
 
-  // Hook to fetch data and refetch
-  const { ready: orderReady, data: orderData, refetch } = useFirstLoad(fetcher);
+  // // Hook to fetch data and refetch
+  // const { ready: orderReady, data: orderData, refetch } = useFirstLoad(fetcher);
 
   // Handle pagination (from View)
   const handlePageChange = (page, limit) => {
@@ -51,16 +52,16 @@ const MemberDetailWidget = ({ slug }) => {
 
   // Handle delete then refetch
   const handleDelete = async (payload) => {
-    const { error: errorDelete } = await memberModel.orderDelete(payload);
-    if (!errorDelete) refetch();
+    // const { error: errorDelete } = await memberModel.orderDelete(payload);
+    // if (!errorDelete) refetch();
   };
 
   return (
     <MemberDetailView
-      data={data?.data}
+      data={dummyData?.data}
       summary={dummyData?.summary}
       order={orderData?.data}
-      loading={!orderReady}
+      loading={false}
       pagination={pagination}
       filters={filters}
       totalPage={orderData?.total}

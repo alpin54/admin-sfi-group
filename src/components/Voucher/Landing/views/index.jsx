@@ -142,6 +142,10 @@ const VoucherLanding = (props) => {
       dataIndex: 'name'
     },
     {
+      title: 'Code',
+      dataIndex: 'code'
+    },
+    {
       title: 'Validity Period',
       dataIndex: 'valid_from',
       render: (valid_from, record) => {
@@ -161,6 +165,10 @@ const VoucherLanding = (props) => {
           !record.valid_until || dayjs().isBefore(dayjs(record.valid_until, 'YYYY-MM-DD HH:mm:ss.SSS'));
         return isAfterStart && isBeforeEnd ? 'Active' : 'Expired';
       }
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type'
     },
     {
       title: 'Usage',
@@ -246,7 +254,7 @@ const VoucherLanding = (props) => {
               </Link>
             </Col>
           )}
-          <Col lg={6}>
+          {/* <Col span={6}>
             <RangePicker
               allowClear={true}
               placeholder='Date'
@@ -263,8 +271,23 @@ const VoucherLanding = (props) => {
                 })
               }
             />
+          </Col> */}
+          <Col span={6}>
+            <Select
+              showSearch
+              allowClear
+              placeholder='Type'
+              optionFilterProp='label'
+              options={[
+                { label: 'Guest', value: 0 },
+                { label: 'Member', value: 1 },
+                { label: 'Dealer', value: 2 }
+              ]}
+              value={filters?.status}
+              onChange={(value) => onFilterChange({ status: value })}
+            />
           </Col>
-          <Col lg={6}>
+          <Col span={6}>
             <Select
               showSearch
               allowClear

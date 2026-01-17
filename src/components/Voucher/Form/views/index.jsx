@@ -14,7 +14,8 @@ import {
   Checkbox,
   DatePicker,
   Empty,
-  Popover
+  Popover,
+  Space
 } from 'antd';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -49,6 +50,8 @@ const VoucherFormView = (props) => {
   const [formInstance] = Form.useForm();
   const [viewOnly, setViewOnly] = useState(action === 'detail');
   const [voucherQuantityType, setVoucherQuantityType] = useState('unlimited');
+  const [voucherVisibility, setVoucherVisibility] = useState('public');
+  const [voucherType, setVoucherType] = useState('guest');
   const [discountTarget, setDiscountTarget] = useState('all');
   const [validityType, setValidityType] = useState('unlimited');
   const [conditionType, setConditionType] = useState('');
@@ -400,26 +403,17 @@ const VoucherFormView = (props) => {
                           rules={[{ required: true, message: 'Please input voucher name!' }]}>
                           <Input placeholder='Enter voucher name' disabled={viewOnly} />
                         </Form.Item>
-                        {/* <Form.Item
+                        <Form.Item
                           label='Voucher Code'
                           name='code'
                           rules={[{ required: true, message: 'Please input voucher code!' }]}>
-                          <Input
-                            placeholder='Enter voucher code'
-                            disabled={viewOnly}
-                            addonAfter={
-                              <Button type='primary' disabled={viewOnly} onClick={() => handleGenerateCode()}>
-                                Generate Code
-                              </Button>
-                            }
-                          />
-                        </Form.Item> */}
-                        {/* <Flex gap={12}>
+                          <Flex gap={12}>
                             <Input placeholder='Enter voucher code' disabled={viewOnly} />
                             <Button type='primary' disabled={viewOnly} onClick={() => handleGenerateCode()}>
                               Generate Code
                             </Button>
-                          </Flex> */}
+                          </Flex>
+                        </Form.Item>
                       </>
                     )
                   },
@@ -428,6 +422,194 @@ const VoucherFormView = (props) => {
                     label: 'Discount Details',
                     children: (
                       <>
+                        {/* Validity Period */}
+                        <Form.Item label='Validity Period'>
+                          <Card className={style.card}>
+                            <Row gutter={[16, 16]}>
+                              <Col span={12}>
+                                <Checkbox
+                                  checked={validityType === 'unlimited'}
+                                  onChange={() => setValidityType('unlimited')}
+                                  disabled={viewOnly}>
+                                  Unlimited
+                                </Checkbox>
+                              </Col>
+                              <Col span={12}>
+                                <Checkbox
+                                  checked={validityType === 'date'}
+                                  onChange={() => setValidityType('date')}
+                                  disabled={viewOnly}>
+                                  Start and Expiry Date
+                                </Checkbox>
+                              </Col>
+                              {validityType === 'date' && (
+                                <>
+                                  <Col span={12}>
+                                    <Form.Item name='start_date'>
+                                      <DatePicker
+                                        allowClear={false}
+                                        format='DD MMM YYYY'
+                                        placeholder='start date'
+                                        disabled={viewOnly}
+                                      />
+                                    </Form.Item>
+                                  </Col>
+                                  <Col span={12}>
+                                    <Form.Item name='end_date'>
+                                      <DatePicker
+                                        allowClear={false}
+                                        format='DD MMM YYYY'
+                                        placeholder='end date'
+                                        disabled={viewOnly}
+                                      />
+                                    </Form.Item>
+                                  </Col>
+                                </>
+                              )}
+                            </Row>
+                          </Card>
+                        </Form.Item>
+                        {/* Conditions */}
+                        <Form.Item label='Conditions'>
+                          <Card>
+                            <Row gutter={[16, 16]}>
+                              <Col span={12}>
+                                <Checkbox
+                                  checked={conditionType === 'discount_amount'}
+                                  onChange={() => setConditionType('discount_amount')}
+                                  disabled={viewOnly}>
+                                  Discount Amount (Rp)
+                                </Checkbox>
+                              </Col>
+                              <Col span={12}>
+                                <Checkbox
+                                  checked={conditionType === 'percentage'}
+                                  onChange={() => setConditionType('percentage')}
+                                  disabled={viewOnly}>
+                                  Discount Percentage (%)
+                                </Checkbox>
+                              </Col>
+                              <Col span={12}>
+                                <Checkbox
+                                  checked={conditionType === 'min_spend_amount'}
+                                  onChange={() => setConditionType('min_spend_amount')}
+                                  disabled={viewOnly}>
+                                  Min. Spend & Discount (Rp)
+                                </Checkbox>
+                              </Col>
+                              <Col span={12}>
+                                <Checkbox
+                                  checked={conditionType === 'min_spend_percentage'}
+                                  onChange={() => setConditionType('min_spend_percentage')}
+                                  disabled={viewOnly}>
+                                  Min. Spend & Discount (%)
+                                </Checkbox>
+                              </Col>
+                              {conditionType === 'discount_amount' && (
+                                <Col span={24}>
+                                  <Form.Item name='discount_amount'>
+                                    <InputNumber
+                                      min={0}
+                                      step={1000}
+                                      placeholder='Rp'
+                                      disabled={viewOnly}
+                                      formatter={(value) => {
+                                        if (value) {
+                                          return Currency.formatRp(value);
+                                        }
+                                        return '';
+                                      }}
+                                      parser={(value) => {
+                                        const parsed = Currency.removeRp(value || '');
+                                        return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
+                                      }}
+                                    />
+                                  </Form.Item>
+                                </Col>
+                              )}
+                              {conditionType === 'percentage' && (
+                                <Col span={24}>
+                                  <Form.Item name='percentage'>
+                                    <InputNumber min={1} max={100} suffix='%' disabled={viewOnly} />
+                                  </Form.Item>
+                                </Col>
+                              )}
+                              {conditionType === 'min_spend_amount' && (
+                                <>
+                                  <Col span={12}>
+                                    <Form.Item name='min_spend_amount'>
+                                      <InputNumber
+                                        min={0}
+                                        step={1000}
+                                        placeholder='Rp'
+                                        disabled={viewOnly}
+                                        formatter={(value) => {
+                                          if (value) {
+                                            return Currency.formatRp(value);
+                                          }
+                                          return '';
+                                        }}
+                                        parser={(value) => {
+                                          const parsed = Currency.removeRp(value || '');
+                                          return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
+                                        }}
+                                      />
+                                    </Form.Item>
+                                  </Col>
+                                  <Col span={12}>
+                                    <Form.Item name='min_spend_discount'>
+                                      <InputNumber
+                                        min={0}
+                                        step={1000}
+                                        placeholder='Rp'
+                                        disabled={viewOnly}
+                                        formatter={(value) => {
+                                          if (value) {
+                                            return Currency.formatRp(value);
+                                          }
+                                          return '';
+                                        }}
+                                        parser={(value) => {
+                                          const parsed = Currency.removeRp(value || '');
+                                          return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
+                                        }}
+                                      />
+                                    </Form.Item>
+                                  </Col>
+                                </>
+                              )}
+                              {conditionType === 'min_spend_percentage' && (
+                                <>
+                                  <Col span={12}>
+                                    <Form.Item name='min_spend_amount'>
+                                      <InputNumber
+                                        min={0}
+                                        step={1000}
+                                        placeholder='Rp'
+                                        disabled={viewOnly}
+                                        formatter={(value) => {
+                                          if (value) {
+                                            return Currency.formatRp(value);
+                                          }
+                                          return '';
+                                        }}
+                                        parser={(value) => {
+                                          const parsed = Currency.removeRp(value || '');
+                                          return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
+                                        }}
+                                      />
+                                    </Form.Item>
+                                  </Col>
+                                  <Col span={12}>
+                                    <Form.Item name='min_spend_percentage'>
+                                      <InputNumber min={1} max={100} suffix='%' disabled={viewOnly} />
+                                    </Form.Item>
+                                  </Col>
+                                </>
+                              )}
+                            </Row>
+                          </Card>
+                        </Form.Item>
                         {/* Apply Discount to */}
                         <Form.Item label='Apply Discount to'>
                           <Card className={style.card}>
@@ -468,15 +650,16 @@ const VoucherFormView = (props) => {
                                           <div className={style.img}>
                                             {/* guard image props to avoid error if missing */}
                                             <Image
-                                              src={product.image1 ?? ''}
+                                              src={product.image ?? ''}
                                               alt={product.name ?? ''}
-                                              width={52}
-                                              height={52}
+                                              width={96}
+                                              height={96}
                                             />
                                           </div>
                                           <div className={style.text}>
+                                            <p className={style.label}>{product.sku ?? ''}</p>
                                             <p className={style.name}>{product.name ?? ''}</p>
-                                            <p className={style.price}>
+                                            {/* <p className={style.price}>
                                               {product.variants && product.variants.length > 0 ? (
                                                 (() => {
                                                   const content = renderVariantsPopoverContent(product.variants);
@@ -499,7 +682,7 @@ const VoucherFormView = (props) => {
                                                   </span>
                                                 </>
                                               )}
-                                            </p>
+                                            </p> */}
                                           </div>
                                         </div>
                                         <button
@@ -609,194 +792,6 @@ const VoucherFormView = (props) => {
                             )}
                           </Card>
                         </Form.Item>
-                        {/* Validity Period */}
-                        <Form.Item label='Validity Period'>
-                          <Card className={style.card}>
-                            <Row gutter={[16, 16]}>
-                              <Col span={12}>
-                                <Checkbox
-                                  checked={validityType === 'unlimited'}
-                                  onChange={() => setValidityType('unlimited')}
-                                  disabled={viewOnly}>
-                                  Unlimited
-                                </Checkbox>
-                              </Col>
-                              <Col span={12}>
-                                <Checkbox
-                                  checked={validityType === 'date'}
-                                  onChange={() => setValidityType('date')}
-                                  disabled={viewOnly}>
-                                  Start and Expiry Date
-                                </Checkbox>
-                              </Col>
-                              {validityType === 'date' && (
-                                <>
-                                  <Col span={12}>
-                                    <Form.Item name='start_date'>
-                                      <DatePicker
-                                        allowClear={false}
-                                        format='DD MMM YYYY'
-                                        placeholder='start date'
-                                        disabled={viewOnly}
-                                      />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col span={12}>
-                                    <Form.Item name='end_date'>
-                                      <DatePicker
-                                        allowClear={false}
-                                        format='DD MMM YYYY'
-                                        placeholder='end date'
-                                        disabled={viewOnly}
-                                      />
-                                    </Form.Item>
-                                  </Col>
-                                </>
-                              )}
-                            </Row>
-                          </Card>
-                        </Form.Item>
-                        {/* Conditions */}
-                        <Form.Item label='Conditions'>
-                          <Card>
-                            <Row gutter={[16, 16]}>
-                              <Col span={12}>
-                                <Checkbox
-                                  checked={conditionType === 'discount_amount'}
-                                  onChange={() => setConditionType('discount_amount')}
-                                  disabled={viewOnly}>
-                                  Discount Amount (Rp)
-                                </Checkbox>
-                              </Col>
-                              <Col span={12}>
-                                <Checkbox
-                                  checked={conditionType === 'percentage'}
-                                  onChange={() => setConditionType('percentage')}
-                                  disabled={viewOnly}>
-                                  Discount Percentage (%)
-                                </Checkbox>
-                              </Col>
-                              <Col span={12}>
-                                <Checkbox
-                                  checked={conditionType === 'min_spend_amount'}
-                                  onChange={() => setConditionType('min_spend_amount')}
-                                  disabled={viewOnly}>
-                                  Min. Spend & Discount (Rp)
-                                </Checkbox>
-                              </Col>
-                              <Col span={12}>
-                                <Checkbox
-                                  checked={conditionType === 'min_spend_percentage'}
-                                  onChange={() => setConditionType('min_spend_percentage')}
-                                  disabled={viewOnly}>
-                                  Min. Spend & Discount (%)
-                                </Checkbox>
-                              </Col>
-                              {conditionType === 'discount_amount' && (
-                                <Col span={24}>
-                                  <Form.Item name='discount_amount'>
-                                    <InputNumber
-                                      min={0}
-                                      step={1000}
-                                      placeholder='Rp'
-                                      disabled={viewOnly}
-                                      formatter={(value) => {
-                                        if (value) {
-                                          return Currency.formatRp(value);
-                                        }
-                                        return '';
-                                      }}
-                                      parser={(value) => {
-                                        const parsed = Currency.removeRp(value || '');
-                                        return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
-                                      }}
-                                    />
-                                  </Form.Item>
-                                </Col>
-                              )}
-                              {conditionType === 'percentage' && (
-                                <Col span={24}>
-                                  <Form.Item name='percentage'>
-                                    <InputNumber min={1} max={100} addonAfter='%' disabled={viewOnly} />
-                                  </Form.Item>
-                                </Col>
-                              )}
-                              {conditionType === 'min_spend_amount' && (
-                                <>
-                                  <Col span={12}>
-                                    <Form.Item name='min_spend_amount'>
-                                      <InputNumber
-                                        min={0}
-                                        step={1000}
-                                        placeholder='Rp'
-                                        disabled={viewOnly}
-                                        formatter={(value) => {
-                                          if (value) {
-                                            return Currency.formatRp(value);
-                                          }
-                                          return '';
-                                        }}
-                                        parser={(value) => {
-                                          const parsed = Currency.removeRp(value || '');
-                                          return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
-                                        }}
-                                      />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col span={12}>
-                                    <Form.Item name='min_spend_discount'>
-                                      <InputNumber
-                                        min={0}
-                                        step={1000}
-                                        placeholder='Rp'
-                                        disabled={viewOnly}
-                                        formatter={(value) => {
-                                          if (value) {
-                                            return Currency.formatRp(value);
-                                          }
-                                          return '';
-                                        }}
-                                        parser={(value) => {
-                                          const parsed = Currency.removeRp(value || '');
-                                          return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
-                                        }}
-                                      />
-                                    </Form.Item>
-                                  </Col>
-                                </>
-                              )}
-                              {conditionType === 'min_spend_percentage' && (
-                                <>
-                                  <Col span={12}>
-                                    <Form.Item name='min_spend_amount'>
-                                      <InputNumber
-                                        min={0}
-                                        step={1000}
-                                        placeholder='Rp'
-                                        disabled={viewOnly}
-                                        formatter={(value) => {
-                                          if (value) {
-                                            return Currency.formatRp(value);
-                                          }
-                                          return '';
-                                        }}
-                                        parser={(value) => {
-                                          const parsed = Currency.removeRp(value || '');
-                                          return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
-                                        }}
-                                      />
-                                    </Form.Item>
-                                  </Col>
-                                  <Col span={12}>
-                                    <Form.Item name='min_spend_percentage'>
-                                      <InputNumber min={1} max={100} addonAfter='%' disabled={viewOnly} />
-                                    </Form.Item>
-                                  </Col>
-                                </>
-                              )}
-                            </Row>
-                          </Card>
-                        </Form.Item>
                       </>
                     )
                   }
@@ -805,6 +800,52 @@ const VoucherFormView = (props) => {
             </Col>
             {/* RIGHT SIDE */}
             <Col span={9}>
+              <Card>
+                <Form.Item label='Visibility'>
+                  <Card>
+                    <Space direction='vertical' size={16}>
+                      <Checkbox
+                        checked={voucherVisibility === 'public'}
+                        onChange={() => setVoucherVisibility('public')}
+                        disabled={viewOnly}>
+                        Public
+                      </Checkbox>
+                      <Checkbox
+                        checked={voucherVisibility === 'private'}
+                        onChange={() => setVoucherVisibility('private')}
+                        disabled={viewOnly}>
+                        Private
+                      </Checkbox>
+                    </Space>
+                  </Card>
+                </Form.Item>
+              </Card>
+              <Card>
+                <Form.Item label='Type'>
+                  <Card>
+                    <Space direction='vertical' size={16}>
+                      <Checkbox
+                        checked={voucherType === 'guest'}
+                        onChange={() => setVoucherType('guest')}
+                        disabled={viewOnly}>
+                        Guest
+                      </Checkbox>
+                      <Checkbox
+                        checked={voucherType === 'member'}
+                        onChange={() => setVoucherType('member')}
+                        disabled={viewOnly}>
+                        Member
+                      </Checkbox>
+                      <Checkbox
+                        checked={voucherType === 'dealer'}
+                        onChange={() => setVoucherType('dealer')}
+                        disabled={viewOnly}>
+                        Dealer
+                      </Checkbox>
+                    </Space>
+                  </Card>
+                </Form.Item>
+              </Card>
               <Card>
                 <Form.Item label='Voucher Quantity'>
                   <Card>

@@ -19,9 +19,9 @@ const HeaderWidget = () => {
   const user = LocalStorage.get('user');
 
   // Fetch user data
-  const { data } = useFirstLoad(useCallback(() => headerModel.single(user?.id), [user?.id]));
+  // const { data } = useFirstLoad(useCallback(() => headerModel.single(user?.id), [user?.id]));
 
-  return <HeaderView data={data?.data} />;
+  return <HeaderView />;
 };
 
 export default HeaderWidget;

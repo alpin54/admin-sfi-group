@@ -120,7 +120,7 @@ const NotFoundView = (props) => {
               </Form.Item>
               <Form.Item
                 name='image'
-                label='Background'
+                label='Image'
                 valuePropName='file'
                 getValueFromEvent={(e) => e}
                 help='1440px x 800px'>

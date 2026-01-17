@@ -1,6 +1,6 @@
 // -- libraries
 import { useEffect, useState } from 'react';
-import { Button, Modal, Form, Input, Space, Checkbox, Spin, Empty, Popover } from 'antd';
+import { Button, Drawer, Form, Input, Space, Checkbox, Spin, Empty, Popover } from 'antd';
 import Image from 'next/image';
 
 // -- icons
@@ -86,7 +86,7 @@ const ModalProductView = (props) => {
   };
 
   return (
-    <Modal
+    <Drawer
       title='Product'
       width={600}
       onClose={onClose}
@@ -94,8 +94,7 @@ const ModalProductView = (props) => {
       footer={footerComponent}
       onCancel={onClose}
       closable={true}
-      className='modal-form'
-      size='large'>
+      className='drawer-form'>
       <div className={style.search}>
         <Input
           placeholder='Search ...'
@@ -110,11 +109,12 @@ const ModalProductView = (props) => {
           {products.map((product) => (
             <div className={style.item} key={product.id}>
               <div className={style.img}>
-                <Image src={product.image1} alt={product.name} width={56} height={56} />
+                <Image src={product.image} alt={product.name} width={72} height={72} />
               </div>
               <div className={style.text}>
+                <p className={style.label}>{product.sku}</p>
                 <p className={style.name}>{product.name}</p>
-                <p className={style.price}>
+                {/* <p className={style.price}>
                   {product.variants && product.variants.length > 0 ? (
                     (() => {
                       const content = renderVariantsPopoverContent(product.variants);
@@ -131,7 +131,7 @@ const ModalProductView = (props) => {
                       <span>{Currency.formatRp(product.sale_price > 0 ? product.sale_price : product.price)}</span>
                     </>
                   )}
-                </p>
+                </p> */}
               </div>
               <div className={style.checkbox}>
                 <Checkbox
@@ -153,7 +153,7 @@ const ModalProductView = (props) => {
           )}
         </div>
       </Form>
-    </Modal>
+    </Drawer>
   );
 };
 
