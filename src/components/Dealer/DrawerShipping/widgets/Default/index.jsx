@@ -1,4 +1,4 @@
-import DetailDealerDrawer from '@components/Dealer/Drawer/views';
+import DetailDealerDrawer from '@components/Dealer/DrawerShipping/views';
 
 const DrawerDealerDetailWidget = (props) => {
   return <DetailDealerDrawer {...props} />;

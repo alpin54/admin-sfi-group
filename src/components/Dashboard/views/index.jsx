@@ -354,6 +354,7 @@ const DashboardView = (props) => {
         {/* Filter */}
         <div className='row-container'>
           <RangePicker
+            className='custom-range-picker'
             allowClear={false}
             value={dateRange || [dayjs(), dayjs()]}
             onChange={(dates) => setDateRange?.(dates)}

@@ -8,16 +8,28 @@
 
 /* Each address card */
 .addressCard {
+  position: relative;
   background: color(white);
   border: 1px solid #f0f0f0;
   border-radius: 8px;
-  padding: 16px;
+  padding: 16px 64px 16px 16px;
   box-shadow: none;
 }
 
 /* header containing the small tag */
 .addressHeader {
+  display: flex;
+  gap: 12px;
   margin-bottom: 8px;
+}
+
+.addressAction {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 /* Tag override to match pill look */

@@ -244,6 +244,7 @@ const MemberLanding = (props) => {
         {/* Filter */}
         <div className='row-container'>
           <RangePicker
+            className='custom-range-picker'
             allowClear={false}
             defaultValue={[dayjs(), dayjs()]}
             format='DD MMM YYYY'

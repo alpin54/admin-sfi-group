@@ -394,23 +394,8 @@
 .ant-picker {
   width: 100% !important;
   &-range {
-    #dashboard-section &,
-    #revenue-section &,
-    #member-section &,
-    #guest-section &,
-    #pages-section &,
-    #subscribe-section &,
-    #order-section & {
+    &.custom-range-picker {
       width: 368px !important;
-    }
-    #dashboard-section .ant-col &,
-    #revenue-section .ant-col &,
-    #member-section .ant-col &,
-    #guest-section .ant-col &,
-    #pages-section .ant-col &,
-    #subscribe-section .ant-col &,
-    #order-section .ant-col & {
-      width: 100% !important;
     }
   }
 }
