@@ -115,22 +115,22 @@ const SimpleProductTab = ({
 
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Form.Item label='Weight' name='weight'>
+          <Form.Item label='Weight' name='weight' rules={[{ required: true, message: 'Please input weight!' }]}>
             <Input suffix='g' type='number' placeholder='Weight' disabled={viewOnly} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label='Width' name='width'>
+          <Form.Item label='Width' name='width' rules={[{ required: true, message: 'Please input width!' }]}>
             <Input suffix='cm' type='number' placeholder='Width' disabled={viewOnly} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label='Length' name='length'>
+          <Form.Item label='Length' name='length' rules={[{ required: true, message: 'Please input length!' }]}>
             <Input suffix='cm' type='number' placeholder='Length' disabled={viewOnly} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label='Height' name='height'>
+          <Form.Item label='Height' name='height' rules={[{ required: true, message: 'Please input height!' }]}>
             <Input suffix='cm' type='number' placeholder='Height' disabled={viewOnly} />
           </Form.Item>
         </Col>

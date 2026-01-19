@@ -1,4 +1,4 @@
-import productImage from '@assets/image/dummy/product.jpg';
+import productImage from '@assets/image/dummy/product-case.png';
 
 const data = {
   data: {
@@ -16,16 +16,16 @@ const data = {
         id: 37,
         order_id: 32,
         product_id: 3,
-        name: 'Aelia Set',
+        name: 'Zagg Case for iPhone 16 – Snap – Crystal Palace',
         image: productImage,
         price: 3850000,
         quantity: 1,
         variant_id: 280,
         variant_name: null,
         material_id: 11,
-        material_name: 'SATEEN',
+        material_name: 'ZAAG',
         color_id: 22,
-        color_name: 'Dusty Pink',
+        color_name: 'Grey',
         size_id: 4,
         size_name: 'L',
         discount: 0,

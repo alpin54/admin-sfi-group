@@ -11,12 +11,15 @@ import useFirstLoad from '@hooks/useFirstLoad';
 // -- components
 import AdminLandingView from '@components/Admin/Landing/views';
 
+// -- data
+import dummyData from '@components/Admin/Landing/data';
+
 const AdminLandingWidget = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const [filters, setFilters] = useState({ role_id: null, keyword: '' });
 
   // Fetch role options
-  const { data: roleData } = useFirstLoad(useCallback(() => roleModel.list(), []));
+  // const { data: roleData } = useFirstLoad(useCallback(() => roleModel.list(), []));
 
   // Combine parameters for API
   const fetchParams = useMemo(
@@ -25,10 +28,10 @@ const AdminLandingWidget = () => {
   );
 
   // Create a dynamic fetcher, depending on parameters
-  const fetcher = useCallback(() => adminModel.list(fetchParams), [fetchParams]);
+  // const fetcher = useCallback(() => adminModel.list(fetchParams), [fetchParams]);
 
-  // Hook to fetch data and refetch
-  const { ready, data, refetch } = useFirstLoad(fetcher);
+  // // Hook to fetch data and refetch
+  // const { ready, data, refetch } = useFirstLoad(fetcher);
 
   // Handle pagination (from View)
   const handlePageChange = (page, limit) => {
@@ -43,43 +46,43 @@ const AdminLandingWidget = () => {
 
   // Handle delete then refetch
   const handleDelete = async (id) => {
-    const { error: errorDelete } = await adminModel.delete(id);
-    if (!errorDelete) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorDelete?.message
-      };
-    }
+    // const { error: errorDelete } = await adminModel.delete(id);
+    // if (!errorDelete) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorDelete?.message
+    //   };
+    // }
   };
 
   // Handle suspend then refetch
   const handleSuspend = async (payload) => {
-    const { error: errorSuspend } = await adminModel.suspend(payload);
-    if (!errorSuspend) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorSuspend?.message
-      };
-    }
+    // const { error: errorSuspend } = await adminModel.suspend(payload);
+    // if (!errorSuspend) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorSuspend?.message
+    //   };
+    // }
   };
 
   return (
     <AdminLandingView
-      data={data?.data || []}
-      roleOptions={roleData?.data || []}
-      loading={!ready}
+      data={dummyData.data || []}
+      roleOptions={dummyData.role?.data || []}
+      loading={false}
       pagination={pagination}
       filters={filters}
-      totalPage={data?.total}
+      totalPage={dummyData.total}
       onPageChange={handlePageChange}
       onFilterChange={handleFilterChange}
       onDelete={handleDelete}
       onSuspend={handleSuspend}
-      refetch={refetch}
+      refetch={() => {}}
     />
   );
 };

@@ -10,6 +10,9 @@ import useFirstLoad from '@hooks/useFirstLoad';
 // -- components
 import RoleLandingView from '@components/Role/Landing/views';
 
+// -- data
+import dummyData from '@components/Role/Landing/data';
+
 const RoleLandingWidget = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
 
@@ -20,13 +23,13 @@ const RoleLandingWidget = () => {
   );
 
   // Create a dynamic fetcher, depending on parameters
-  const fetcher = useCallback(() => roleModel.list(fetchParams), [fetchParams]);
+  // const fetcher = useCallback(() => roleModel.list(fetchParams), [fetchParams]);
 
-  // Hook to fetch data and refetch
-  const { ready, data, error, refetch } = useFirstLoad(fetcher);
+  // // Hook to fetch data and refetch
+  // const { ready, data, error, refetch } = useFirstLoad(fetcher);
 
   // Only fetch access options
-  const { data: accessOptions } = useFirstLoad(useCallback(() => roleModel.menuList(), []));
+  // const { data: accessOptions } = useFirstLoad(useCallback(() => roleModel.menuList(), []));
 
   // Handle pagination (from View)
   const handlePageChange = (page, limit) => {
@@ -35,42 +38,42 @@ const RoleLandingWidget = () => {
 
   // Handle delete then refetch
   const handleDelete = async (id) => {
-    const { error: errorDelete } = await roleModel.delete(id);
-    if (!errorDelete) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorDelete?.message
-      };
-    }
+    // const { error: errorDelete } = await roleModel.delete(id);
+    // if (!errorDelete) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorDelete?.message
+    //   };
+    // }
   };
 
   // Handle status then refetch
   const handleStatus = async (payload) => {
-    const { error: errorStatus } = await roleModel.status(payload);
-    if (!errorStatus) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorStatus?.message
-      };
-    }
+    // const { error: errorStatus } = await roleModel.status(payload);
+    // if (!errorStatus) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorStatus?.message
+    //   };
+    // }
   };
 
   return (
     <RoleLandingView
-      accessOptions={accessOptions?.data ?? []}
-      data={data?.data}
-      loading={!ready}
-      error={error}
-      totalPage={data?.total}
+      accessOptions={dummyData?.access?.data ?? []}
+      data={dummyData?.data}
+      loading={false}
+      error={null}
+      totalPage={dummyData?.total}
       pagination={pagination}
       onPageChange={handlePageChange}
       onDelete={handleDelete}
       onStatus={handleStatus}
-      refetch={refetch}
+      refetch={() => {}}
     />
   );
 };

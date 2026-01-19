@@ -961,7 +961,7 @@ const TopProduct = ({ data }) => {
         title: 'Revenue',
         dataIndex: 'total',
         key: 'total',
-        align: 'right',
+        align: 'center',
         width: 140,
         render: (val) => Currency.formatRp(val)
       }

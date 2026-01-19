@@ -22,7 +22,7 @@ const EmailLanding = () => {
   const permissions = usePermission('/email');
 
   useEffect(() => {
-    setMenu('Email');
+    setMenu('email');
   }, [setMenu]);
 
   if (!permissions.canView) {

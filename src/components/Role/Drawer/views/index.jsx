@@ -29,7 +29,8 @@ import {
   BgColorsOutlined,
   ClockCircleOutlined,
   MailOutlined,
-  BookOutlined
+  BookOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
 
 // -- styles
@@ -78,6 +79,7 @@ const RoleDrawerView = (props) => {
     product: <ShoppingOutlined />,
     voucher: <TagOutlined />,
     member: <UserAddOutlined />,
+    guest: <UserOutlined />,
     pages: <CopyOutlined />,
     menu: <UnorderedListOutlined />,
     footer: <DownloadOutlined />,
@@ -88,7 +90,8 @@ const RoleDrawerView = (props) => {
     admin: <EditOutlined />,
     'user-log': <ClockCircleOutlined />,
     email: <MailOutlined />,
-    subscriber: <BookOutlined />
+    subscriber: <BookOutlined />,
+    logout: <LogoutOutlined />
   };
 
   // Set default values on load

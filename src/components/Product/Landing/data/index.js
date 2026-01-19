@@ -1,4 +1,4 @@
-import productImage from '@assets/image/dummy/product.jpg';
+import productImage from '@assets/image/dummy/product-case.png';
 
 const data = {
   summary: [

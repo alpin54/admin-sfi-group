@@ -1,6 +1,6 @@
 import shippingImage from '@assets/image/dummy/anteraja.svg';
 import paymentImage from '@assets/image/dummy/bca.svg';
-import productImage from '@assets/image/dummy/product.jpg';
+import productImage from '@assets/image/dummy/product-case.png';
 
 const data = {
   widgetOrder: [
@@ -1464,7 +1464,7 @@ const data = {
       product: {
         id: 1,
         image1: productImage,
-        name: 'Performa Euro Syn SAE 5W-60'
+        name: 'Zagg Case for iPhone 16 – Snap – Crystal Palace'
       },
       total_quantity: 1,
       total_revenue: 3850000
@@ -1474,7 +1474,7 @@ const data = {
       product: {
         id: 2,
         image1: productImage,
-        name: 'Super Lube Motor Oil 10W-40'
+        name: 'Zagg Case for iPhone 16 – Snap – Crystal Palace'
       },
       total_quantity: 27,
       total_revenue: 3500000
@@ -1484,7 +1484,7 @@ const data = {
       product: {
         id: 3,
         image1: productImage,
-        name: 'Ultra Protect Diesel 15W-50'
+        name: 'Zagg Case for iPhone 16 – Snap – Crystal Palace'
       },
       total_quantity: 30,
       total_revenue: 3750000
@@ -1494,7 +1494,7 @@ const data = {
       product: {
         id: 4,
         image1: productImage,
-        name: 'Eco Drive SAE 0W-20'
+        name: 'Zagg Case for iPhone 16 – Snap – Crystal Palace'
       },
       total_quantity: 22,
       total_revenue: 3200000
@@ -1504,7 +1504,7 @@ const data = {
       product: {
         id: 5,
         image1: productImage,
-        name: 'Turbo Syn Engine Oil 5W-30'
+        name: 'Zagg Case for iPhone 16 – Snap – Crystal Palace'
       },
       total_quantity: 25,
       total_revenue: 3400000
@@ -1514,7 +1514,7 @@ const data = {
       product: {
         id: 6,
         image1: productImage,
-        name: 'Maximum Power Gear Oil 80W-90'
+        name: 'Zagg Case for iPhone 16 – Snap – Crystal Palace'
       },
       total_quantity: 18,
       total_revenue: 2600000
@@ -1524,7 +1524,7 @@ const data = {
       product: {
         id: 7,
         image1: productImage,
-        name: 'Advance Brake Fluid DOT 4'
+        name: 'Zagg Case for iPhone 16 – Snap – Crystal Palace'
       },
       total_quantity: 20,
       total_revenue: 2100000
@@ -1534,7 +1534,7 @@ const data = {
       product: {
         id: 8,
         image1: productImage,
-        name: 'Performance ATF Dexron VI',
+        name: 'Zagg Case for iPhone 16 – Snap – Crystal Palace',
         total_item: 15,
         total: 1900000
       }
