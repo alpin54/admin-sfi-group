@@ -1,13 +1,21 @@
+import profileImage from '@assets/image/dummy/profile.svg';
+import ktpImage from '@assets/image/dummy/ktp.jpg';
 import shippingImage from '@assets/image/dummy/jne.svg';
 import paymentImage from '@assets/image/dummy/bca.svg';
 
 const data = {
   data: {
+    image: profileImage.src,
     name: 'Alex Putra',
     phone: '+62 812 3456 7890',
     email: 'alex@gmail.com',
     date_of_birth: '2000-01-22T12:40:04.648Z',
     gender: 'Male',
+    dealer_name: 'Dealer Alex',
+    dealer_code: 'DLR-0001',
+    address: 'Jl. Melati No. 12, Kalideres, Jakarta Barat',
+    ktp_image: ktpImage.src,
+    npwp_image: ktpImage.src,
     created_at: '2026-01-22T12:40:04.648Z',
     updated_at: '2026-02-10T09:20:15.123Z',
     addresses: [

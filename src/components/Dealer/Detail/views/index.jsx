@@ -15,7 +15,8 @@ import {
   Card,
   Typography,
   DatePicker,
-  Modal
+  Modal,
+  Divider
 } from 'antd';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -42,7 +43,9 @@ import {
   MailOutlined,
   EnvironmentOutlined,
   RightOutlined,
-  EditOutlined
+  EditOutlined,
+  IdcardOutlined,
+  CreditCardOutlined
 } from '@ant-design/icons';
 
 // -- image
@@ -347,6 +350,30 @@ const DealerDetail = (props) => {
               </Col>
               <Col span={12}>
                 <InfoRow icon={<UserOutlined />} label='Gender' value={data?.gender ?? '-'} />
+              </Col>
+              <Col span={24}>
+                <Divider />
+                <Text strong>Dealer Information</Text>
+              </Col>
+              <Col span={12}>
+                <InfoRow icon={<ShopOutlined />} label='Dealer Name' value={data?.dealer_name ?? '-'} />
+              </Col>
+              <Col span={12}>
+                <InfoRow icon={<EnvironmentOutlined />} label='Address' value={data?.address ?? '-'} />
+              </Col>
+              <Col span={12}>
+                <InfoRow
+                  icon={<IdcardOutlined />}
+                  label='KTP'
+                  value={data?.ktp_image ? <Text type='success'>Verified</Text> : <Text type='error'>Pending</Text>}
+                />
+              </Col>
+              <Col span={12}>
+                <InfoRow
+                  icon={<CreditCardOutlined />}
+                  label='NPWP'
+                  value={data?.npwp_image ? <Text type='success'>Verified</Text> : <Text type='error'>Pending</Text>}
+                />
               </Col>
             </Row>
           </Card>

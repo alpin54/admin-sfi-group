@@ -1,7 +1,17 @@
 // -- libraries
 import { useEffect } from 'react';
-import { Button, Radio, Col, Drawer, Form, Input, Row, Space, DatePicker } from 'antd';
-import { UserOutlined, PhoneOutlined, MailOutlined, GiftOutlined, ManOutlined } from '@ant-design/icons';
+import { Button, Radio, Tabs, Drawer, Form, Input, Space, DatePicker } from 'antd';
+import {
+  UserOutlined,
+  PhoneOutlined,
+  MailOutlined,
+  GiftOutlined,
+  ManOutlined,
+  ShopOutlined,
+  EnvironmentOutlined,
+  IdcardOutlined,
+  CreditCardOutlined
+} from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -23,7 +33,7 @@ const DrawerDetailView = (props) => {
   const user = LocalStorage.get('user');
   const isDetailMode = method === 'detail';
   const isEditMode = method === 'edit';
-  const title = isEditMode ? 'Edit User Information' : 'User Information';
+  const title = isEditMode ? 'Edit Dealer Information' : 'Dealer Information';
   const [formInstance] = Form.useForm();
 
   // Set value dari string ke dayjs instance ketika data berubah
@@ -115,113 +125,188 @@ const DrawerDetailView = (props) => {
         <Form.Item name='id' hidden initialValue={data?.id}>
           <Input />
         </Form.Item>
-
-        <Form.Item
-          label={
-            <Space>
-              <UserOutlined />
-              Full Name
-            </Space>
-          }
-          name='image'
-          valuePropName='file'
-          getValueFromEvent={(e) => e}>
-          <UploadImage disabled={isDetailMode} value={{ url: data?.image ? data?.image : '' }} />
-        </Form.Item>
-
-        <Form.Item
-          name='name'
-          rules={[
+        <Tabs
+          defaultActiveKey='1'
+          items={[
             {
-              required: !isDetailMode,
-              message: 'Please input your full name!'
-            }
-          ]}>
-          <Input disabled={isDetailMode} allowClear placeholder='Full Name' />
-        </Form.Item>
+              key: 1,
+              label: 'Personal Information',
+              children: (
+                <>
+                  <Form.Item
+                    label={
+                      <Space>
+                        <UserOutlined />
+                        Full Name
+                      </Space>
+                    }
+                    name='image'
+                    valuePropName='file'
+                    getValueFromEvent={(e) => e}>
+                    <UploadImage disabled={isDetailMode} value={{ url: data?.image ? data?.image : '' }} />
+                  </Form.Item>
 
-        <Form.Item
-          label={
-            <Space>
-              <PhoneOutlined />
-              Phone Number
-            </Space>
-          }
-          name='phone'
-          rules={[
-            {
-              required: !isDetailMode,
-              message: 'Please enter a valid phone number!'
-            }
-          ]}>
-          <Input disabled={isDetailMode} allowClear />
-        </Form.Item>
+                  <Form.Item
+                    name='name'
+                    rules={[
+                      {
+                        required: !isDetailMode,
+                        message: 'Please input your full name!'
+                      }
+                    ]}>
+                    <Input disabled={isDetailMode} allowClear placeholder='Full Name' />
+                  </Form.Item>
 
-        <Form.Item
-          label={
-            <Space>
-              <MailOutlined />
-              Email
-            </Space>
-          }
-          name='email'
-          rules={[
-            {
-              required: !isDetailMode,
-              type: 'email',
-              message: 'Please enter a valid email!'
-            }
-          ]}>
-          <Input disabled={isDetailMode} allowClear />
-        </Form.Item>
+                  <Form.Item
+                    label={
+                      <Space>
+                        <PhoneOutlined />
+                        Phone Number
+                      </Space>
+                    }
+                    name='phone'
+                    rules={[
+                      {
+                        required: !isDetailMode,
+                        message: 'Please enter a valid phone number!'
+                      }
+                    ]}>
+                    <Input disabled={isDetailMode} allowClear />
+                  </Form.Item>
 
-        <Form.Item
-          label={
-            <Space>
-              <GiftOutlined />
-              Date of Birth
-            </Space>
-          }
-          name='date_of_birth'
-          rules={[
-            {
-              required: !isDetailMode,
-              message: 'Please pick your date of birth!'
-            }
-          ]}>
-          <DatePicker
-            format='DD MMMM YYYY'
-            style={{ width: '100%' }}
-            allowClear={!isDetailMode}
-            disabled={isDetailMode}
-            placeholder='Select date'
-            inputReadOnly
-          />
-        </Form.Item>
+                  <Form.Item
+                    label={
+                      <Space>
+                        <MailOutlined />
+                        Email
+                      </Space>
+                    }
+                    name='email'
+                    rules={[
+                      {
+                        required: !isDetailMode,
+                        type: 'email',
+                        message: 'Please enter a valid email!'
+                      }
+                    ]}>
+                    <Input disabled={isDetailMode} allowClear />
+                  </Form.Item>
 
-        <Form.Item
-          label={
-            <Space>
-              <ManOutlined />
-              Gender
-            </Space>
-          }
-          name='gender'
-          rules={[
+                  <Form.Item
+                    label={
+                      <Space>
+                        <GiftOutlined />
+                        Date of Birth
+                      </Space>
+                    }
+                    name='date_of_birth'
+                    rules={[
+                      {
+                        required: !isDetailMode,
+                        message: 'Please pick your date of birth!'
+                      }
+                    ]}>
+                    <DatePicker
+                      format='DD MMMM YYYY'
+                      style={{ width: '100%' }}
+                      allowClear={!isDetailMode}
+                      disabled={isDetailMode}
+                      placeholder='Select date'
+                      inputReadOnly
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    label={
+                      <Space>
+                        <ManOutlined />
+                        Gender
+                      </Space>
+                    }
+                    name='gender'
+                    rules={[
+                      {
+                        required: !isDetailMode,
+                        message: 'Please select gender!'
+                      }
+                    ]}>
+                    <Radio.Group disabled={isDetailMode}>
+                      <Radio value='male' checked={data?.gender === 'Male'}>
+                        Male
+                      </Radio>
+                      <Radio value='female' checked={data?.gender === 'Female'}>
+                        Female
+                      </Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                </>
+              )
+            },
             {
-              required: !isDetailMode,
-              message: 'Please select gender!'
+              key: 2,
+              label: 'Dealer Information',
+              children: (
+                <>
+                  <Form.Item
+                    label={
+                      <Space>
+                        <ShopOutlined />
+                        Dealer Name
+                      </Space>
+                    }
+                    name='dealer_name'
+                    rules={[
+                      {
+                        required: !isDetailMode,
+                        message: 'Please enter a valid dealer name!'
+                      }
+                    ]}>
+                    <Input disabled={isDetailMode} allowClear />
+                  </Form.Item>
+                  <Form.Item
+                    label={
+                      <Space>
+                        <EnvironmentOutlined />
+                        Address
+                      </Space>
+                    }
+                    name='address'
+                    rules={[
+                      {
+                        required: !isDetailMode,
+                        message: 'Please enter a valid address!'
+                      }
+                    ]}>
+                    <Input.TextArea rows={3} disabled={isDetailMode} allowClear />
+                  </Form.Item>
+                  <Form.Item
+                    label={
+                      <Space>
+                        <IdcardOutlined />
+                        KTP
+                      </Space>
+                    }
+                    name='ktp_image'
+                    valuePropName='file'
+                    getValueFromEvent={(e) => e}>
+                    <UploadImage disabled={isDetailMode} value={{ url: data?.ktp_image ? data?.ktp_image : '' }} />
+                  </Form.Item>
+                  <Form.Item
+                    label={
+                      <Space>
+                        <CreditCardOutlined />
+                        NPWP
+                      </Space>
+                    }
+                    name='npwp_image'
+                    valuePropName='file'
+                    getValueFromEvent={(e) => e}>
+                    <UploadImage disabled={isDetailMode} value={{ url: data?.npwp_image ? data?.npwp_image : '' }} />
+                  </Form.Item>
+                </>
+              )
             }
-          ]}>
-          <Radio.Group disabled={isDetailMode}>
-            <Radio value='male' checked={data?.gender === 'Male'}>
-              Male
-            </Radio>
-            <Radio value='female' checked={data?.gender === 'Female'}>
-              Female
-            </Radio>
-          </Radio.Group>
-        </Form.Item>
+          ]}></Tabs>
       </Form>
     </Drawer>
   );
