@@ -36,7 +36,7 @@
 /* Radius
    ========================================================================== */
 @mixin radius($size) {
-  border-radius: map-get($radius, number(#{$size}));
+  border-radius: map-get($radius, $size);
 }
 
 /* clearfix
@@ -44,7 +44,7 @@
 @mixin clearfix {
   &::before,
   &::after {
-    content: " ";
+    content: ' ';
     display: table;
   }
   &::after {
@@ -61,8 +61,8 @@
 
 /* scroll
   ========================================================================== */
-@mixin scroll($coor, $scrolling: "no-touch", $scrollbar: "show") {
-  @if ($coor == "x") {
+@mixin scroll($coor, $scrolling: 'no-touch', $scrollbar: 'show') {
+  @if ($coor == 'x') {
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: auto;
@@ -71,11 +71,11 @@
     overflow-y: auto;
   }
 
-  @if ($scrolling == "touch") {
+  @if ($scrolling == 'touch') {
     -webkit-overflow-scrolling: touch;
   }
 
-  @if ($scrollbar == "hide") {
+  @if ($scrollbar == 'hide') {
     -ms-overflow-style: none;
     &::-webkit-scrollbar {
       -webkit-appearance: none;
@@ -125,4 +125,3 @@
     @content;
   }
 }
-

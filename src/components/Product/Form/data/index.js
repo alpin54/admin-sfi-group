@@ -1,7 +1,7 @@
 const data = {
   data: {
     id: 1,
-    product_type: 1,
+    product_type: [1],
     is_variant: false,
     is_features: true,
     sku: 'SP-001',
@@ -22,7 +22,13 @@ const data = {
     discount_dealer_end: '2026-01-31T09:31:46.066Z',
     is_stock: true,
     stock: 10,
-    wieght: 500,
+    sold: 2,
+    revenue: 2000000,
+    review: {
+      total: 5,
+      rating: 4.5
+    },
+    weight: 500,
     width: 10,
     height: 20,
     length: 15,

@@ -7,6 +7,7 @@ import LocalStorage from '@utils/localStorage';
 
 // -- elements
 import SectionHeader from '@elements/SectionHeader/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
 const FormMetaSection1View = (props) => {
   const { method, confirm, notify, data, ready, loading, message, onSubmit } = props;
@@ -79,29 +80,51 @@ const FormMetaSection1View = (props) => {
         <Form.Item name='id' hidden>
           <Input />
         </Form.Item>
-        <Form.Item name={'title'} label='Title' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
-        </Form.Item>
-        <Form.Item
-          name={'description'}
-          label='Description'
-          rules={[{ required: true, message: 'Description is required' }]}>
-          <TextArea allowClear rows={3} readOnly={!isEdit} />
-        </Form.Item>
-        <Form.Item name={'keyword'} label='Keywords' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
-        </Form.Item>
+        <TranslationTabs>
+          {(lang) => (
+            <>
+              <Form.Item
+                name={['title', lang]}
+                label='Title'
+                rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+              <Form.Item
+                name={['description', lang]}
+                label='Description'
+                rules={[{ required: true, message: 'Description is required' }]}>
+                <TextArea allowClear rows={3} readOnly={!isEdit} />
+              </Form.Item>
+              <Form.Item
+                name={['keyword', lang]}
+                label='Keywords'
+                rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
 
-        <Form.Item name={'robots'} label='Robots' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
-        </Form.Item>
+              <Form.Item
+                name={['robots', lang]}
+                label='Robots'
+                rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
 
-        <Form.Item name={'refresh'} label='Refresh' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
-        </Form.Item>
-        <Form.Item name={'author'} label='Author' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
-        </Form.Item>
+              <Form.Item
+                name={['refresh', lang]}
+                label='Refresh'
+                rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+              <Form.Item
+                name={['author', lang]}
+                label='Author'
+                rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+            </>
+          )}
+        </TranslationTabs>
+
         <Form.Item>
           <Space size={16}>
             {isEdit ? (

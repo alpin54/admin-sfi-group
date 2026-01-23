@@ -1,33 +1,34 @@
-// -- libraries
 import { useState, useCallback } from 'react';
+import dayjs from 'dayjs';
 
 const useDiscount = (formInstance) => {
+  // Member
   const [memberDiscountEnabled, setMemberDiscountEnabled] = useState(false);
   const [memberScheduleEnabled, setMemberScheduleEnabled] = useState(false);
   const [memberScheduleDateRange, setMemberScheduleDateRange] = useState([null, null]);
   const [memberDiscountNumber, setMemberDiscountNumber] = useState(0);
   const [memberDiscountPercentage, setMemberDiscountPercentage] = useState(0);
 
+  // Dealer
   const [dealerDiscountEnabled, setDealerDiscountEnabled] = useState(false);
   const [dealerScheduleEnabled, setDealerScheduleEnabled] = useState(false);
   const [dealerScheduleDateRange, setDealerScheduleDateRange] = useState([null, null]);
   const [dealerDiscountNumber, setDealerDiscountNumber] = useState(0);
   const [dealerDiscountPercentage, setDealerDiscountPercentage] = useState(0);
 
+  // --- HANDLER (nominal dan persentase selalu sinkron dua arah) ---
   const handleMemberNumberChange = useCallback(
     (value, memberPrice) => {
-      if (!memberPrice || memberPrice === 0) return;
-
-      const numValue = value || 0;
+      const numValue = Number(value) || 0;
       setMemberDiscountNumber(numValue);
 
-      const percentage = (numValue / memberPrice) * 100;
-      const roundedPercentage = Math.round(percentage * 100) / 100;
-      setMemberDiscountPercentage(roundedPercentage);
+      let percentage = 0;
+      if (memberPrice > 0) percentage = Math.round((numValue / memberPrice) * 10000) / 100;
+      setMemberDiscountPercentage(percentage);
 
       formInstance.setFieldsValue({
         discount_member_number: numValue,
-        discount_member: roundedPercentage
+        discount_member: percentage
       });
     },
     [formInstance]
@@ -35,17 +36,15 @@ const useDiscount = (formInstance) => {
 
   const handleMemberPercentageChange = useCallback(
     (value, memberPrice) => {
-      if (!memberPrice || memberPrice === 0) return;
-
-      const percentValue = value || 0;
+      const percentValue = Number(value) || 0;
       setMemberDiscountPercentage(percentValue);
 
-      const discountAmount = (memberPrice * percentValue) / 100;
-      const roundedAmount = Math.round(discountAmount);
-      setMemberDiscountNumber(roundedAmount);
+      let discountAmount = 0;
+      if (memberPrice > 0) discountAmount = Math.round((memberPrice * percentValue) / 100);
+      setMemberDiscountNumber(discountAmount);
 
       formInstance.setFieldsValue({
-        discount_member_number: roundedAmount,
+        discount_member_number: discountAmount,
         discount_member: percentValue
       });
     },
@@ -54,18 +53,16 @@ const useDiscount = (formInstance) => {
 
   const handleDealerNumberChange = useCallback(
     (value, dealerPrice) => {
-      if (!dealerPrice || dealerPrice === 0) return;
-
-      const numValue = value || 0;
+      const numValue = Number(value) || 0;
       setDealerDiscountNumber(numValue);
 
-      const percentage = (numValue / dealerPrice) * 100;
-      const roundedPercentage = Math.round(percentage * 100) / 100;
-      setDealerDiscountPercentage(roundedPercentage);
+      let percentage = 0;
+      if (dealerPrice > 0) percentage = Math.round((numValue / dealerPrice) * 10000) / 100;
+      setDealerDiscountPercentage(percentage);
 
       formInstance.setFieldsValue({
         discount_dealer_number: numValue,
-        discount_dealer: roundedPercentage
+        discount_dealer: percentage
       });
     },
     [formInstance]
@@ -73,47 +70,72 @@ const useDiscount = (formInstance) => {
 
   const handleDealerPercentageChange = useCallback(
     (value, dealerPrice) => {
-      if (!dealerPrice || dealerPrice === 0) return;
-
-      const percentValue = value || 0;
+      const percentValue = Number(value) || 0;
       setDealerDiscountPercentage(percentValue);
 
-      const discountAmount = (dealerPrice * percentValue) / 100;
-      const roundedAmount = Math.round(discountAmount);
-      setDealerDiscountNumber(roundedAmount);
+      let discountAmount = 0;
+      if (dealerPrice > 0) discountAmount = Math.round((dealerPrice * percentValue) / 100);
+      setDealerDiscountNumber(discountAmount);
 
       formInstance.setFieldsValue({
-        discount_dealer_number: roundedAmount,
+        discount_dealer_number: discountAmount,
         discount_dealer: percentValue
       });
     },
     [formInstance]
   );
 
-  const initializeFromData = useCallback((data) => {
-    if (!data) return;
+  // --- INISIALISASI dari DATA API (mapping lengkap sesuai API-mu) ---
+  const initializeFromData = useCallback(
+    (data = {}) => {
+      // Member discount
+      setMemberDiscountEnabled(Boolean(data.is_discount_member));
+      setMemberScheduleEnabled(Boolean(data.is_schedule_discount_member));
+      const memberPercentage = Number(data.discount_member) || 0;
+      setMemberDiscountPercentage(memberPercentage);
+      const memberPrice = Number(data.member_price) || 0;
+      const memberNumber = memberPrice > 0 ? Math.round((memberPrice * memberPercentage) / 100) : 0;
+      setMemberDiscountNumber(memberNumber);
 
-    setMemberDiscountEnabled(Boolean(data.is_discount_member));
-    setMemberScheduleEnabled(Boolean(data.is_schedule_discount_member));
-    setDealerDiscountEnabled(Boolean(data.is_discount_dealer));
-    setDealerScheduleEnabled(Boolean(data.is_schedule_discount_dealer));
-
-    if (data.discount_member_number) {
-      setMemberDiscountNumber(data.discount_member_number);
-      if (data.member_price > 0) {
-        const percentage = (data.discount_member_number / data.member_price) * 100;
-        setMemberDiscountPercentage(Math.round(percentage * 100) / 100);
+      let memberScheduleRange = [null, null];
+      if (data.discount_member_start && data.discount_member_end) {
+        memberScheduleRange = [dayjs(data.discount_member_start), dayjs(data.discount_member_end)];
+        setMemberScheduleDateRange(memberScheduleRange);
+      } else {
+        setMemberScheduleDateRange([null, null]);
       }
-    }
 
-    if (data.discount_dealer_number) {
-      setDealerDiscountNumber(data.discount_dealer_number);
-      if (data.dealer_price > 0) {
-        const percentage = (data.discount_dealer_number / data.dealer_price) * 100;
-        setDealerDiscountPercentage(Math.round(percentage * 100) / 100);
+      // Dealer discount
+      setDealerDiscountEnabled(Boolean(data.is_discount_dealer));
+      setDealerScheduleEnabled(Boolean(data.is_schedule_discount_dealer));
+      const dealerPercentage = Number(data.discount_dealer) || 0;
+      setDealerDiscountPercentage(dealerPercentage);
+      const dealerPrice = Number(data.dealer_price) || 0;
+      const dealerNumber = dealerPrice > 0 ? Math.round((dealerPrice * dealerPercentage) / 100) : 0;
+      setDealerDiscountNumber(dealerNumber);
+
+      let dealerScheduleRange = [null, null];
+      if (data.discount_dealer_start && data.discount_dealer_end) {
+        dealerScheduleRange = [dayjs(data.discount_dealer_start), dayjs(data.discount_dealer_end)];
+        setDealerScheduleDateRange(dealerScheduleRange);
+      } else {
+        setDealerScheduleDateRange([null, null]);
       }
-    }
-  }, []);
+
+      // Set to Ant Design Form
+      formInstance?.setFieldsValue({
+        // MEMBER
+        discount_member: memberPercentage,
+        discount_member_number: memberNumber,
+        discount_member_schedule: memberScheduleRange,
+        // DEALER
+        discount_dealer: dealerPercentage,
+        discount_dealer_number: dealerNumber,
+        discount_dealer_schedule: dealerScheduleRange
+      });
+    },
+    [formInstance]
+  );
 
   return {
     // Member
@@ -140,7 +162,7 @@ const useDiscount = (formInstance) => {
     handleDealerNumberChange,
     handleDealerPercentageChange,
 
-    // Initialize
+    // Utils
     initializeFromData
   };
 };

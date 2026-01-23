@@ -15,7 +15,7 @@
   padding: 16px;
   background-color: color(neutral, 1);
   border: 1px solid color(neutral, 3);
-  @include radius(1);
+  @include radius(xs);
   margin-bottom: 16px;
   transform: translate(0);
   &:last-child {

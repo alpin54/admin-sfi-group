@@ -2,56 +2,35 @@
 import httpRequest from '@api/httpRequest';
 import ENDPOINT from '@api/endPoint';
 
-const handleSingle = async () => {
+const handleList = async () => {
   return await httpRequest({
     method: 'get',
-    url: ENDPOINT.ABOUT_OUR_VALUES
-  });
-};
-
-const handlePublish = async (payload) => {
-  return await httpRequest({
-    method: 'put',
-    url: ENDPOINT.ABOUT_OUR_VALUES,
-    data: payload
-  });
-};
-
-const handleSubmit = async (payload) => {
-  return await httpRequest({
-    method: 'put',
-    url: ENDPOINT.ABOUT_OUR_VALUES,
-    data: payload
-  });
-};
-
-const handleStatus = async (payload) => {
-  return await httpRequest({
-    method: 'put',
-    url: ENDPOINT.ABOUT_VALUES,
-    data: payload,
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+    url: ENDPOINT.CAREER_BANNER
   });
 };
 
 const handleDelete = async (id) => {
   return await httpRequest({
     method: 'delete',
-    url: ENDPOINT.ABOUT_VALUES,
+    url: ENDPOINT.CAREER_BANNER,
     data: {
       id
     }
   });
 };
 
-const aboutValuesModel = {
-  single: handleSingle,
-  publish: handlePublish,
-  submit: handleSubmit,
-  status: handleStatus,
-  delete: handleDelete
+const handleStatus = async (payload) => {
+  return await httpRequest({
+    method: 'put',
+    url: ENDPOINT.CAREER_BANNER,
+    data: payload
+  });
 };
 
-export default aboutValuesModel;
+const careerBannerModel = {
+  list: handleList,
+  delete: handleDelete,
+  status: handleStatus
+};
+
+export default careerBannerModel;

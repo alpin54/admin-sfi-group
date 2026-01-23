@@ -2,20 +2,16 @@
 import { Form, Input, Row, Col, DatePicker, Switch } from 'antd';
 
 // -- components
-import { AttributeVariation } from '@components/Product/Form/views/AttributeVariation';
-import { VariantTable } from '@components/Product/Form/views/VariantTable';
+import AttributeVariation from '@components/Product/Form/views/AttributeVariation';
+import VariantTable from '@components/Product/Form/views/VariantTable';
 
 const VariableProductTab = ({
   viewOnly,
   formInstance,
   discountHook,
   rangePresets,
-  materialOptions,
-  sizeOptions,
-  colorOptions,
   data,
   notify,
-  setTabKey,
   attributesHook,
   variantsHook,
   groupImagesHook
@@ -24,16 +20,7 @@ const VariableProductTab = ({
   return (
     <>
       <div className='row-container'>
-        <AttributeVariation
-          viewOnly={viewOnly}
-          materialOptions={materialOptions}
-          sizeOptions={sizeOptions}
-          colorOptions={colorOptions}
-          data={data}
-          notify={notify}
-          setTabKey={setTabKey}
-          attributesHook={attributesHook}
-        />
+        <AttributeVariation viewOnly={viewOnly} data={data} notify={notify} attributesHook={attributesHook} />
 
         <VariantTable
           viewOnly={viewOnly}
@@ -115,4 +102,4 @@ const VariableProductTab = ({
   );
 };
 
-export { VariableProductTab };
+export default VariableProductTab;

@@ -2,36 +2,35 @@
 import httpRequest from '@api/httpRequest';
 import ENDPOINT from '@api/endPoint';
 
-const handleSingle = async () => {
+const handleList = async () => {
   return await httpRequest({
     method: 'get',
-    url: ENDPOINT.ABOUT_OUR_STORY
+    url: ENDPOINT.CAREER_BANNER
   });
 };
 
-const handlePublish = async (payload) => {
+const handleDelete = async (id) => {
   return await httpRequest({
-    method: 'put',
-    url: ENDPOINT.ABOUT_OUR_STORY,
-    data: payload
-  });
-};
-
-const handleSubmit = async (payload) => {
-  return await httpRequest({
-    method: 'put',
-    url: ENDPOINT.ABOUT_OUR_STORY,
-    data: payload,
-    headers: {
-      'Content-Type': 'multipart/form-data'
+    method: 'delete',
+    url: ENDPOINT.CAREER_BANNER,
+    data: {
+      id
     }
   });
 };
 
-const aboutOurStoryModel = {
-  single: handleSingle,
-  publish: handlePublish,
-  submit: handleSubmit
+const handleStatus = async (payload) => {
+  return await httpRequest({
+    method: 'put',
+    url: ENDPOINT.CAREER_BANNER,
+    data: payload
+  });
 };
 
-export default aboutOurStoryModel;
+const careerBannerModel = {
+  list: handleList,
+  delete: handleDelete,
+  status: handleStatus
+};
+
+export default careerBannerModel;

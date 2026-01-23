@@ -146,7 +146,7 @@ const Sidebar = ({ data }) => {
   // Function to find the best matching key for the current path
   const findMatchingKey = useCallback(
     (path) => {
-      if (!path) return menu || '/overview';
+      if (!path) return menu;
 
       const pathStr = String(path);
 

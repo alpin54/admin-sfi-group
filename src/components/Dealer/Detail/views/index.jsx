@@ -45,11 +45,9 @@ import {
   RightOutlined,
   EditOutlined,
   IdcardOutlined,
-  CreditCardOutlined
+  CreditCardOutlined,
+  RetweetOutlined
 } from '@ant-design/icons';
-
-// -- image
-import pointLogo from '@assets/image/dummy/point-logo.png';
 
 // -- styles
 import style from '@components/Dealer/Detail/styles/style.module.scss';
@@ -63,11 +61,12 @@ import Currency from '@utils/currency';
 import LocalStorage from '@utils/localStorage';
 
 // -- components
+import PrintLabel, { getPaymentLogo, getShippingLogo } from '@components/Order/Landing/views/print';
 import DrawerDetailDetailWidget from '@components/Dealer/DrawerDetail/widgets/Default';
 import DrawerShippingDetailWidget from '@components/Dealer/DrawerShipping/widgets/Default';
 import ModalPasswordDetailWidget from '@components/Dealer/ModalPassword/widgets/Default';
 import ModalAddressDetailWidget from '@components/Dealer/ModalAddress/widgets/Default';
-import PrintLabel, { getPaymentLogo, getShippingLogo } from '@components/Order/Landing/views/print';
+import ModalRevisionWidget from '@components/Dealer/ModalRevision/widgets/Default';
 
 // -- elements
 import CardSummary from '@components/Elements/CardSummary/views';
@@ -93,6 +92,9 @@ const DealerDetail = (props) => {
   const [openModalPassword, setOpenModalPassword] = useState(false);
   const [openModalAddress, setOpenModalAddress] = useState(false);
   const [dataAddress, setDataAddress] = useState(null);
+  const [openModalRevision, setOpenModalRevision] = useState(false);
+  const [variantModalRevision, setVariantModalRevision] = useState('ktp');
+  const [dataModalRevision, setDataModalRevision] = useState(null);
 
   // Modal state for print
   const [printModalOpen, setPrintModalOpen] = useState(false);
@@ -107,7 +109,18 @@ const DealerDetail = (props) => {
   const handleOpenAddress = (data) => {
     setOpenModalAddress(true);
     setDataAddress(data);
-    console.log('data', data);
+  };
+
+  const handleOpenRevision = (data, variant) => {
+    setVariantModalRevision(variant);
+    setDataModalRevision(data);
+    setOpenModalRevision(true);
+  };
+
+  const handleCloseRevision = () => {
+    setOpenModalRevision(false);
+    setDataModalRevision(null);
+    setVariantModalRevision('ktp');
   };
 
   // Print handler
@@ -279,13 +292,13 @@ const DealerDetail = (props) => {
 
   const InfoRow = ({ icon, label, value, image }) => (
     <Row align='middle' className={style.infoRow}>
-      <Col flex='20px' className={style.infoIcon}>
+      <Col span={1} className={style.infoIcon}>
         {icon}
       </Col>
-      <Col flex='100px' className={style.infoLabel}>
+      <Col span={5} className={style.infoLabel}>
         <Text className={style.infoLabelText}>{label}</Text>
       </Col>
-      <Col className={style.infoValue}>
+      <Col span={16} className={style.infoValue}>
         {image && <Image className={style.infoImg} src={image} alt={label} width={24} height={24} />}
         <Text className={style.infoValueText}>{value}</Text>
       </Col>
@@ -365,14 +378,54 @@ const DealerDetail = (props) => {
                 <InfoRow
                   icon={<IdcardOutlined />}
                   label='KTP'
-                  value={data?.ktp_image ? <Text type='success'>Verified</Text> : <Text type='error'>Pending</Text>}
+                  value={
+                    data?.ktp_image ? (
+                      <Text type='success'>Verified</Text>
+                    ) : (
+                      <Row>
+                        <Col span={12}>
+                          <Text type='info'>Under Review</Text>
+                        </Col>
+                        <Col span={12} style={{ textAlign: 'right' }}>
+                          <Tooltip title='Revision KTP'>
+                            <Button
+                              size='small'
+                              type='text'
+                              icon={<RetweetOutlined />}
+                              onClick={() => handleOpenRevision(data, 'ktp')}
+                            />
+                          </Tooltip>
+                        </Col>
+                      </Row>
+                    )
+                  }
                 />
               </Col>
               <Col span={12}>
                 <InfoRow
                   icon={<CreditCardOutlined />}
                   label='NPWP'
-                  value={data?.npwp_image ? <Text type='success'>Verified</Text> : <Text type='error'>Pending</Text>}
+                  value={
+                    data?.npwp_image ? (
+                      <Text type='success'>Verified</Text>
+                    ) : (
+                      <Row>
+                        <Col span={12}>
+                          <Text type='info'>Under Review</Text>
+                        </Col>
+                        <Col span={12} style={{ textAlign: 'right' }}>
+                          <Tooltip title='Revision NPWP'>
+                            <Button
+                              size='small'
+                              type='text'
+                              icon={<RetweetOutlined />}
+                              onClick={() => handleOpenRevision(data, 'npwp')}
+                            />
+                          </Tooltip>
+                        </Col>
+                      </Row>
+                    )
+                  }
                 />
               </Col>
             </Row>
@@ -555,6 +608,16 @@ const DealerDetail = (props) => {
           onClose={() => setOpenModalAddress(false)}
           data={dataAddress}
           notify={notify}
+        />
+      )}
+
+      {/* Modal Revision */}
+      {openModalRevision && (
+        <ModalRevisionWidget
+          variant={variantModalRevision}
+          open={openModalRevision}
+          data={dataModalRevision}
+          onClose={handleCloseRevision}
         />
       )}
 

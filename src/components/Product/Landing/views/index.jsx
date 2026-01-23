@@ -196,6 +196,7 @@ const ProductLanding = (props) => {
     {
       title: 'SKU',
       dataIndex: 'sku',
+      width: 150,
       render: (_, record) => {
         const variants = record?.variants;
         if (variants && variants.length > 0) {
@@ -219,7 +220,7 @@ const ProductLanding = (props) => {
     },
     {
       title: 'Brand',
-      width: 150,
+      width: 80,
       dataIndex: 'brands',
       render: (brands) => brands.map((brand) => brand.name ?? '-').join(', ')
     },
@@ -265,9 +266,8 @@ const ProductLanding = (props) => {
       title: 'Action',
       dataIndex: 'action',
       align: 'center',
-      width: 180,
       render: (_, record) => (
-        <Space size={4} align='center'>
+        <Space size={1} align='center'>
           {canView && (
             <Tooltip title='View More' placement='left'>
               <Link href={`/product/detail/${record.id}`}>
@@ -422,7 +422,6 @@ const ProductLanding = (props) => {
           dataSource={data ?? []}
           rowKey='id'
           loading={loading}
-          scroll={{ x: 1440 }}
           pagination={
             totalPage > pagination.limit && {
               current: pagination.page,

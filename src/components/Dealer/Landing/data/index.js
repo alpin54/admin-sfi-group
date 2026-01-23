@@ -1,4 +1,5 @@
 import ProfileImage from '@assets/image/dummy/profile.svg';
+import ktpImage from '@assets/image/dummy/ktp.jpg';
 
 const data = {
   data: [
@@ -14,11 +15,11 @@ const data = {
       total_spending: 7500000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -34,11 +35,11 @@ const data = {
       total_spending: 12000000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: false
     },
@@ -54,11 +55,11 @@ const data = {
       total_spending: 2500000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -74,11 +75,11 @@ const data = {
       total_spending: 20500000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: false
     },
@@ -94,11 +95,11 @@ const data = {
       total_spending: 3000000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -114,11 +115,11 @@ const data = {
       total_spending: 13250000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -134,11 +135,11 @@ const data = {
       total_spending: 8100000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -154,11 +155,11 @@ const data = {
       total_spending: 10200000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -174,11 +175,11 @@ const data = {
       total_spending: 9000000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -194,11 +195,11 @@ const data = {
       total_spending: 2100000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -214,11 +215,11 @@ const data = {
       total_spending: 8700000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -234,11 +235,11 @@ const data = {
       total_spending: 6200000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -254,11 +255,11 @@ const data = {
       total_spending: 18700000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     },
@@ -274,11 +275,11 @@ const data = {
       total_spending: 1900000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: false
     },
@@ -294,11 +295,11 @@ const data = {
       total_spending: 11500000,
       ktp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       npwp: {
         code: '32034303033',
-        image: ProfileImage
+        image: ktpImage
       },
       status: true
     }

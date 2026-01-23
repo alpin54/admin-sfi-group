@@ -1,15 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { message, Upload, Button, Image, Progress } from 'antd';
-import { EditOutlined, CloudUploadOutlined, PlusOutlined, FileImageOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  CloudUploadOutlined,
+  PlusOutlined,
+  FileImageOutlined,
+  VideoCameraOutlined
+} from '@ant-design/icons';
 
 // -- styles
 import style from '@components/Elements/UploadImage/styles/style.module.scss';
 
 /**
- * Custom UploadImage component supporting single and multi (maxCount) image upload with gallery grid style.
+ * Custom UploadImage component supporting single and multi (maxCount) image/video upload with gallery grid style.
  * If maxCount is given, shows gallery grid with add ("+") slots, matching design in image3.
+ * Now supports images (jpg, png) and videos (mp4, webm, mov).
  */
-const UploadImage = ({ variant = 'default', value, onChange, disabled = false, maxCount = 1 }) => {
+const UploadImage = ({
+  variant = 'default',
+  value,
+  onChange,
+  disabled = false,
+  maxCount = 1,
+  type = 'image',
+  size = 'default'
+}) => {
   // Always ensure fileList is array
   const [fileList, setFileList] = useState(Array.isArray(value) ? value : value ? [value] : []);
   const [loading, setLoading] = useState(false);
@@ -29,13 +44,19 @@ const UploadImage = ({ variant = 'default', value, onChange, disabled = false, m
     }
   }, [value]);
 
-  // Image file validation
+  // Allowed types for upload
+  const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4', 'video/webm', 'video/quicktime'];
+  // Map type to preview
+  const isImage = (type) => type && type.startsWith('image/');
+  const isVideo = (type) => type && type.startsWith('video/');
+
+  // Media file validation
   const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) message.error('You can only upload JPG/PNG file!');
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) message.error('Image must be smaller than 2MB!');
-    return isJpgOrPng && isLt2M;
+    const isAllowed = allowedTypes.includes(file.type);
+    if (!isAllowed) message.error('You can only upload JPG/PNG/MP4/WebM/MOV file!');
+    const isLt20M = file.size / 1024 / 1024 < 20;
+    if (!isLt20M) message.error('File must be smaller than 20MB!');
+    return isAllowed && isLt20M;
   };
 
   // Custom upload handler, supports adding in specific slot (for multi)
@@ -116,24 +137,48 @@ const UploadImage = ({ variant = 'default', value, onChange, disabled = false, m
     }
   };
 
-  // Single mode: show first image from fileList or value prop or default
-  const imageToShow = fileList.length > 0 ? fileList[0]?.url : value && typeof value === 'string' ? value : value?.url;
+  // Single mode: show first item from fileList or value prop or default
+  const mediaToShow =
+    fileList.length > 0 ? fileList[0] : value && typeof value === 'string' ? { url: value, type: 'image/jpeg' } : value;
 
-  // Multi mode: build grid like image3
+  // Render media preview (image/video)
+  const renderMediaPreview = (file, className = '', editable = false, editCallback = null) => {
+    if (!file || !file.url) return null;
+    if (isImage(file.type)) {
+      return (
+        <div className={className}>
+          <Image src={file.url} alt={file.name || 'uploaded'} preview={false} className={style.slotImage} />
+          {editable && <Button icon={<EditOutlined />} className={style.slotEdit} onClick={editCallback} />}
+        </div>
+      );
+    } else if (isVideo(file.type)) {
+      return (
+        <div className={className}>
+          <video
+            src={file.url}
+            controls
+            width={180}
+            height={100}
+            className={style.slotVideo}
+            style={{ borderRadius: 8, background: '#000' }}
+          />
+          {editable && <Button icon={<EditOutlined />} className={style.slotEdit} onClick={editCallback} />}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Multi mode: build grid
   const renderMultiGrid = () => {
     const slots = [];
     for (let i = 0; i < maxCount; i++) {
       if (fileList[i]) {
+        // Show image or video
         slots.push(
-          <div className={style.slotItem} key={fileList[i].uid || i}>
-            <Image
-              src={fileList[i].url}
-              alt={fileList[i].name || 'uploaded'}
-              className={style.slotImage}
-              preview={false}
-            />
-            {!disabled && <Button icon={<EditOutlined />} className={style.slotEdit} onClick={() => handleEdit(i)} />}
-          </div>
+          <React.Fragment key={fileList[i].uid || i}>
+            {renderMediaPreview(fileList[i], style.slotItem, !disabled, () => handleEdit(i))}
+          </React.Fragment>
         );
       } else {
         slots.push(
@@ -146,48 +191,50 @@ const UploadImage = ({ variant = 'default', value, onChange, disabled = false, m
     return <div className={`${style.slot} ${disabled && style.disabled}`}>{slots}</div>;
   };
 
+  // Accept images and videos
+  const acceptTypes = ['image/jpeg', 'image/png', 'video/mp4', 'video/webm', 'video/quicktime'].join(',');
+
   return (
     <>
       <div
-        className={`${style.upload} ${disabled && style.disabled} ${variant === 'simple' && style.simple}`}
+        className={`${style.upload} ${disabled && style.disabled} ${style[variant]} ${style[size]}`}
         ref={wrapperRef}>
         <Upload.Dragger
-          name='image'
+          name='media'
           customRequest={handleCustomUpload}
           maxCount={maxCount}
           showUploadList={false}
           beforeUpload={beforeUpload}
           disabled={disabled}
-          accept='image/jpeg,image/png'
+          accept={acceptTypes}
           style={{ display: loading ? 'none' : undefined }}
           multiple={false} // always false, we only allow one file at a time
         >
           <div className={style.uploadIcon}>
-            {variant !== 'simple' ? <CloudUploadOutlined /> : <FileImageOutlined />}
+            {variant !== 'simple' ? (
+              <CloudUploadOutlined />
+            ) : type === 'video' ? (
+              <VideoCameraOutlined />
+            ) : (
+              <FileImageOutlined />
+            )}
           </div>
           {variant !== 'simple' && (
             <>
-              <p className={style.uploadText}>Drag & Drop Files to Upload Profile Photo</p>
-              <p className={style.uploadHint}>jpeg, jpg, png, max 2MB</p>
+              <p className={style.uploadText}>Drag & Drop Files to Upload Media (Photo/Video)</p>
+              <p className={style.uploadHint}>jpeg, jpg, png, mp4, webm, mov, max 20MB</p>
               <Button variant='outlined' color='primary' className={style.uploadBtn} disabled={disabled}>
                 Select File
               </Button>
             </>
           )}
+          {size === 'auto' && variant === 'simple' && <p className={style.uploadInfo}>{type === 'video' ? 'Video' : 'Photo'}</p>}
         </Upload.Dragger>
 
         {/* Single preview if maxCount === 1 */}
-        {maxCount === 1 && imageToShow && !loading && (
+        {maxCount === 1 && mediaToShow && mediaToShow.url && !loading && (
           <div className={style.uploadPreview}>
-            <Image src={imageToShow} alt='avatar' preview={false} />
-            {!disabled && (
-              <Button
-                type='primary'
-                icon={<EditOutlined />}
-                className={style.uploadEdit}
-                onClick={() => handleEdit(0)}
-              />
-            )}
+            {renderMediaPreview(mediaToShow, '', !disabled, () => handleEdit(0))}
           </div>
         )}
 

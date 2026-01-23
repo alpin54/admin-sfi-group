@@ -8,4 +8,4 @@ const Tags = ({ viewOnly }) => {
   );
 };
 
-export { Tags };
+export default Tags;

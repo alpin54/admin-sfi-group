@@ -100,7 +100,7 @@ const MemberLanding = (props) => {
         content: (
           <>
             <p>
-              Are you sure you want to delete the guest named <strong>{record.name}</strong>?
+              Are you sure you want to delete the account of <strong>{record.name}</strong>?
             </p>
             <Input.Password
               allowClear
@@ -157,7 +157,11 @@ const MemberLanding = (props) => {
 
       confirm({
         icon: <WarningOutlined style={{ color: '#d6a31f' }} />,
-        content: `Are you sure you want to ${title.toLowerCase()} ${record.name.toLocaleLowerCase()}?`,
+        content: (
+          <span>
+            Are you sure you want to {title.toLowerCase()} the account of <strong>{record.name}</strong>?
+          </span>
+        ),
         onSuccess: async () => {
           notify({
             type: 'success',

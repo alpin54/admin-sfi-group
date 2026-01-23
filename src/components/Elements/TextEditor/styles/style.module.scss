@@ -2,9 +2,13 @@
 
 /* toolbar look like the example */
 .rteWrapper {
-  background: color(neutral, 1);
+  background-color: color(neutral, 1);
   border: 1px solid color(neutral, 3);
   border-radius: 6px;
+  &.disabled {
+    background-color: color(neutral, 2);
+    pointer-events: none;
+  }
 }
 
 /* Toolbar area */
@@ -38,7 +42,11 @@
     padding: 12px;
     color: #0f172a;
     line-height: 1.6;
-    background: color(neutral, 1);
+    background-color: color(neutral, 1);
+    .disabled & {
+      background-color: color(neutral, 2);
+      pointer-events: none;
+    }
   }
 }
 
@@ -58,7 +66,7 @@
   border-collapse: collapse;
   table-layout: auto; /* or fixed if you prefer fixed columns */
   margin: 12px 0;
-  background: color(neutral, 1);
+  background-color: color(neutral, 1);
 }
 
 /* Cell borders and padding */
@@ -76,7 +84,7 @@
 /* Header row styling */
 .editorContent thead th,
 .ProseMirror thead th {
-  background: color(neutral, 2);
+  background-color: color(neutral, 2);
   font-weight: 600;
   color: #0f172a;
 }
@@ -84,11 +92,11 @@
 /* Zebra stripes for readability */
 .editorContent tbody tr:nth-child(odd) td,
 .ProseMirror tbody tr:nth-child(odd) td {
-  background: color(neutral, 1);
+  background-color: color(neutral, 1);
 }
 .editorContent tbody tr:nth-child(even) td,
 .ProseMirror tbody tr:nth-child(even) td {
-  background: color(neutral, 1);
+  background-color: color(neutral, 1);
 }
 
 /* Make table more visible in editor: subtle shadow and rounded corners */
@@ -106,7 +114,7 @@
 .ProseMirror td.is-selected,
 .ProseMirror th.is-selected {
   outline: 2px solid rgba(24, 144, 255, 0.15);
-  background: rgba(24, 144, 255, 0.03);
+  background-color: rgba(24, 144, 255, 0.03);
 }
 
 /* Ensure images or long content inside table cells wrap or scroll */
@@ -145,5 +153,5 @@
   color: #6b7280;
   font-size: 12px;
   border-top: 1px solid color(neutral, 3);
-  background: color(neutral, 1);
+  background-color: color(neutral, 1);
 }

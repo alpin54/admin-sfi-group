@@ -13,7 +13,7 @@ import usePermission from '@hooks/usePermission';
 import DeniedAccess from '@components/Elements/DeniedAccess/views';
 
 // -- components
-import Empty from '@components/Elements/Empty/views';
+import MenuWidget from '@components/Menu/Landing/widgets/Default';
 
 const Menu = () => {
   // set menu
@@ -29,7 +29,7 @@ const Menu = () => {
     return <DeniedAccess />;
   }
 
-  return <Empty title='Under Construction' description='Menu page is not available.' />;
+  return <MenuWidget method='view' />;
 };
 
 export default Menu;

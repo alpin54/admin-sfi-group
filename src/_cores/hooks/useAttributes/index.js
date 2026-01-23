@@ -1,45 +1,26 @@
 import { useState, useCallback } from 'react';
 import { generateId } from '@utils/productHelpers';
 
-const useAttributes = (notify, getSelectOptionsForName) => {
+const useAttributes = (notify) => {
   const [attributes, setAttributes] = useState([]);
 
-  const activateAttribute = useCallback(
-    (attrId) => {
-      setAttributes((prev) =>
-        prev.map((a) =>
-          a.id === attrId
-            ? {
-                ...a,
-                active: true,
-                options: a.options && a.options.length ? a.options : [{ id: generateId(), value: '' }],
-                selectOptions:
-                  a.selectOptions && a.selectOptions.length ? a.selectOptions : getSelectOptionsForName(a.name)
-              }
-            : a
-        )
-      );
-    },
-    [getSelectOptionsForName]
-  );
+  const activateAttribute = useCallback((attrId) => {
+    setAttributes((prev) =>
+      prev.map((a) =>
+        a.id === attrId
+          ? {
+              ...a,
+              active: true,
+              options: a.options && a.options.length ? a.options : [{ id: generateId(), value: '' }]
+            }
+          : a
+      )
+    );
+  }, []);
 
   const addAttribute = useCallback(() => {
     setAttributes((prev) => {
-      const inactivePresetIdx = prev.findIndex((a) => a.preset && !a.active);
-      if (inactivePresetIdx !== -1) {
-        return prev.map((a, idx) =>
-          idx === inactivePresetIdx
-            ? {
-                ...a,
-                active: true,
-                options: a.options && a.options.length ? a.options : [{ id: generateId(), value: '' }],
-                selectOptions:
-                  a.selectOptions && a.selectOptions.length ? a.selectOptions : getSelectOptionsForName(a.name)
-              }
-            : a
-        );
-      }
-
+      // Tidak ada preset lagi!
       const activeCount = prev.filter((p) => p.active).length;
       if (activeCount >= 3) {
         notify({ type: 'warning', message: 'Max 3 variations allowed' });
@@ -50,23 +31,14 @@ const useAttributes = (notify, getSelectOptionsForName) => {
         id: generateId(),
         name: '',
         options: [{ id: generateId(), value: '' }],
-        preset: false,
-        selectOptions: [],
         active: true
       };
       return [...prev, newAttr];
     });
-  }, [notify, getSelectOptionsForName]);
+  }, [notify]);
 
   const removeAttribute = useCallback((attrId) => {
-    setAttributes((prev) => {
-      const found = prev.find((a) => a.id === attrId);
-      if (!found) return prev;
-      if (found.preset) {
-        return prev.map((a) => (a.id === attrId ? { ...a, active: false, options: [] } : a));
-      }
-      return prev.filter((a) => a.id !== attrId);
-    });
+    setAttributes((prev) => prev.filter((a) => a.id !== attrId));
   }, []);
 
   const updateAttributeName = useCallback((attrId, name) => {

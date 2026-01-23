@@ -1,0 +1,135 @@
+@import '_cores/styles/_assets.scss';
+
+.card {
+  :global {
+    .ant-card-body {
+      padding: 14px !important;
+    }
+  }
+}
+
+.row {
+  margin-bottom: 16px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 100%;
+  border: 1px solid color(neutral, 3);
+  background-color: color(neutral, 1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.box {
+  display: flex;
+  height: 100%;
+  margin-right: 8px;
+}
+
+.img {
+  width: 96px;
+  height: 96px;
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.text {
+  flex: 1;
+  padding: 12px 32px 12px 12px;
+}
+
+.label {
+  @include font-size(small);
+  color: color(neutral, 7);
+  margin-bottom: 4px;
+}
+
+.name {
+  @include font-size(caption);
+  font-weight: fw(regular);
+  color: color(neutral, 8);
+  @include multiline-ellipsis(2);
+  margin-bottom: 0;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  @include font-size(caption);
+  font-weight: fw(medium);
+  color: color(neutral, 8);
+  margin-bottom: 0;
+  del {
+    color: color(neutral, 5);
+    margin-right: 8px;
+  }
+  a {
+    position: relative;
+    z-index: 8;
+  }
+}
+
+.button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  color: color(danger, 7);
+}
+
+.popover {
+  min-width: 300px;
+  &Head {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    &Text {
+      flex: 3;
+      padding: 8px 4px;
+      font-weight: fw(medium);
+      @include font-size(small);
+      margin-bottom: 0;
+      &:last-child {
+        flex: 2;
+        text-align: center;
+      }
+    }
+  }
+  &Row {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid color(neutral, 3);
+    @include font-size(body);
+    &:last-child {
+      border-bottom: 1px solid color(neutral, 3);
+    }
+    &Text {
+      flex: 3;
+      padding: 8px 4px;
+      @include font-size(small);
+      margin-bottom: 0;
+      &:first-child {
+        word-break: break-word;
+      }
+      &:last-child {
+        flex: 2;
+        text-align: center;
+      }
+    }
+  }
+}

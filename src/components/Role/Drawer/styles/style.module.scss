@@ -9,7 +9,7 @@
       align-items: center;
       justify-content: flex-end;
       background-color: color(neutral, 2);
-      @include radius(1);
+      @include radius(xs);
       padding: 12px !important;
       min-width: 214px;
       width: 100%;

@@ -10,45 +10,48 @@ import useFirstLoad from '@hooks/useFirstLoad';
 // -- components
 import CareerView from '@components/Career/Landing/views';
 
+// -- data
+import dataDummy from '@components/Career/Landing/data';
+
 // Widget that uses data dummy (client-side filtering & pagination)
 const CareerWidget = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
-  const [filters, setFilters] = useState({ jobType: '', keyword: '' });
+  const [filters, setFilters] = useState({ job_type_id: null, keyword: '' });
 
-  // Combine parameters for API
-  const fetchParams = useMemo(
-    () => ({ page: pagination.page, limit: pagination.limit, ...filters }),
-    [pagination.page, pagination.limit, filters]
-  );
+  // // Combine parameters for API
+  // const fetchParams = useMemo(
+  //   () => ({ page: pagination.page, limit: pagination.limit, ...filters }),
+  //   [pagination.page, pagination.limit, filters]
+  // );
 
-  // Create a dynamic fetcher, depending on parameters
-  const fetcher = useCallback(() => careerModel.list(fetchParams), [fetchParams]);
+  // // Create a dynamic fetcher, depending on parameters
+  // const fetcher = useCallback(() => careerModel.list(fetchParams), [fetchParams]);
 
-  // Hook to fetch data and refetch
-  const { ready, data, refetch } = useFirstLoad(fetcher);
+  // // Hook to fetch data and refetch
+  // const { ready, data, refetch } = useFirstLoad(fetcher);
 
-  // Fetch workplace options
-  const { data: categoryDataJobType } = useFirstLoad(useCallback(() => careerModel.jobTypeList(), []));
+  // // Fetch workplace options
+  // const { data: categoryDataJobType } = useFirstLoad(useCallback(() => careerModel.jobTypeList(), []));
 
-  // Fetch summary options
-  const { data: summaryDataCareer } = useFirstLoad(
-    useCallback(() => careerModel.summaryCareer(), []),
-    []
-  );
+  // // Fetch summary options
+  // const { data: summaryDataCareer } = useFirstLoad(
+  //   useCallback(() => careerModel.summaryCareer(), []),
+  //   []
+  // );
 
-  const summaryCareer = {
-    total: summaryDataCareer?.data?.total ?? summaryDataCareer?.total ?? data?.total ?? 0
-  };
+  // const summaryCareer = {
+  //   total: summaryDataCareer?.data?.total ?? summaryDataCareer?.total ?? data?.total ?? 0
+  // };
 
-  // Fetch summary options for applications
-  const { data: summaryDataApplication } = useFirstLoad(
-    useCallback(() => careerModel.summaryApplication(), []),
-    []
-  );
+  // // Fetch summary options for applications
+  // const { data: summaryDataApplication } = useFirstLoad(
+  //   useCallback(() => careerModel.summaryApplication(), []),
+  //   []
+  // );
 
-  const summaryApplication = {
-    total: summaryDataApplication?.data?.total ?? summaryDataApplication?.total ?? data?.total ?? 0
-  };
+  // const summaryApplication = {
+  //   total: summaryDataApplication?.data?.total ?? summaryDataApplication?.total ?? data?.total ?? 0
+  // };
 
   const handlePageChange = (page, limit) => {
     setPagination({ page, limit });
@@ -71,14 +74,14 @@ const CareerWidget = () => {
 
   return (
     <CareerView
-      summaryCareer={summaryCareer}
-      summaryApplication={summaryApplication}
-      data={data?.data}
-      categoryJobTypeOptions={categoryDataJobType?.data}
-      loading={!ready}
+      summaryCareer={dataDummy?.summary[0].total_career}
+      summaryApplication={dataDummy?.summary[0].total_applicants}
+      data={dataDummy?.data}
+      categoryJobTypeOptions={dataDummy?.categoryJobTypeOptions}
+      loading={false}
       pagination={pagination}
       filters={filters}
-      totalPage={data?.total}
+      totalPage={dataDummy?.total}
       onPageChange={handlePageChange}
       onFilterChange={handleFilterChange}
       onDelete={handleDelete}

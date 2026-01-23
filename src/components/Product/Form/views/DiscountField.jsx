@@ -68,8 +68,6 @@ const DiscountField = ({
             disabled={!discountEnabled || viewOnly}
             value={discountPercentage}
             onChange={(val) => onPercentageChange(val, price)}
-            formatter={(value) => (value ? `${value}%` : '')}
-            parser={(value) => value?.replace('%', '')}
             suffix='%'
           />
         </Form.Item>
@@ -87,11 +85,11 @@ const DiscountField = ({
           }
           name={`discount_${prefix}_schedule`}>
           <RangePicker
-            disabled={!scheduleEnabled || viewOnly}
-            allowClear={false}
             format='DD MMM YYYY'
             presets={rangePresets}
-            value={scheduleDateRange}
+            disabled={[!scheduleEnabled || viewOnly, !scheduleEnabled || viewOnly]}
+            allowEmpty={[true, true]}
+            value={Array.isArray(scheduleDateRange) ? scheduleDateRange : [null, null]}
             onChange={(dates) => setScheduleDateRange(dates)}
           />
         </Form.Item>
@@ -100,4 +98,4 @@ const DiscountField = ({
   );
 };
 
-export { DiscountField };
+export default DiscountField;

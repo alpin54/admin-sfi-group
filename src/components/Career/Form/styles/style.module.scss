@@ -13,6 +13,18 @@
   }
 }
 
+.collapse {
+  margin-bottom: 20px !important;
+  :global {
+    .ant-collapse-header {
+      font-weight: fw(regular) !important;
+    }
+    .ant-collapse-content-box {
+      padding: 20px 24px;
+    }
+  }
+}
+
 .checkbox {
   width: 100%;
   :global {

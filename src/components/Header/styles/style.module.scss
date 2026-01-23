@@ -26,28 +26,101 @@
   margin-bottom: 0;
 }
 .profile {
-  position: relative;
-  display: flex;
-  align-items: center;
-  &Btn {
-    position: absolute;
-    top: 0;
-    left: 0;
+  &Img {
+    overflow: hidden;
+    display: block;
     width: 100%;
     height: 100%;
-    opacity: 0;
-  }
-  &Img {
-    flex: 0 0 auto;
-    width: 48px;
-    height: 48px;
+    object-fit: cover;
     border-radius: 50%;
+  }
+}
+.dropdown {
+  &Container {
+    background-color: color(neutral, 1);
+    @include shadow(1);
+    @include radius(md);
     overflow: hidden;
-    &El {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    :global(.ant-btn) {
+      padding: 0 !important;
+    }
+    :global(.ant-avatar) {
+      background-color: rgba(color(primary, 1), 0.5) !important;
+      border-color: color(primary, 6) !important;
+      color: color(primary, 6) !important;
+    }
+    :global(.ant-scroll-number-custom-component) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      font-size: 6px;
+      color: color(neutral, 1);
+      background-color: color(curious-blue, 7);
+    }
+  }
+  &Header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: solid 1px color(neutral, 3);
+    :global(.ant-btn-sm.ant-btn-icon-only) {
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
+  &Info {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    justify-content: space-between;
+  }
+  &Body {
+    max-height: 60vh;
+    overflow-y: auto;
+    :global(.ant-dropdown-menu) {
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+    :global(.ant-dropdown-menu-item) {
+      padding: 16px 24px !important;
+    }
+  }
+  &Footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 24px;
+  }
+  &Title {
+    @include font-size(body);
+    margin-bottom: 0;
+  }
+  &Text {
+    width: 100%;
+  }
+  &Label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @include font-size(caption);
+    color: color(neutral, 7);
+    margin-bottom: 0;
+    span {
+      &:last-child {
+        @include font-size(x-small);
+        color: color(neutral, 5);
+      }
+    }
+  }
+  &Value {
+    @include font-size(small);
+    color: color(neutral, 7);
+    margin-bottom: 0;
+    span {
+      color: color(primary, 6);
     }
   }
 }

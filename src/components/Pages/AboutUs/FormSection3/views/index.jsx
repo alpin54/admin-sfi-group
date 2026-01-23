@@ -1,28 +1,34 @@
-// --library
-import { useCallback, useEffect, useState } from 'react';
-import { Card, Button, Tooltip, Table, Space, Form, Input } from 'antd';
+import { useCallback, useEffect, useState, useMemo } from 'react';
+import { Card, Button, Tooltip, Table, Space, Switch, Form, Input } from 'antd';
 import Image from 'next/image';
+
+// -- icons
 import { EditOutlined, EyeOutlined, DeleteOutlined, EyeInvisibleOutlined, WarningOutlined } from '@ant-design/icons';
+
+// -- hooks
+import useConfirmationModal from '@hooks/useConfirmationModal';
+import useNotification from '@hooks/useNotification';
 
 // -- utils
 import LocalStorage from '@utils/localStorage';
 import FormData from '@utils/formdata';
 
+// -- components
+import ModalStory from '@components/Pages/AboutUs/ModalStory/widgets/Default';
+
 // -- elements
 import SectionHeader from '@elements/SectionHeader/views';
-
-// -- components
-import ModalValues from '@components/Pages/AboutUs/ModalValues/widgets/Default';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
 const FormAboutUsSection3View = (props) => {
-  const { method, confirm, notify, data, ready, loading, message, onPublish, onStatus, onDelete, onSubmit, refetch } =
-    props;
+  const { data, loading, onStatus, refetch, onDelete, onPublish } = props;
+  const { confirm, contextHolder: confirmHolder } = useConfirmationModal();
+  const { notify, contextHolder: notificationHolder } = useNotification();
   const [isEdit, setIsEdit] = useState(false);
   const [open, setOpen] = useState(false);
-  const [methodForm, setMethodForm] = useState('add');
+  const [method, setMethod] = useState('add');
   const [dataForm, setDataForm] = useState(undefined);
   const [formInstance] = Form.useForm();
-  const [formInstanceModal] = Form.useForm();
   const user = LocalStorage.get('user');
 
   useEffect(() => {
@@ -31,53 +37,60 @@ const FormAboutUsSection3View = (props) => {
     }
   }, [method]);
 
-  useEffect(() => {
-    if (data) {
-      formInstance?.setFieldsValue(data);
-    }
-  }, [data, formInstance]);
-
-  useEffect(() => {
-    if (message) {
-      notify({
-        type: 'error',
-        message: `Failed`,
-        description: message
-      });
-    }
-  }, [message, notify]);
-
   // Show modal (Add, Edit, View)
   const handleShowModal = useCallback(
     (type, record) => {
-      formInstanceModal.resetFields();
-      setMethodForm(type);
+      formInstance.resetFields();
+      setMethod(type);
       setDataForm(type === 'add' ? undefined : record);
       setOpen(true);
     },
-    [formInstanceModal]
+    [formInstance]
   );
 
-  // Close modal & reset modal-only state
+  // Close modal & reset form
   const handleCloseModal = useCallback(() => {
-    formInstanceModal.resetFields();
+    formInstance.resetFields();
     setDataForm(undefined);
     setOpen(false);
-  }, [formInstanceModal]);
+  }, [formInstance]);
 
-  const handleEnableForm = (e, value) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsEdit(value);
-  };
-
-  const handleDelete = useCallback(
+  const handlePublish = useCallback(
     (record) => {
+      const title = record.status ? 'Unpublish' : 'Publish';
+      const status = record.status ? 0 : 1;
+      const payload = { id: record.id, status: status, updated_by: user?.id };
+      const formData = FormData(payload);
+      confirm({
+        icon: <WarningOutlined />,
+        content: `Are you sure you want to ${title.toLowerCase()} ${record.title.toLocaleLowerCase()}?`,
+        onSuccess: async () => {
+          const response = await onPublish(formData);
+          if (response && !response.error) {
+            notify({
+              type: 'success',
+              message: `Data ${title.toLowerCase()} successfully`
+            });
+          } else {
+            notify({
+              type: 'error',
+              message: response.error || `Failed to ${title.toLowerCase()} data`
+            });
+          }
+        }
+      });
+    },
+    [confirm, notify, onPublish, user]
+  );
+
+  // Table actions
+  const handleDelete = useCallback(
+    (item) => {
       confirm({
         icon: <DeleteOutlined />,
-        content: `Are you sure you want to delete ${record.title.toLocaleLowerCase()}?`,
+        content: `Are you sure you want to delete ${item.title.en.toLocaleLowerCase()}?`,
         onSuccess: async () => {
-          const response = await onDelete(record.id);
+          const response = await onDelete(item.id);
           if (response && !response.error) {
             notify({
               type: 'success',
@@ -96,15 +109,15 @@ const FormAboutUsSection3View = (props) => {
   );
 
   const handleStatus = useCallback(
-    (record) => {
-      const title = record.status ? 'Hide' : 'Unhide';
-      const status = record.status ? 0 : 1;
-      const payload = { id: record.id, status: status, updated_by: user?.id };
+    (item) => {
+      const title = item.status ? 'Hide' : 'Unhide';
+      const status = item.status ? false : true;
+      const payload = { id: item.id, status: status, updated_by: user.id };
       const formData = FormData(payload);
 
       confirm({
         icon: <WarningOutlined />,
-        content: `Are you sure you want to ${title.toLowerCase()} ${record.title.toLocaleLowerCase()}?`,
+        content: `Are you sure you want to ${title.toLowerCase()} ${item.title.en.toLocaleLowerCase()}?`,
         onSuccess: async () => {
           const response = await onStatus(formData);
           if (response && !response.error) {
@@ -124,203 +137,119 @@ const FormAboutUsSection3View = (props) => {
     [confirm, notify, onStatus, user]
   );
 
-  const handlePublish = useCallback(
-    (record) => {
-      const title = record.status ? 'Unpublish' : 'Publish';
-      const status = record.status ? false : true;
-      const payload = { id: record.id, status: status, updated_by: user?.id };
-      confirm({
-        icon: <WarningOutlined />,
-        content: `Are you sure you want to ${title.toLowerCase()} ${record.title.toLocaleLowerCase()}?`,
-        onSuccess: async () => {
-          const response = await onPublish(payload);
-          if (response && !response.error) {
-            notify({
-              type: 'success',
-              message: `Data ${title.toLowerCase()} successfully`
-            });
-          } else {
-            notify({
-              type: 'error',
-              message: response.error || `Failed to ${title.toLowerCase()} data`
-            });
+  const dataSource = Array.isArray(data.list) ? data.list : [];
+
+  // helper: build columns for a given language key ('en' or 'id')
+  const buildColumns = useCallback(
+    (lang) => {
+      const cols = [
+        {
+          title: 'Year',
+          dataIndex: ['year', lang],
+          key: `year_${lang}`,
+          width: 100,
+          render: (value, record) => {
+            return record?.year?.[lang] || '-';
           }
-        }
-      });
-    },
-    [confirm, notify, onPublish, user]
-  );
-
-  const handleFinish = async (values) => {
-    try {
-      const payload = {
-        ...values,
-        updated_by: user?.id
-      };
-      const formData = FormData(payload);
-      // Submit form data
-      const response = await onSubmit(formData);
-
-      if (response && response.data) {
-        notify({
-          type: 'success',
-          message: 'Data updated successfully'
-        });
-      } else {
-        notify({
-          type: 'error',
-          message: 'Data failed to updated'
-        });
-      }
-    } catch (err) {
-      console.log('Error:', err);
-
-      notify({
-        type: 'error',
-        message: 'Data failed to updated',
-        description: err?.message ?? 'Unknown error'
-      });
-    }
-  };
-
-  // helper: build columns ...
-  const buildColumns = useCallback(() => {
-    const cols = [
-      {
-        title: 'Image',
-        dataIndex: 'image',
-        key: `image`,
-        width: 80,
-        render: (image, record) => {
-          const src = image?.url ?? image ?? record?.image?.url ?? record?.image ?? '';
-          if (!src) return null;
-          return (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Image
-                src={src}
-                width={40}
-                height={32}
-                alt={`img-${record.id}`}
-                style={{ objectFit: 'cover', borderRadius: 4 }}
-              />
-            </div>
-          );
-        }
-      },
-      {
-        title: 'Title',
-        dataIndex: 'title',
-        key: `title`,
-        ellipsis: {
-          showTitle: true
-        }
-      },
-      {
-        title: 'Description',
-        dataIndex: 'description',
-        key: `description`,
-        ellipsis: {
-          showTitle: true
         },
-        render: (text) => <div dangerouslySetInnerHTML={{ __html: text }} />
+        {
+          title: 'Title',
+          dataIndex: ['title', lang],
+          key: `title_${lang}`,
+          width: 150,
+          render: (value, record) => {
+            return record?.title?.[lang] || '-';
+          }
+        },
+        {
+          title: 'Description',
+          dataIndex: ['description', lang],
+          key: `description_${lang}`,
+          ellipsis: true
+        }
+      ];
+
+      if (isEdit) {
+        cols.push({
+          title: 'Actions',
+          key: 'actions',
+          align: 'center',
+          width: 200,
+          render: (_, record) => (
+            <Space>
+              <Tooltip
+                key={record.status ? 'suspend' : 'unsuspend'}
+                title={record.status ? 'Suspend' : 'Unsuspend'}
+                placement='top'>
+                <Button
+                  size='small'
+                  type='text'
+                  icon={record.status ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                  onClick={() => handleStatus(record)}
+                />
+              </Tooltip>
+
+              <Tooltip key='edit' title='Edit' placement='top'>
+                <Button
+                  size='small'
+                  type='text'
+                  icon={<EditOutlined />}
+                  onClick={() => handleShowModal('edit', record)}
+                />
+              </Tooltip>
+
+              <Tooltip key='delete' title='Delete' placement='top'>
+                <Button size='small' type='text' danger onClick={() => handleDelete(record)}>
+                  <DeleteOutlined />
+                </Button>
+              </Tooltip>
+            </Space>
+          )
+        });
       }
-    ];
 
-    if (isEdit) {
-      cols.push({
-        title: 'Actions',
-        key: 'actions',
-        align: 'center',
-        width: 200,
-        render: (_, record) => (
-          <Space>
-            <Tooltip key={record.status ? 'hide' : 'unhide'} title={record.status ? 'Hide' : 'Unhide'} placement='top'>
-              <Button
-                size='small'
-                type='text'
-                icon={record.status ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                onClick={() => handleStatus(record)}
-              />
-            </Tooltip>
-
-            <Tooltip key='edit' title='Edit' placement='top'>
-              <Button
-                size='small'
-                type='text'
-                icon={<EditOutlined />}
-                onClick={() => handleShowModal('edit', record)}
-              />
-            </Tooltip>
-
-            <Tooltip key='delete' title='Delete' placement='top'>
-              <Button size='small' type='text' danger icon={<DeleteOutlined />} onClick={() => handleDelete(record)} />
-            </Tooltip>
-          </Space>
-        )
-      });
-    }
-
-    return cols;
-  }, [isEdit, handleStatus, handleShowModal, handleDelete]);
+      return cols;
+    },
+    [isEdit, handleStatus, handleShowModal, handleDelete]
+  );
 
   return (
     <>
-      <Card loading={ready}>
-        <SectionHeader title='Values' publish={data?.status} onPublish={() => handlePublish(data)} />
-        <Form form={formInstance} id='form-about-us' layout='vertical' autoComplete='off' onFinish={handleFinish}>
-          <Form.Item name='id' hidden>
-            <Input />
-          </Form.Item>
+      {confirmHolder}
+      {notificationHolder}
+      <Card>
+        <SectionHeader title='Story' publish={data?.status} onPublish={() => handlePublish(data)} />
 
-          <Form.Item name='title' label='Title ' rules={[{ required: true, message: 'Title is required' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item>
-            <Space size={16}>
-              {isEdit ? (
-                <>
-                  <Button color='primary' variant='outlined' onClick={(e) => handleEnableForm(e, false)}>
-                    Cancel
-                  </Button>
-                  <Button type='primary' htmlType='submit' form='form-about-us-section3' loading={loading}>
-                    Save
-                  </Button>
-                </>
-              ) : (
-                <Button type='primary' htmlType='button' onClick={(e) => handleEnableForm(e, true)}>
-                  Edit
-                </Button>
-              )}
-            </Space>
-          </Form.Item>
-          <Table dataSource={data?.list || []} columns={buildColumns()} rowKey='id' pagination={false} />
-          <Space size={16}>
-            {isEdit ? (
-              <>
-                <Button color='primary' variant='outlined' onClick={(e) => handleEnableForm(e, false)}>
-                  Cancel
-                </Button>
-                <Button type='primary' onClick={() => handleShowModal('add')}>
-                  Add Value
-                </Button>
-              </>
-            ) : (
-              <Button type='primary' onClick={() => setIsEdit(true)}>
-                Edit
+        <TranslationTabs>
+          {(lang) => <Table dataSource={dataSource} columns={buildColumns(lang)} rowKey='id' pagination={false} />}
+        </TranslationTabs>
+
+        <div style={{ marginTop: 12 }}>
+          {isEdit ? (
+            <>
+              <Button type='primary' onClick={() => handleShowModal('add')} style={{ marginLeft: 8 }}>
+                Add Story
               </Button>
-            )}
-          </Space>
-        </Form>
+              <Button type='primary' onClick={() => setIsEdit(false)} style={{ marginLeft: 8 }}>
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <Button type='primary' onClick={() => setIsEdit(true)} style={{ marginLeft: 8 }}>
+              Edit
+            </Button>
+          )}
+        </div>
       </Card>
 
       {open && (
-        <ModalValues
-          method={methodForm}
-          setMethod={() => setMethodForm('edit')}
+        <ModalStory
+          method={method}
+          setMethod={() => setMethod('edit')}
           open={open}
           onClose={handleCloseModal}
           initialValues={dataForm}
-          formInstance={formInstanceModal}
+          formInstance={formInstance}
           notify={notify}
           refetch={refetch}
         />

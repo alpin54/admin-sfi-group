@@ -5,7 +5,7 @@ const data = {
   id: 'section-1',
   facebook: 'https://www.facebook.com',
   twitter: 'https://www.twitter.com',
-  image: DefaultOgImage.src,
+  og_image: DefaultOgImage.src,
   twitter_image: DefaultTwitter.src
 };
 export default data;

@@ -10,7 +10,7 @@ import useConfirmationModal from '@hooks/useConfirmationModal';
 import useNotification from '@hooks/useNotification';
 
 // -- elements
-import CardUserLogWidget from '@components/Elements/CardUserLog/views';
+import CardUserLogWidget from '@components/Elements/CardUserLog/widgets/Default';
 
 // -- components
 import FormAboutUsSection1Widget from '@components/Pages/AboutUs/FormSection1/widgets/Default';
@@ -18,6 +18,9 @@ import FormAboutUsSection2Widget from '@components/Pages/AboutUs/FormSection2/wi
 import FormAboutUsSection3Widget from '@components/Pages/AboutUs/FormSection3/widgets/Default';
 import FormAboutUsSection4Widget from '@components/Pages/AboutUs/FormSection4/widgets/Default';
 import FormAboutUsSection5Widget from '@components/Pages/AboutUs/FormSection5/widgets/Default';
+import FormAboutUsSection6Widget from '@components/Pages/AboutUs/FormSection6/widgets/Default';
+import FormAboutUsSection7Widget from '@components/Pages/AboutUs/FormSection7/widgets/Default';
+import FormAboutUsSection8Widget from '@components/Pages/AboutUs/FormSection8/widgets/Default';
 
 const AboutUsView = (props) => {
   const { method } = props;
@@ -54,7 +57,13 @@ const AboutUsView = (props) => {
           <FormAboutUsSection5Widget method={method} confirm={confirm} notify={notify} />
         </div>
         <div className='row-container'>
-          {/* <FormAboutUsSection3Widget method={method} confirm={confirm} notify={notify} /> */}
+          <FormAboutUsSection6Widget method={method} confirm={confirm} notify={notify} />
+        </div>
+        <div className='row-container'>
+          <FormAboutUsSection7Widget method={method} confirm={confirm} notify={notify} />
+        </div>
+        <div className='row-container'>
+          <FormAboutUsSection8Widget method={method} confirm={confirm} notify={notify} />
         </div>
       </section>
       <CardUserLogWidget

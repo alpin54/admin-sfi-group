@@ -15,13 +15,16 @@ import LocalStorage from '@utils/localStorage';
 // -- components
 import HeaderView from '@components/Header/views';
 
+// -- data
+import dummyData from '@components/Header/data';
+
 const HeaderWidget = () => {
   const user = LocalStorage.get('user');
 
   // Fetch user data
   // const { data } = useFirstLoad(useCallback(() => headerModel.single(user?.id), [user?.id]));
 
-  return <HeaderView />;
+  return <HeaderView data={null} notifications={dummyData.data} total={dummyData.total} />;
 };
 
 export default HeaderWidget;

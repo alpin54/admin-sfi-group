@@ -10,7 +10,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import style from '@components/Product/Form/styles/style.module.scss';
 
 // -- components
-import { DragHandle } from '@components/Product/Form/views/DragHandle';
+import DragHandle from '@components/Product/Form/views/DragHandle';
 
 const SortableOption = ({ option, attrId, onChangeValue, onRemove, disabled, isSelect, selectOptions }) => {
   const sortableId = `${attrId}-${option.id}`;
@@ -59,4 +59,4 @@ const SortableOption = ({ option, attrId, onChangeValue, onRemove, disabled, isS
   );
 };
 
-export { SortableOption };
+export default SortableOption;

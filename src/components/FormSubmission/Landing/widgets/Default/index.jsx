@@ -11,6 +11,7 @@ import useFirstLoad from '@hooks/useFirstLoad';
 import FormSubmissionView from '@components/FormSubmission/Landing/views';
 
 // NOTE: removed dummy data import and integrated real summary endpoint
+import dataDummy from '@components/FormSubmission/Landing/data';
 
 const FormSubmissionWidget = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
@@ -37,10 +38,10 @@ const FormSubmissionWidget = () => {
   const fetcherSummary = useCallback(() => formSubmissionModel.summary(fetchParams), [fetchParams]);
 
   // Hook to fetch list data
-  const { ready: readyList, data, refetch: refetchList } = useFirstLoad(fetcherList);
+  // const { ready: readyList, data, refetch: refetchList } = useFirstLoad(fetcherList);
 
   // Hook to fetch summary data
-  const { ready: readySummary, data: summaryRaw, refetch: refetchSummary } = useFirstLoad(fetcherSummary);
+  // const { ready: readySummary, data: summaryRaw, refetch: refetchSummary } = useFirstLoad(fetcherSummary);
 
   // Handle pagination (from View)
   const handlePageChange = (page, limit) => {
@@ -60,6 +61,15 @@ const FormSubmissionWidget = () => {
       if (typeof refetchList === 'function') await refetchList();
       if (typeof refetchSummary === 'function') await refetchSummary();
     }
+  };
+
+  const handleSelected = async (payload) => {
+    // const { error: errorSelected } = await formSubmissionModel.selected(payload);
+    // if (!errorSelected) {
+    //   if (typeof refetchList === 'function') await refetchList();
+    //   if (typeof refetchSummary === 'function') await refetchSummary();
+    // }
+    await formSubmissionModel.selected(payload);
   };
 
   const unwrapEnvelope = (payload) => {
@@ -84,13 +94,13 @@ const FormSubmissionWidget = () => {
     return [];
   };
 
-  const normalizedData = useMemo(
-    () => {
-      toNormalized(data);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data]
-  );
+  // const normalizedData = useMemo(
+  //   () => {
+  //     toNormalized(data);
+  //   },
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [data]
+  // );
 
   const applyClientFilters = (payload) => {
     if (!payload) return [];
@@ -116,40 +126,42 @@ const FormSubmissionWidget = () => {
     return payload.filter(recordMatches);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const finalList = useMemo(() => applyClientFilters(normalizedData), [normalizedData, filters, dateRange]);
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // const finalList = useMemo(() => applyClientFilters(normalizedData), [normalizedData, filters, dateRange]);
 
-  // Build payload expected by FormSubmissionView (data.data usage)
-  const finalPayload = useMemo(() => {
-    return { data: finalList, total: finalList.length };
-  }, [finalList]);
+  // // Build payload expected by FormSubmissionView (data.data usage)
+  // const finalPayload = useMemo(() => {
+  //   return { data: finalList, total: finalList.length };
+  // }, [finalList]);
 
-  // Normalize / unwrap summary payload and provide safe defaults
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const unwrappedSummary = unwrapEnvelope(summaryRaw) || {};
-  const summaryData = useMemo(() => {
-    // If API returns { data: { total_all, total_today } } unwrapEnvelope would've stripped the outer data.
-    // We accept either { total_all, total_today } or nested shapes; provide default of zero when missing.
-    const tAll = unwrappedSummary.total_all ?? unwrappedSummary.total ?? 0;
-    const tToday = unwrappedSummary.total_today ?? unwrappedSummary.today ?? 0;
-    return { total_all: tAll, total_today: tToday };
-  }, [unwrappedSummary]);
+  // // Normalize / unwrap summary payload and provide safe defaults
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // const unwrappedSummary = unwrapEnvelope(summaryRaw) || {};
+  // const summaryData = useMemo(() => {
+  //   // If API returns { data: { total_all, total_today } } unwrapEnvelope would've stripped the outer data.
+  //   // We accept either { total_all, total_today } or nested shapes; provide default of zero when missing.
+  //   const tAll = unwrappedSummary.total_all ?? unwrappedSummary.total ?? 0;
+  //   const tToday = unwrappedSummary.total_today ?? unwrappedSummary.today ?? 0;
+  //   return { total_all: tAll, total_today: tToday };
+  // }, [unwrappedSummary]);
 
-  const loading = !(readyList && readySummary);
+  // const loading = !(readyList && readySummary);
 
   return (
     <FormSubmissionView
-      summaryData={summaryData}
-      data={finalPayload}
-      loading={loading}
+      // summaryData={dataDummy?.summary}
+      summaryData={dataDummy?.summary?.[0]}
+      data={dataDummy?.data}
+      loading={false}
       pagination={pagination}
       filters={filters}
       dateRange={dateRange}
       setDateRange={handleDateRangeChange}
-      totalPage={data?.total ?? 1}
+      totalPage={dataDummy?.total ?? 1}
       onPageChange={handlePageChange}
       onFilterChange={handleFilterChange}
       onDelete={handleDelete}
+      onSelected={handleSelected}
     />
   );
 };

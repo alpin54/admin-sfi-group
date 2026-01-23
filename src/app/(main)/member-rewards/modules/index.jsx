@@ -13,7 +13,7 @@ import usePermission from '@hooks/usePermission';
 import DeniedAccess from '@components/Elements/DeniedAccess/views';
 
 // -- components
-import Empty from '@components/Elements/Empty/views';
+import MemberReward from '@components/Member/Reward/Landing/views';
 
 const MemberRewards = () => {
   // set menu
@@ -28,7 +28,7 @@ const MemberRewards = () => {
     return <DeniedAccess />;
   }
 
-  return <Empty title='Under Construction' description='Member Rewards page is not available.' />;
+  return <MemberReward />;
 };
 
 export default MemberRewards;

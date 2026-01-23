@@ -3,5 +3,5 @@
    ========================================================================== */
 
 @mixin shadow($size) {
-  box-shadow: map-get($shadow, s#{$size});
+  box-shadow: map-get($shadow, $size);
 }

@@ -12,7 +12,7 @@ import { chooseImageAttrIndex } from '@utils/productHelpers';
 // -- elements
 import UploadImage from '@elements/UploadImage/views';
 
-const VariantTable = ({ viewOnly, attributes, data, variantsHook, groupImagesHook }) => {
+const VariantTable = ({ viewOnly, attributes, variantsHook, groupImagesHook }) => {
   // Terima hooks dari parent, jangan buat di sini
   const { variantRows, variantData, updateVariantField } = variantsHook;
   const { groupImages, getUploadImageValue, handleGroupImageChange } = groupImagesHook;
@@ -55,19 +55,22 @@ const VariantTable = ({ viewOnly, attributes, data, variantsHook, groupImagesHoo
         <thead>
           <tr>
             {activeAttrs.map((a) => (
-              <th key={a.id} width={120} align='center'>
+              <th key={a.id} width={200} align='center'>
                 {a.name || 'Variant'}
               </th>
             ))}
-            <th width={100}>SKU</th>
-            <th width={120}>Price</th>
-            <th width={100}>Stock</th>
+            <th width={96}>SKU</th>
+            <th width={200}>Member Price</th>
+            <th width={216}>Member Dicount</th>
+            <th width={200}>Dealer Price</th>
+            <th width={216}>Dealer Dicount</th>
+            <th width={80}>Stock</th>
           </tr>
         </thead>
         <tbody>
           {variantRows.length === 0 && (
             <tr>
-              <td colSpan={activeAttrs.length + 3} align='center'>
+              <td colSpan={activeAttrs.length + 6} align='center'>
                 No variant combinations yet. Add options to generate rows.
               </td>
             </tr>
@@ -127,8 +130,12 @@ const VariantTable = ({ viewOnly, attributes, data, variantsHook, groupImagesHoo
                     min={0}
                     step={1000}
                     disabled={viewOnly}
-                    value={typeof variantData[row.key]?.price === 'number' ? variantData[row.key].price : undefined}
-                    onChange={(val) => updateVariantField(row.key, 'price', val ?? 0)}
+                    value={
+                      typeof variantData[row.key]?.price_member === 'number'
+                        ? variantData[row.key].price_member
+                        : undefined
+                    }
+                    onChange={(val) => updateVariantField(row.key, 'price_member', val ?? 0)}
                     formatter={(value) => {
                       if (value || value === 0) return Currency.formatRp(value);
                       return '';
@@ -139,6 +146,95 @@ const VariantTable = ({ viewOnly, attributes, data, variantsHook, groupImagesHoo
                     }}
                     placeholder='Rp'
                   />
+                </td>
+                <td style={{ padding: 0 }}>
+                  <div className={style.discount}>
+                    <InputNumber
+                      variant='borderless'
+                      className={style.discountNumber}
+                      min={0}
+                      step={1000}
+                      placeholder='Rp'
+                      disabled={viewOnly}
+                      value={variantData[row.key]?.discount_member_number ?? undefined}
+                      onChange={(val) => updateVariantField(row.key, 'discount_member_number', val ?? 0)}
+                      formatter={(value) => {
+                        if (value || value === 0) return Currency.formatRp(value);
+                        return '';
+                      }}
+                      parser={(value) => {
+                        const parsed = Currency.removeRp(value || '');
+                        return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
+                      }}
+                    />
+                    <InputNumber
+                      variant='borderless'
+                      className={style.discountPercent}
+                      min={0}
+                      max={100}
+                      step={1}
+                      disabled={viewOnly}
+                      value={variantData[row.key]?.discount_member_percentage ?? undefined}
+                      onChange={(val) => updateVariantField(row.key, 'discount_member_percentage', val ?? 0)}
+                      suffix='%'
+                    />
+                  </div>
+                </td>
+                <td style={{ padding: 0 }}>
+                  <InputNumber
+                    variant='borderless'
+                    min={0}
+                    step={1000}
+                    disabled={viewOnly}
+                    value={
+                      typeof variantData[row.key]?.price_dealer === 'number'
+                        ? variantData[row.key].price_dealer
+                        : undefined
+                    }
+                    onChange={(val) => updateVariantField(row.key, 'price_dealer', val ?? 0)}
+                    formatter={(value) => {
+                      if (value || value === 0) return Currency.formatRp(value);
+                      return '';
+                    }}
+                    parser={(value) => {
+                      const parsed = Currency.removeRp(value || '');
+                      return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
+                    }}
+                    placeholder='Rp'
+                  />
+                </td>
+                <td style={{ padding: 0 }}>
+                  <div className={style.discount}>
+                    <InputNumber
+                      variant='borderless'
+                      className={style.discountNumber}
+                      min={0}
+                      step={1000}
+                      placeholder='Rp'
+                      disabled={viewOnly}
+                      value={variantData[row.key]?.discount_dealer_number ?? undefined}
+                      onChange={(val) => updateVariantField(row.key, 'discount_dealer_number', val ?? 0)}
+                      formatter={(value) => {
+                        if (value || value === 0) return Currency.formatRp(value);
+                        return '';
+                      }}
+                      parser={(value) => {
+                        const parsed = Currency.removeRp(value || '');
+                        return parsed !== undefined && parsed !== null ? Number(parsed) : 0;
+                      }}
+                    />
+                    <InputNumber
+                      variant='borderless'
+                      className={style.discountPercent}
+                      min={0}
+                      max={100}
+                      step={1}
+                      disabled={viewOnly}
+                      value={variantData[row.key]?.discount_dealer_percentage ?? undefined}
+                      onChange={(val) => updateVariantField(row.key, 'discount_dealer_percentage', val ?? 0)}
+                      suffix='%'
+                    />
+                  </div>
                 </td>
                 <td style={{ padding: 0 }}>
                   <InputNumber
@@ -159,4 +255,4 @@ const VariantTable = ({ viewOnly, attributes, data, variantsHook, groupImagesHoo
   );
 };
 
-export { VariantTable };
+export default VariantTable;

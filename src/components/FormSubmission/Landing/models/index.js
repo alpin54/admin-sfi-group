@@ -20,6 +20,14 @@ const handleDelete = async (id) => {
   });
 };
 
+const handleSelected = async (payload) => {
+  return await httpRequest({
+    method: 'put',
+    url: ENDPOINT.FORM_SUBMISSION,
+    data: payload
+  });
+};
+
 const handleSummary = async (params) => {
   return await httpRequest({
     method: 'get',
@@ -31,7 +39,8 @@ const handleSummary = async (params) => {
 const formSubmissionModel = {
   list: handleList,
   delete: handleDelete,
-  summary: handleSummary
+  summary: handleSummary,
+  selected: handleSelected
 };
 
 export default formSubmissionModel;

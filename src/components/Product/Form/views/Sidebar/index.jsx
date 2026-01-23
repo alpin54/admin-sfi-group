@@ -5,10 +5,10 @@ import { Collapse } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 // -- components
-import { ProductType } from '@components/Product/Form/views/Sidebar/ProductType';
-import { CoverImage } from '@components/Product/Form/views/Sidebar/CoverImage';
-import { Tags } from '@components/Product/Form/views/Sidebar/Tags';
-import { CategoryBrandColorPromotion } from '@components/Product/Form/views/Sidebar/CategoryBrandColorPromotion';
+import ProductType from '@components/Product/Form/views/Sidebar/ProductType';
+import CoverImage from '@components/Product/Form/views/Sidebar/CoverImage';
+import Tags from '@components/Product/Form/views/Sidebar/Tags';
+import CategoryBrandColorPromotion from '@components/Product/Form/views/Sidebar/CategoryBrandColorPromotion';
 
 const Sidebar = ({ viewOnly, categoryTreeOptions, brandTreeOptions, colorTreeOptions, promotionTreeOptions }) => {
   return (
@@ -89,4 +89,4 @@ const Sidebar = ({ viewOnly, categoryTreeOptions, brandTreeOptions, colorTreeOpt
   );
 };
 
-export { Sidebar };
+export default Sidebar;

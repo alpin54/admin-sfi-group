@@ -9,6 +9,8 @@
  */
 
 const data = {
+  summaryApplication: { total: 20 },
+  summaryCareer: { total: 1 },
   careers: [
     {
       id: 1,

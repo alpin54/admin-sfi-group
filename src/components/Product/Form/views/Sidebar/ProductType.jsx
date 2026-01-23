@@ -11,12 +11,12 @@ const ProductType = ({ viewOnly }) => {
         className={style.checkboxGroup}
         disabled={viewOnly}
         options={[
-          { label: 'Member', value: 'member' },
-          { label: 'Dealer', value: 'dealer' }
+          { label: 'Member', value: 1 },
+          { label: 'Dealer', value: 2 }
         ]}
       />
     </Form.Item>
   );
 };
 
-export { ProductType };
+export default ProductType;

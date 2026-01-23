@@ -11,7 +11,7 @@ import useFirstLoad from '@hooks/useFirstLoad';
 import ProductFormView from '@components/Product/Form/views';
 
 // -- data
-import data from '@components/Product/Form/data';
+import dummyData from '@components/Product/Form/data';
 import categoryData from '@components/Product/Category/data';
 import brandData from '@components/Product/Brand/data';
 import colorData from '@components/Product/Color/data';
@@ -64,7 +64,7 @@ const ProductFormWidget = (props) => {
   return (
     <ProductFormView
       {...props}
-      data={null}
+      data={props.slug ? dummyData?.data : null}
       categoryOptions={categoryData?.data ?? []}
       brandOptions={brandData?.data ?? []}
       colorOptions={colorData?.data ?? []}

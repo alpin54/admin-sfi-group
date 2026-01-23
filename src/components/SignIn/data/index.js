@@ -332,6 +332,20 @@ const data = {
           can_create: true,
           can_edit: true,
           can_delete: true
+        },
+        {
+          menu_id: 21,
+          role_id: 1,
+          icon: 'notification',
+          name: 'Notification',
+          route: '/notification',
+          group_id: 6,
+          sorting: 2,
+          is_navigation: true,
+          can_view: true,
+          can_create: true,
+          can_edit: true,
+          can_delete: true
         }
       ]
     }

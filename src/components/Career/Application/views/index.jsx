@@ -112,6 +112,8 @@ const CareerApplicationView = (props) => {
     ];
   };
 
+  const summaryCards = buildSummaryCards(dataSummary);
+
   const handleDelete = useCallback(
     (record) => {
       confirm({
@@ -266,6 +268,8 @@ const CareerApplicationView = (props) => {
     return [];
   })();
 
+  const totalItems = typeof totalPage === 'number' ? totalPage : dataSource.length;
+
   // compute display values for Job Type and Workplace:
   // prefer filters value (filters.job_type / filters.workplace), fallback to first option name
   const displayJobType = filters?.job_type ?? categoryJobTypeOptions[0]?.name ?? '';
@@ -284,11 +288,13 @@ const CareerApplicationView = (props) => {
         {/* Summary cards */}
         <Row gutter={[16, 16]} className='row-container'>
           <Col xs={24} sm={12}>
-            <CardSummary icon={<BookOutlined />} title='Position Title' value={dataSummary?.total} />
+            <CardSummary icon={summaryCards[0]?.icon} title={summaryCards[0]?.title} value={summaryCards[0]?.value} />
+            {/* <CardSummary icon={<BookOutlined />} title='Position Title' value={dataSummary?.total} /> */}
           </Col>
 
           <Col xs={24} sm={12}>
-            <CardSummary icon={<PieChartOutlined />} title='Total Applicants' value={dataSummary?.total} />
+            <CardSummary icon={summaryCards[1]?.icon} title={summaryCards[1]?.title} value={summaryCards[1]?.value} />
+            {/* <CardSummary icon={<PieChartOutlined />} title='Total Applicants' value={dataSummary?.total} /> */}
           </Col>
         </Row>
         <Row gutter={[16, 16]} className='row-container' style={{ marginTop: 12 }}>
@@ -297,11 +303,11 @@ const CareerApplicationView = (props) => {
               <div className={style.summaryWork}>
                 <div className={style.summaryWorkItem}>
                   <span>
-                    <ClockCircleOutlined />
+                    <ClockCircleOutlined style={{ color: '#fa8c16' }} />
                   </span>{' '}
                   Job Type
                 </div>
-                <Tag>{displayJobType || '—'}</Tag>
+                {displayJobType || '—'}
               </div>
             </Card>
           </Col>
@@ -311,11 +317,11 @@ const CareerApplicationView = (props) => {
               <div className={style.summaryWork}>
                 <div className={style.summaryWorkItem}>
                   <span>
-                    <BankTwoTone />
+                    <BankTwoTone twoToneColor='#fa8c16' />
                   </span>{' '}
                   Workplace
                 </div>
-                <Tag>{displayWorkplace || '—'}</Tag>
+                {displayWorkplace || '—'}
               </div>
             </Card>
           </Col>
@@ -359,16 +365,24 @@ const CareerApplicationView = (props) => {
           dataSource={dataSource}
           rowKey='id'
           loading={loading ?? false}
-          pagination={
-            totalPage > pagination.limit && {
-              current: pagination.page,
-              pageSize: pagination.limit,
-              total: totalPage,
-              onChange: (page, pageSize) => onPageChange(page, pageSize),
-              showSizeChanger: true,
-              pageSizeOptions: ['10', '20', '50', '100']
-            }
-          }
+          pagination={{
+            current: pagination.page,
+            pageSize: pagination.limit,
+            total: totalItems,
+            onChange: (page, pageSize) => onPageChange(page, pageSize),
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '20', '50', '100']
+          }}
+          // pagination={
+          //   totalPage > pagination.limit && {
+          //     current: pagination.page,
+          //     pageSize: pagination.limit,
+          //     total: totalPage,
+          //     onChange: (page, pageSize) => onPageChange(page, pageSize),
+          //     showSizeChanger: true,
+          //     pageSizeOptions: ['10', '20', '50', '100']
+          //   }
+          // }
         />
       </section>
 

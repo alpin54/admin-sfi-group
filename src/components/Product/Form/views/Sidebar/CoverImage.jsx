@@ -12,4 +12,4 @@ const CoverImage = ({ viewOnly }) => {
   );
 };
 
-export { CoverImage };
+export default CoverImage;

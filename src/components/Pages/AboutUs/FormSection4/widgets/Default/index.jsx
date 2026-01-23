@@ -1,8 +1,8 @@
-// -- libraries
-import { useState, useCallback } from 'react';
+// --library
+import { useState, useCallback, useMemo } from 'react';
 
 // -- models
-import formAboutUsSection4Model from '@components/Pages/AboutUs/FormSection4/models';
+import aboutUsBannerModel from '@components/Pages/AboutUs/FormSection4/models';
 
 // -- hooks
 import useFirstLoad from '@hooks/useFirstLoad';
@@ -10,60 +10,61 @@ import useFirstLoad from '@hooks/useFirstLoad';
 // -- components
 import FormAboutUsSection4View from '@components/Pages/AboutUs/FormSection4/views';
 
+// -- data
+import data from '@components/Pages/AboutUs/FormSection4/data';
+
 const FormAboutUsSection4Widget = (props) => {
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const fetcParams = useMemo(() => ({}), []);
 
-  // Only fetch role data if slug exists
-  const { data, ready, refetch } = useFirstLoad(useCallback(() => formAboutUsSection4Model.single(), []));
+  // const fetcher = useCallback(() => aboutUsBannerModel.list(fetcParams), [fetcParams]);
 
-  // Handle publish then refetch
+  // const { data, ready, refetch } = useFirstLoad(fetcher);
+
   const handlePublish = async (payload) => {
-    const { error: errorPublish } = await formAboutUsSection4Model.publish(payload);
-    if (!errorPublish) {
-      refetch();
-      return { error: null };
-    } else {
-      return {
-        error: errorPublish?.message
-      };
-    }
+    // const { error: errorPublish } = await aboutUsBannerModel.publish(payload);
+    // if (!errorPublish) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorPublish?.message
+    //   };
+    // }
   };
 
-  const handleSubmit = async (formData, method) => {
-    setLoading(true);
-    setMessage('');
+  const handleStatus = async (payload) => {
+    // const { error: errorStatus } = await aboutUsBannerModel.status(payload);
+    // if (!errorStatus) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorStatus?.message
+    //   };
+    // }
+  };
 
-    try {
-      const { data, error } = await formAboutUsSection4Model.submit(formData, method);
-
-      if (error) {
-        setMessage(error.message);
-      }
-
-      if (data) {
-        refetch();
-      }
-
-      return data;
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'An unknown error occurred';
-      setMessage(msg);
-      return { error: msg };
-    } finally {
-      setLoading(false);
-    }
+  const handleDelete = async (id) => {
+    // const { error: errorDelete } = await AboutUsBannerModel.delete(id);
+    // if (!errorDelete) {
+    //   refetch();
+    //   return { error: null };
+    // } else {
+    //   return {
+    //     error: errorDelete?.message
+    //   };
+    // }
   };
 
   return (
     <FormAboutUsSection4View
       {...props}
-      data={data?.data}
-      ready={!ready}
-      loading={loading}
-      message={message}
+      data={data}
+      loading={false}
       onPublish={handlePublish}
-      onSubmit={handleSubmit}
+      onDelete={handleDelete}
+      onStatus={handleStatus}
+      // refetch={refetch}
     />
   );
 };

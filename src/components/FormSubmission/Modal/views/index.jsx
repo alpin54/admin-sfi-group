@@ -34,7 +34,7 @@ const DetailRow = ({ label, children }) => (
  */
 const DetailFormSubmissionModal = (props) => {
   const { open, onClose, initialValues = {} } = props;
-  const { created_at = '-', full_name = '-', phone = '-', email = '-', message = '-' } = initialValues || {};
+  const { created_at = '-', name = '-', phone = '-', email = '-', message = '-' } = initialValues || {};
 
   const formattedDate = useMemo(() => formatDateForDisplay(created_at), [created_at]);
 
@@ -54,7 +54,7 @@ const DetailFormSubmissionModal = (props) => {
         </DetailRow>
 
         <DetailRow label='Full Name'>
-          <div>{full_name ?? '—'}</div>
+          <div>{name ?? '—'}</div>
         </DetailRow>
 
         <DetailRow label='Phone Number'>

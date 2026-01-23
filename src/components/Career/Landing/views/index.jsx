@@ -7,6 +7,7 @@ import {
   DeleteOutlined,
   SearchOutlined,
   AuditOutlined,
+  PieChartOutlined,
   EyeOutlined,
   EyeInvisibleOutlined,
   EditOutlined,
@@ -190,7 +191,7 @@ const CareerView = (props) => {
         {/* Card Summary */}
         <Row gutter={[16, 16]} className='row-container'>
           <Col xs={24} sm={12}>
-            <CardSummary icon={<AuditOutlined />} title='Total Application' value={dataSummaryApplication?.total} />
+            <CardSummary icon={<PieChartOutlined />} title='Total Application' value={dataSummaryApplication?.total} />
           </Col>
 
           <Col xs={24} sm={12}>

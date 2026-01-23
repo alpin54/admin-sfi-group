@@ -3,8 +3,8 @@ import { Tabs } from 'antd';
 import dayjs from 'dayjs';
 
 // -- components
-import { SimpleProductTab } from '@components/Product/Form/views/SimpleProductTab';
-import { VariableProductTab } from '@components/Product/Form/views/PriceAndStock/VariableProductTab';
+import SimpleProductTab from '@components/Product/Form/views/PriceAndStock/SimpleProductTab';
+import VariableProductTab from '@components/Product/Form/views/PriceAndStock/VariableProductTab';
 
 const PriceAndStock = ({
   tabKey,
@@ -16,9 +16,6 @@ const PriceAndStock = ({
   discountHook,
   manageStockEnabled,
   setManageStockEnabled,
-  materialOptions,
-  sizeOptions,
-  colorOptions,
   data,
   notify,
   attributesHook,
@@ -65,9 +62,6 @@ const PriceAndStock = ({
               formInstance={formInstance}
               discountHook={discountHook}
               rangePresets={rangePresets}
-              materialOptions={materialOptions}
-              sizeOptions={sizeOptions}
-              colorOptions={colorOptions}
               data={data}
               notify={notify}
               setTabKey={setTabKey}
@@ -82,4 +76,4 @@ const PriceAndStock = ({
   );
 };
 
-export { PriceAndStock };
+export default PriceAndStock;

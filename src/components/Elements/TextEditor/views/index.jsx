@@ -122,9 +122,10 @@ function IconOrLabel(IconComp, label) {
 }
 
 /* EditorInner: menerima final extensions sebagai prop dan inisialisasi editor di sini */
-function EditorInner({ initialContent, onChange, placeholder, className, extensions }) {
+function EditorInner({ initialContent, onChange, placeholder, className, extensions, disabled }) {
   const editor = useEditor({
     extensions: dedupeExtensions(extensions),
+    editable: !disabled,
     content: initialContent || '<p></p>',
     onUpdate: ({ editor }) => {
       if (typeof onChange === 'function') onChange(editor.getHTML());
@@ -309,43 +310,9 @@ function EditorInner({ initialContent, onChange, placeholder, className, extensi
   ];
 
   return (
-    <div className={`${style.rteWrapper} ${className}`}>
+    <div className={`${style.rteWrapper} ${className} ${disabled ? style.disabled : ''}`}>
       <div className={style.rteToolbar} style={{ marginBottom: 8 }}>
         <Space wrap align='center'>
-          <Select
-            size='small'
-            style={{ minWidth: 120 }}
-            placeholder='Heading'
-            value={
-              [1, 2, 3, 4, 5, 6].find((lvl) => editor.isActive('heading', { level: lvl }))
-                ? `h${[1, 2, 3, 4, 5, 6].find((lvl) => editor.isActive('heading', { level: lvl }))}`
-                : editor.isActive('paragraph')
-                  ? 'p'
-                  : undefined
-            }
-            onChange={(val) => {
-              if (val === 'p') {
-                editor.chain().focus().setParagraph().run();
-              } else {
-                const lvl = Number(val.slice(1));
-                editor.chain().focus().toggleHeading({ level: lvl }).run();
-              }
-            }}
-            options={[
-              { label: 'Paragraph', value: 'p' },
-              { label: 'Heading 1', value: 'h1' },
-              { label: 'Heading 2', value: 'h2' },
-              { label: 'Heading 3', value: 'h3' },
-              { label: 'Heading 4', value: 'h4' },
-              { label: 'Heading 5', value: 'h5' },
-              { label: 'Heading 6', value: 'h6' }
-            ]}
-            allowClear={false}
-            suffixIcon={<BlockOutlined />}
-          />
-
-          <Divider type='vertical' style={{ height: 24 }} />
-
           <Select
             size='small'
             style={{ width: 92 }}
@@ -588,7 +555,8 @@ export default function TextEditor({
   onChange,
   placeholder = 'Tulis sesuatu...',
   className = '',
-  withTables = true
+  withTables = true,
+  disabled = false
 }) {
   // resolve modules we imported as namespaces
   const ResolvedTextStyle = resolveModuleExt(TextStyleModule);
@@ -596,11 +564,11 @@ export default function TextEditor({
   const ResolvedTextAlign = resolveModuleExt(TextAlignModule, { types: ['heading', 'paragraph'] });
   const ResolvedColor = resolveModuleExt(ColorModule);
 
-  // ------ SUPPORT heading h1-h6
+  // Add FontSize extension
   const baseExtensions = useMemo(
     () =>
       [
-        StarterKit.configure({ heading: { levels: [1, 2, 3, 4, 5, 6] } }),
+        StarterKit.configure({ heading: { levels: [1, 2, 3] }, underline: false }),
         ResolvedTextStyle,
         ResolvedUnderline,
         ResolvedTextAlign,
@@ -658,6 +626,7 @@ export default function TextEditor({
       placeholder={placeholder}
       className={className}
       extensions={merged}
+      disabled={disabled}
     />
   );
 }

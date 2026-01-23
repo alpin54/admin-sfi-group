@@ -7,26 +7,29 @@ import emailLandingModel from '@components/Email/Landing/models';
 // -- components
 import EmailLandingView from '@components/Email/Landing/views';
 
+// -- data
+import data from '@components/Email/Landing/data';
+
 const EmailLandingWidget = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [data, setData] = useState([]);
+  // const [loading, setLoading] = useState(true);
 
-  const getData = async () => {
-    try {
-      const response = await emailLandingModel.list();
-      setData(response?.data?.data || []);
-    } catch (err) {
-      console.error('Fetch error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     const response = await emailLandingModel.list();
+  //     setData(response?.data?.data || []);
+  //   } catch (err) {
+  //     console.error('Fetch error:', err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
-  return <EmailLandingView data={data} loading={loading} />;
+  return <EmailLandingView data={data.list} loading={false} />;
 };
 
 export default EmailLandingWidget;

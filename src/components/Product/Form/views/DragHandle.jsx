@@ -15,4 +15,4 @@ const DragHandle = ({ attributes, listeners }) => {
   );
 };
 
-export { DragHandle };
+export default DragHandle;

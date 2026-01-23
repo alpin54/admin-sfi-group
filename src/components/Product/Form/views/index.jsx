@@ -1,11 +1,11 @@
 // -- libraries
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Breadcrumb, Form, Button, Row, Col, Collapse, Space, Input } from 'antd';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 // -- icons
-import { DownOutlined } from '@ant-design/icons';
+import { CommentOutlined, DollarCircleOutlined, DownOutlined, PieChartOutlined } from '@ant-design/icons';
 
 // -- hooks
 import useNotification from '@hooks/useNotification';
@@ -21,26 +21,16 @@ import { transformImageApiToUploadInitialValue, normalizeOptions } from '@utils/
 
 // -- elements
 import CardUserLog from '@components/Elements/CardUserLog/widgets/Default';
+import CardSummary from '@components/Elements/CardSummary/views';
 
 // -- components
-import { GeneralInformation } from '@components/Product/Form/views/GeneralInformation';
-import { PriceAndStock } from '@components/Product/Form/views//PriceAndStock';
-import { Sidebar } from '@components/Product/Form/views//Sidebar';
+import GeneralInformation from '@components/Product/Form/views/GeneralInformation';
+import PriceAndStock from '@components/Product/Form/views/PriceAndStock';
+import Sidebar from '@components/Product/Form/views/Sidebar';
 
 const ProductFormView = (props) => {
-  const {
-    slug,
-    action,
-    data,
-    loading,
-    categoryOptions,
-    brandOptions,
-    materialOptions = [],
-    colorOptions,
-    promotionOptions,
-    sizeOptions = [],
-    onSubmit
-  } = props;
+  const { slug, action, data, loading, categoryOptions, brandOptions, colorOptions, promotionOptions, onSubmit } =
+    props;
 
   const { notify, contextHolder } = useNotification();
   const [formInstance] = Form.useForm();
@@ -56,25 +46,13 @@ const ProductFormView = (props) => {
 
   const user = useMemo(() => LocalStorage.get('user'), []);
   const categoryTreeOptions = useMemo(() => TransformTree.catSelect(categoryOptions), [categoryOptions]);
-  const brandTreeOptions = useMemo(() => TransformTree.collectSelect(brandOptions), [brandOptions]);
-  const colorTreeOptions = useMemo(() => TransformTree.collectSelect(colorOptions), [colorOptions]);
-  const promotionTreeOptions = useMemo(() => TransformTree.collectSelect(promotionOptions), [promotionOptions]);
-
-  // Memoize getSelectOptionsForName dengan dependencies yang stabil
-  const getSelectOptionsForName = useCallback(
-    (name) => {
-      const n = String(name || '').toLowerCase();
-      if (n === 'color') return normalizeOptions(colorOptions || []);
-      if (n === 'material') return normalizeOptions(materialOptions || []);
-      if (n === 'size') return normalizeOptions(sizeOptions || []);
-      return [];
-    },
-    [colorOptions, materialOptions, sizeOptions]
-  );
+  const brandTreeOptions = useMemo(() => TransformTree.brandSelect(brandOptions), [brandOptions]);
+  const colorTreeOptions = useMemo(() => TransformTree.colorSelect(colorOptions), [colorOptions]);
+  const promotionTreeOptions = useMemo(() => TransformTree.promotionSelect(promotionOptions), [promotionOptions]);
 
   // Initialize hooks - PENTING: Panggil hooks di top level, tidak di dalam useEffect
   const discountHook = useDiscount(formInstance);
-  const attributesHook = useAttributes(notify, getSelectOptionsForName);
+  const attributesHook = useAttributes(notify);
   const variantsHook = useVariants();
   const groupImagesHook = useGroupImages();
 
@@ -88,7 +66,7 @@ const ProductFormView = (props) => {
       variantsHook.updateVariantRows(attributesHook.attributes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attributesHook.attributes]); // HANYA depend pada attributes, bukan variantsHook
+  }, [attributesHook.attributes]);
 
   // Initialize form
   useEffect(() => {
@@ -116,7 +94,7 @@ const ProductFormView = (props) => {
       setTabKey(data.is_variant ? 'variant' : 'simple');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]); // HANYA depend pada data
+  }, [data]);
 
   // Initialize group images from data - FIX: tambah guard untuk prevent infinite loop
   useEffect(() => {
@@ -130,16 +108,12 @@ const ProductFormView = (props) => {
     data.variants.forEach((v) => {
       const values = activeAttrs.map((a) => {
         const key = String(a.name || '').toLowerCase();
-        if (key === 'material' && v.material && v.material.id !== undefined) return String(v.material.id);
-        if (key === 'size' && v.size && v.size.id !== undefined) return String(v.size.id);
-        if (key === 'color' && v.color && v.color.id !== undefined) return String(v.color.id);
         if (v.attributes && v.attributes[a.name]) return String(v.attributes[a.name]);
         return '';
       });
 
       const firstVal = values[0];
       if (firstVal && v.image) gImages[firstVal] = v.image;
-      if (v.material && v.material.id && v.image) gImages[String(v.material.id)] = v.image;
     });
 
     const normalizedG = {};
@@ -177,9 +151,6 @@ const ProductFormView = (props) => {
     data.variants.forEach((v) => {
       const values = activeAttrs.map((a) => {
         const key = String(a.name || '').toLowerCase();
-        if (key === 'material' && v.material && v.material.id !== undefined) return String(v.material.id);
-        if (key === 'size' && v.size && v.size.id !== undefined) return String(v.size.id);
-        if (key === 'color' && v.color && v.color.id !== undefined) return String(v.color.id);
         if (v.attributes && v.attributes[a.name]) return String(v.attributes[a.name]);
         return '';
       });
@@ -227,12 +198,31 @@ const ProductFormView = (props) => {
                   action === 'add'
                     ? 'Add Product'
                     : action === 'edit'
-                      ? `Edit ${data?.name ?? ''}`
-                      : `Detail ${data?.name ?? ''}`
+                      ? `Edit ${data?.name?.en ?? ''}`
+                      : `Detail ${data?.name?.en ?? ''}`
               }
             ]}
           />
         </div>
+
+        {viewOnly && (
+          <Row gutter={[16, 16]} className='row-container'>
+            <Col span={8}>
+              <CardSummary icon={<DollarCircleOutlined />} title='Total Revenue' value={data?.revenue || 0} />
+            </Col>
+            <Col span={8}>
+              <CardSummary icon={<PieChartOutlined />} title='Total Sold' value={data?.sold || 0} />
+            </Col>
+            <Col span={8}>
+              <CardSummary
+                icon={<CommentOutlined />}
+                title='Review'
+                value={`${data?.review?.total ?? 0} . ${data?.review?.rating ?? 0}`}
+                href={`/product/review/${data?.id}`}
+              />
+            </Col>
+          </Row>
+        )}
 
         <Form form={formInstance} id='form-product' layout='vertical' onFinish={handleFinish} autoComplete='off'>
           <Form.Item name='id' hidden>
@@ -254,6 +244,8 @@ const ProductFormView = (props) => {
                         viewOnly={viewOnly}
                         featureEnabled={featureEnabled}
                         setFeatureEnabled={setFeatureEnabled}
+                        data={data}
+                        formInstance={formInstance}
                       />
                     )
                   },
@@ -271,8 +263,6 @@ const ProductFormView = (props) => {
                         discountHook={discountHook}
                         manageStockEnabled={manageStockEnabled}
                         setManageStockEnabled={setManageStockEnabled}
-                        materialOptions={materialOptions}
-                        sizeOptions={sizeOptions}
                         colorOptions={colorOptions}
                         data={data}
                         notify={notify}

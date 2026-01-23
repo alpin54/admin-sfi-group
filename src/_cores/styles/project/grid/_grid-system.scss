@@ -121,7 +121,6 @@
     }
   }
   &-cell {
-    vertical-align: top !important;
     @include font-size(button-small);
     ul {
       list-style: none;
@@ -134,9 +133,6 @@
       &:last-child {
         margin-bottom: 0;
       }
-    }
-    p {
-      font-size: inherit !important;
     }
     a {
       color: color(primary, 6) !important;
@@ -160,6 +156,7 @@
     .ant-modal-title {
       @include font-size(h6);
       color: color(neutral, 7);
+      font-weight: fw(medium);
     }
     .ant-modal-close {
       top: 16px;
@@ -573,4 +570,23 @@
 
 .ant-popover-title {
   @include font-size(small);
+}
+
+.ant-rate {
+  color: color(primary, 6) !important;
+  &-star {
+    font-size: 24px !important;
+  }
+}
+
+.ant-avatar {
+  border-color: color(neutral, 3) !important;
+  background-color: color(neutral, 1) !important;
+  color: color(neutral, 6) !important;
+}
+
+.ant-badge {
+  .ant-badge-count {
+    background-color: color(primary, 6) !important;
+  }
 }

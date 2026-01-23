@@ -13,7 +13,7 @@ import usePermission from '@hooks/usePermission';
 
 // -- elements
 import CardSummary from '@components/Elements/CardSummary/views';
-import CardUserLogWidget from '@components/Elements/CardUserLog/views';
+import CardUserLogWidget from '@components/Elements/CardUserLog/widgets/Default';
 
 const SubscribeView = ({
   data,

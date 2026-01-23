@@ -84,7 +84,7 @@ const ModalJobTypeView = ({
         Cancel
       </Button>
       <Button type='primary' htmlType='submit' form='form-job-type' loading={loading}>
-        Save
+        {method === 'add' ? 'Add Job Type' : 'Save'}
       </Button>
     </>
   );

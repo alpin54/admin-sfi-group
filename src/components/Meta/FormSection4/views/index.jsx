@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card, Button, Form, Input, Space } from 'antd';
+import { Card, Button, Form, Input, Space, Col, Row } from 'antd';
 
 // -- utils
 import LocalStorage from '@utils/localStorage';
@@ -86,29 +86,24 @@ const FormMetaSection4View = (props) => {
         <Form.Item name='id' hidden>
           <Input />
         </Form.Item>
-        <Form.Item
-          name={'gtag_script'}
-          label='Google Analytics'
-          rules={[{ required: true, message: 'Google Analytics is required' }]}>
-          <TextArea
-            allowClear
-            rows={12}
-            readOnly={!isEdit}
-            style={{ fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name={'gtm_script'}
-          label='Google Tag Manager'
-          rules={[{ required: true, message: 'Google Tag Manager is required' }]}>
-          <TextArea
-            allowClear
-            rows={12}
-            readOnly={!isEdit}
-            style={{ fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}
-          />
-        </Form.Item>
+        <Row gutter={16}>
+          <Col xs={24} md={12}>
+            <Form.Item
+              name='gtag_script'
+              label='Google Analytics'
+              rules={[{ required: true, message: 'Google Analytics is required' }]}>
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={12}>
+            <Form.Item
+              name='gtm_script'
+              label='Google Tag Manager'
+              rules={[{ required: true, message: 'Google Tag Manager is required' }]}>
+              <Input />
+            </Form.Item>
+          </Col>
+        </Row>
 
         <Form.Item>
           <Space size={16}>

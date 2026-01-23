@@ -10,7 +10,7 @@ import useConfirmationModal from '@hooks/useConfirmationModal';
 import useNotification from '@hooks/useNotification';
 
 // -- elements
-import CardUserLogWidget from '@components/Elements/CardUserLog/views';
+import CardUserLogWidget from '@components/Elements/CardUserLog/widgets/Default';
 
 // -- components
 import FormDashboardMemberSection1Widget from '@components/Pages/DashboardMember/FormSection1/widgets/Default';

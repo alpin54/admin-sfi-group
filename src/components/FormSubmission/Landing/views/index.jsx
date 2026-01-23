@@ -1,5 +1,5 @@
 // --library
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { Button, Row, Col, Table, Space, Tooltip, Input, DatePicker, Breadcrumb } from 'antd';
 import dayjs from 'dayjs';
@@ -12,7 +12,15 @@ dayjs.extend(localizedFormat);
 dayjs.locale('id');
 
 // -- icons
-import { ZoomInOutlined, DeleteOutlined, SearchOutlined, FileDoneOutlined } from '@ant-design/icons';
+import {
+  ZoomInOutlined,
+  DeleteOutlined,
+  SearchOutlined,
+  FileDoneOutlined,
+  WarningOutlined,
+  StarOutlined,
+  StarFilled
+} from '@ant-design/icons';
 
 // -- styles
 import style from '@components/FormSubmission/Landing/styles/style.module.scss';
@@ -21,6 +29,9 @@ import style from '@components/FormSubmission/Landing/styles/style.module.scss';
 import useConfirmationModal from '@hooks/useConfirmationModal';
 import useNotification from '@hooks/useNotification';
 import usePermission from '@hooks/usePermission';
+
+// -- utils
+import LocalStorage from '@utils/localStorage';
 
 // -- elements
 import CardSummary from '@components/Elements/CardSummary/views';
@@ -36,6 +47,7 @@ const FormSubmissionView = (props) => {
     pagination,
     totalPage,
     onDelete,
+    onSelected,
     onPageChange,
     onFilterChange,
     dateRange,
@@ -46,10 +58,12 @@ const FormSubmissionView = (props) => {
   // Hooks
   const { confirm, contextHolder: confirmHolder } = useConfirmationModal();
   const { notify, contextHolder: notificationHolder } = useNotification();
-  const { canView, canDelete } = usePermission('/form-submission');
+  const { canView, canEdit, canDelete } = usePermission('/form-submission');
 
   const [dataForm, setDataForm] = useState(undefined);
   const [open, setOpen] = useState(false);
+
+  const user = LocalStorage?.get?.('user');
 
   const { RangePicker } = DatePicker;
 
@@ -98,7 +112,7 @@ const FormSubmissionView = (props) => {
       confirm({
         title: 'Delete',
         icon: <DeleteOutlined />,
-        content: `Are you sure you want to delete ${record.full_name.toLocaleLowerCase()}?`,
+        content: `Are you sure you want to delete ${String(record?.full_name ?? record?.name ?? '-').toLocaleLowerCase()}?`,
         onSuccess: async () => {
           notify({
             type: 'success',
@@ -111,6 +125,41 @@ const FormSubmissionView = (props) => {
     [confirm, notify, onDelete, canDelete]
   );
 
+  const handleSelected = useCallback(
+    (record) => {
+      if (!canEdit) {
+        notify({
+          type: 'error',
+          message: 'Permission denied',
+          description: 'You do not have permission to update'
+        });
+        return;
+      }
+
+      const title = record?.pinned ? 'Not Selected' : 'Selected';
+      const selected = record?.pinned ? 0 : 1;
+      const payload = { id: record?.id, pinned: selected, updated_by: user?.id };
+
+      confirm({
+        title: title,
+        icon: record?.pinned ? <StarFilled style={{ color: 'gold' }} /> : <StarOutlined />,
+        content: `Are you sure you want to ${title.toLowerCase()} ${String(
+          record?.full_name ?? record?.name ?? '-'
+        ).toLocaleLowerCase()}?`,
+        onSuccess: async () => {
+          notify({
+            type: 'success',
+            message: `Data ${title.toLowerCase()} successfully`
+          });
+          if (typeof onSelected === 'function') {
+            await onSelected(payload);
+          }
+        }
+      });
+    },
+    [canEdit, confirm, notify, onSelected, user]
+  );
+
   const dataColumns = [
     {
       title: 'Date',
@@ -118,13 +167,27 @@ const FormSubmissionView = (props) => {
       width: 180,
       render: (date) => dayjs(date).format('DD MMMM YYYY HH:mm')
     },
-    { title: 'Full Name', dataIndex: 'full_name', width: 150 },
+    // { title: 'Full Name', dataIndex: 'full_name', width: 150 },
+    {
+      title: 'Full Name',
+      dataIndex: 'full_name',
+      width: 150,
+      render: (_, record) => record?.full_name ?? record?.name ?? '-'
+    },
     { title: 'Phone Number', dataIndex: 'phone', width: 180 },
     { title: 'Email', dataIndex: 'email', width: 160 },
+    // Company field (dummy uses `company`)
+    {
+      title: 'Company',
+      dataIndex: 'company',
+      width: 120,
+      render: (_, record) => record?.company ?? record?.company_name ?? '-'
+    },
     {
       title: 'Message',
       dataIndex: 'message',
-      width: 200,
+      // width: 200,
+      width: 120,
       ellipsis: true,
       render: (text) => <span title={text}>{text}</span>
     },
@@ -135,6 +198,25 @@ const FormSubmissionView = (props) => {
       width: 120,
       render: (_, record) => (
         <Space>
+          {canEdit && typeof onSelected === 'function' && (
+            <Tooltip title={record?.pinned ? 'Selected' : 'Not Selected'} placement='left'>
+              {/*
+              <Button
+                size='small'
+                variant='text'
+                color='default'
+                icon={record?.pinned ? <StarFilled style={{ color: 'gold' }} /> : <StarOutlined />}
+                onClick={() => handleSelected(record)}
+              />
+              */}
+              <Button
+                size='small'
+                type='text'
+                icon={record?.pinned ? <StarFilled style={{ color: 'gold' }} /> : <StarOutlined />}
+                onClick={() => handleSelected(record)}
+              />
+            </Tooltip>
+          )}
           {canView && (
             <Tooltip title='Detail' placement='left'>
               <Button size='small' type='text' icon={<ZoomInOutlined />} onClick={() => handleShowModal(record)} />
@@ -150,7 +232,30 @@ const FormSubmissionView = (props) => {
     }
   ];
 
-  const dataSource = data?.data ?? [];
+  // const dataSource = data?.data ?? [];
+  const dataSource = useMemo(() => {
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray(data.data)) return data.data;
+    if (data && data.data && Array.isArray(data.data.data)) return data.data.data;
+    return [];
+  }, [data]);
+
+  // Normalize summaryData: accept object or array (dummy uses array like Career dummy)
+  const normalizedSummary = useMemo(() => {
+    if (Array.isArray(summaryData)) return summaryData?.[0] ?? {};
+    return summaryData ?? {};
+  }, [summaryData]);
+
+  // Access Denied Guard (same pattern as Career Landing)
+  if (!canView) {
+    return (
+      <div style={{ padding: '48px', textAlign: 'center' }}>
+        <WarningOutlined style={{ fontSize: '64px', color: '#faad14', marginBottom: '16px' }} />
+        <h2>Access Denied</h2>
+        <p>You do not have permission to view this page.</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -167,17 +272,23 @@ const FormSubmissionView = (props) => {
           <Col lg={12}>
             <CardSummary
               title='Total Form Submission Today'
-              value={summaryData.total_today}
+              // value={summaryData.total_today}
+              value={normalizedSummary?.total_today ?? 0}
               icon={<FileDoneOutlined />}
             />
           </Col>
           <Col lg={12}>
-            <CardSummary title='Total Form Submission' value={summaryData.total_all} icon={<FileDoneOutlined />} />
+            {/* <CardSummary title='Total Form Submission' value={summaryData.total_all} icon={<FileDoneOutlined />} /> */}
+            <CardSummary
+              title='Total Form Submission'
+              value={normalizedSummary?.total_all ?? 0}
+              icon={<FileDoneOutlined />}
+            />
           </Col>
         </Row>
 
         {/* Filters: DateRange (left) + Search (right) */}
-        <Row gutter={[12, 12]} className='row-container' style={{ marginTop: 12, marginBottom: 6 }}>
+        <Row gutter={[16, 16]} className='row-container'>
           <Col flex='320px'>
             <RangePicker
               allowClear={false}

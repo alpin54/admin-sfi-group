@@ -48,7 +48,7 @@ const VoucherFormWidget = (props) => {
     <VoucherFormView
       slug={props.slug ?? null}
       action={props.action ?? null}
-      data={dummyData?.data ?? null}
+      data={props.slug ? dummyData?.data : null}
       loading={loading}
       message={message}
       refetch={() => {}}

@@ -36,7 +36,7 @@ import LocalStorage from '@utils/localStorage';
 import CardSummary from '@components/Elements/CardSummary/views';
 
 const VoucherLanding = (props) => {
-  const { data, summary, loading, filters, pagination, totalPage, onDelete, onSuspend, onPageChange, onFilterChange } =
+  const { data, summary, loading, filters, pagination, totalPage, onDelete, onStatus, onPageChange, onFilterChange } =
     props;
 
   // Hooks
@@ -90,9 +90,12 @@ const VoucherLanding = (props) => {
       }
 
       confirm({
-        title: 'Delete',
         icon: <DeleteOutlined style={{ color: 'red' }} />,
-        content: `Are you sure you want to delete ${record.name.toLocaleLowerCase()}?`,
+        content: (
+          <span>
+            Are you sure you want to delete the voucher <strong>{record.name}</strong>?
+          </span>
+        ),
         onSuccess: async () => {
           notify({
             type: 'success',
@@ -105,35 +108,38 @@ const VoucherLanding = (props) => {
     [confirm, notify, onDelete, canDelete]
   );
 
-  const handleSuspend = useCallback(
+  const handleStatus = useCallback(
     (record) => {
       if (!canEdit) {
         notify({
           type: 'error',
           message: 'Permission denied',
-          description: 'You do not have permission to suspend/unsuspend'
+          description: 'You do not have permission to hide/unhide'
         });
         return;
       }
 
-      const title = record.status ? 'Suspend' : 'Unsuspend';
-      const suspend = record.status ? false : true;
-      const payload = { id: record.id, status: suspend, updated_by: user.id };
+      const title = record.status ? 'Hide' : 'Unhide';
+      const hide = record.status ? false : true;
+      const payload = { id: record.id, status: hide, updated_by: user.id };
 
       confirm({
-        title: title,
         icon: record.status ? <EyeOutlined /> : <EyeInvisibleOutlined />,
-        content: `Are you sure you want to ${title.toLowerCase()} ${record.name.toLocaleLowerCase()}?`,
+        content: (
+          <span>
+            Are you sure you want to {title.toLowerCase()} the voucher <strong>{record.name}</strong>?
+          </span>
+        ),
         onSuccess: async () => {
           notify({
             type: 'success',
             message: `Data ${title.toLowerCase()} successfully`
           });
-          await onSuspend(payload);
+          await onStatus(payload);
         }
       });
     },
-    [confirm, notify, user, onSuspend, canEdit]
+    [confirm, notify, user, onStatus, canEdit]
   );
 
   const dataColumns = [
@@ -203,13 +209,13 @@ const VoucherLanding = (props) => {
             </Tooltip>
           )}
           {canEdit && (
-            <Tooltip title={record.status ? 'Suspend' : 'Unsuspend'} placement='left'>
+            <Tooltip title={record.status ? 'Hide' : 'Unhide'} placement='left'>
               <Button
                 size='small'
                 variant='text'
                 color='default'
                 icon={record.status ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                onClick={() => handleSuspend(record)}
+                onClick={() => handleStatus(record)}
               />
             </Tooltip>
           )}

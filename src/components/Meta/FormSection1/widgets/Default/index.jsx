@@ -10,23 +10,26 @@ import useFirstLoad from '@hooks/useFirstLoad';
 // -- components
 import FormMetaSection1View from '@components/Meta/FormSection1/views';
 
+// -- data
+import data from '@components/Meta/FormSection1/data';
+
 const FormMetaSection1Widget = (props) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
   // Only fetch role data if slug exists
-  const { data, ready, refetch } = useFirstLoad(useCallback(() => metaModel.single(), []));
+  // const { data, ready, refetch } = useFirstLoad(useCallback(() => metaModel.single(), []));
 
   const handleSave = async (formData, method) => {
     setLoading(true);
     setMessage('');
 
     try {
-      const { data, error } = await metaModel.submit(formData, method);
+      // const { data, error } = await metaModel.submit(formData, method);
 
-      if (error) {
-        setMessage(error.message);
-      }
+      // if (error) {
+      //   setMessage(error.message);
+      // }
 
       if (data) {
         refetch();
@@ -45,8 +48,8 @@ const FormMetaSection1Widget = (props) => {
   return (
     <FormMetaSection1View
       {...props}
-      data={data?.data}
-      ready={ready}
+      data={data}
+      ready={false}
       onSubmit={handleSave}
       loading={loading}
       message={message}

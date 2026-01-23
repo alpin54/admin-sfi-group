@@ -67,16 +67,55 @@ const TransformTree = (() => {
     }));
   };
 
-  // TreeSelect structure for collection tree
-  const transformCollectSelect = (rawData) => {
-    return rawData.map((collection) => ({
-      ...collection,
-      type: 'collection',
-      title: collection.name,
-      name: collection.name,
-      value: `collection-${collection.id}`,
-      key: `collection-${collection.id}`,
-      status: collection.status
+  // TreeSelect structure for tag tree
+  const transformTagSelect = (rawData) => {
+    return rawData.map((tag) => ({
+      ...tag,
+      type: 'tag',
+      title: tag.name,
+      name: tag.name,
+      value: `tag-${tag.id}`,
+      key: `tag-${tag.id}`,
+      status: tag.status
+    }));
+  };
+
+  // TreeSelect structure for brand tree
+  const transformBrandSelect = (rawData) => {
+    return rawData.map((brand) => ({
+      ...brand,
+      type: 'brand',
+      title: brand.name,
+      name: brand.name,
+      value: `brand-${brand.id}`,
+      key: `brand-${brand.id}`,
+      status: brand.status
+    }));
+  };
+
+  // TreeSelect structure for color tree
+  const transformColorSelect = (rawData) => {
+    return rawData.map((color) => ({
+      ...color,
+      type: 'color',
+      title: color.name,
+      name: color.name,
+      value: `color-${color.id}`,
+      key: `color-${color.id}`,
+      status: color.status
+    }));
+  };
+
+  // TreeSelect structure for promotion tree
+  const transformPromotionSelect = (rawData) => {
+    return rawData.map((promotion) => ({
+      ...promotion,
+      type: 'promotion',
+      title: promotion.name,
+      name: promotion.name,
+      value: `promotion-${promotion.id}`,
+      key: `promotion-${promotion.id}`,
+      status: promotion.status
     }));
   };
 
@@ -104,18 +143,48 @@ const TransformTree = (() => {
       };
     });
 
-    // collection: flat
-    const collectionTree = Array.isArray(data.collections)
-      ? data.collections.map((item) => ({
+    // tag: flat
+    const tagTree = Array.isArray(data.tags)
+      ? data.tags.map((item) => ({
+          title: item,
+          value: `tag-${item}`,
+          key: `tag-${item}`
+        }))
+      : [];
+
+    // brand: flat
+    const brandTree = Array.isArray(data.brands)
+      ? data.brands.map((item) => ({
           title: item.name,
-          value: `collection-${item.id}`,
-          key: `collection-${item.id}`
+          value: `brand-${item.id}`,
+          key: `brand-${item.id}`
+        }))
+      : [];
+
+    // color: flat
+    const colorTree = Array.isArray(data.colors)
+      ? data.colors.map((item) => ({
+          title: item.name,
+          value: `color-${item.id}`,
+          key: `color-${item.id}`
+        }))
+      : [];
+
+    // promotion: flat
+    const promotionTree = Array.isArray(data.promotions)
+      ? data.promotions.map((item) => ({
+          title: item.name,
+          value: `promotion-${item.id}`,
+          key: `promotion-${item.id}`
         }))
       : [];
 
     return {
       category_ids: categoryTree,
-      collection_ids: collectionTree
+      tags: tagTree,
+      brand_ids: brandTree,
+      color_ids: colorTree,
+      promotion_ids: promotionTree
     };
   };
 
@@ -173,7 +242,7 @@ const TransformTree = (() => {
     const trees = transformValuesTree(data) || {};
     const flattened = {};
     // ensure all expected keys exist (avoid missing keys)
-    const keys = ['category_ids', 'collection_ids'];
+    const keys = ['category_ids', 'tags', 'brand_ids', 'color_ids', 'promotion_ids'];
     keys.forEach((k) => {
       flattened[k] = flattenTreeNodes(trees[k] || []);
     });
@@ -183,7 +252,10 @@ const TransformTree = (() => {
   return {
     catList: transformCatList,
     catSelect: transformCatSelect,
-    collectSelect: transformCollectSelect,
+    tagSelect: transformTagSelect,
+    brandSelect: transformBrandSelect,
+    colorSelect: transformColorSelect,
+    promotionSelect: transformPromotionSelect,
     valuesTree: transformValuesTree,
     // exported flatten helpers
     flattenTreeNodes,

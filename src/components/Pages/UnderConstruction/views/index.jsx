@@ -12,7 +12,7 @@ import useNotification from '@hooks/useNotification';
 import LocalStorage from '@utils/localStorage';
 
 // -- elements
-import CardUserLogWidget from '@components/Elements/CardUserLog/views';
+import CardUserLogWidget from '@components/Elements/CardUserLog/widgets/Default';
 import UploadImage from '@elements/UploadImage/views';
 import TranslationTabs from '@components/Elements/TranslationTabs/views';
 

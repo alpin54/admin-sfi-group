@@ -8,7 +8,7 @@
   height: 252px;
   background-color: color(neutral, 2) !important;
   border: 1px dashed color(neutral, 4);
-  @include radius(1);
+  @include radius(xs);
   &.disabled {
     #{$uc} {
       &-edit {
@@ -75,7 +75,7 @@
     z-index: 2;
     background-color: color(neutral, 2);
     overflow: hidden;
-    @include radius(1);
+    @include radius(xs);
     &Item {
       display: flex;
       justify-content: center;

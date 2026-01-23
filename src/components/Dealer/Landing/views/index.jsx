@@ -25,6 +25,9 @@ import useConfirmationModal from '@hooks/useConfirmationModal';
 import useNotification from '@hooks/useNotification';
 import usePermission from '@hooks/usePermission';
 
+// -- states
+import useStateMenu from '@components/Sidebar/states';
+
 // -- utils
 import Currency from '@utils/currency';
 import LocalStorage from '@utils/localStorage';
@@ -40,6 +43,7 @@ const DealerLanding = (props) => {
   const { confirm, contextHolder: confirmHolder } = useConfirmationModal();
   const { notify, contextHolder: notificationHolder } = useNotification();
   const { canView, canEdit, canDelete } = usePermission('/dealer');
+  const { menu } = useStateMenu();
   const { RangePicker } = DatePicker;
   const user = LocalStorage.get('user');
 
@@ -101,7 +105,7 @@ const DealerLanding = (props) => {
         content: (
           <>
             <p>
-              Are you sure you want to delete the guest named <strong>{record.name}</strong>?
+              Are you sure you want to delete the dealer account named <strong>{record.name}</strong>?
             </p>
             <Input.Password
               allowClear
@@ -158,7 +162,11 @@ const DealerLanding = (props) => {
 
       confirm({
         icon: <WarningOutlined style={{ color: '#d6a31f' }} />,
-        content: `Are you sure you want to ${title.toLowerCase()} ${record.name.toLocaleLowerCase()}?`,
+        content: (
+          <span>
+            Are you sure you want to {title.toLowerCase()} the dealer account named <strong>{record.name}</strong>?
+          </span>
+        ),
         onSuccess: async () => {
           notify({
             type: 'success',
@@ -196,8 +204,8 @@ const DealerLanding = (props) => {
     { title: 'Vouchers', dataIndex: 'voucher' },
     { title: 'Total Order', dataIndex: 'total_order', render: (val) => Currency.formatRp(val) },
     { title: 'Total Spending', dataIndex: 'total_spending', render: (val) => Currency.formatRp(val) },
-    { title: 'KTP', dataIndex: 'ktp', render: (val) => val && <FileImageOutlined /> },
-    { title: 'NPWP', dataIndex: 'npwp', render: (val) => val && <FileImageOutlined /> },
+    { title: 'KTP', dataIndex: 'ktp', render: () => <FileImageOutlined /> },
+    { title: 'NPWP', dataIndex: 'npwp', render: () => <FileImageOutlined /> },
     {
       title: 'Action',
       dataIndex: 'action',
@@ -266,7 +274,7 @@ const DealerLanding = (props) => {
 
         {/* Search */}
         <Row gutter={[16, 16]} className='row-container'>
-          <Col lg={24}>
+          <Col span={24}>
             <Input
               placeholder='Search...'
               suffix={<SearchOutlined />}
@@ -276,6 +284,17 @@ const DealerLanding = (props) => {
             />
           </Col>
         </Row>
+
+        <div className='row-container'>
+          <Space size={20}>
+            <Button color={menu === 'dealer' ? 'primary' : ``} variant='outlined' href='/dealer'>
+              Dealers
+            </Button>
+            <Button color={menu === 'dealer-pending' ? 'primary' : ``} variant='outlined' href='/dealer/pending'>
+              Pending Dealers
+            </Button>
+          </Space>
+        </div>
 
         {/* Table */}
         <Table

@@ -13,7 +13,7 @@ import usePermission from '@hooks/usePermission';
 import DeniedAccess from '@components/Elements/DeniedAccess/views';
 
 // -- components
-import Empty from '@components/Elements/Empty/views';
+import DealerReward from '@components/Dealer/Reward/Landing/views';
 
 const DealerRewards = () => {
   // set menu
@@ -28,7 +28,7 @@ const DealerRewards = () => {
     return <DeniedAccess />;
   }
 
-  return <Empty title='Under Construction' description='Dealer Rewards page is not available.' />;
+  return <DealerReward />;
 };
 
 export default DealerRewards;

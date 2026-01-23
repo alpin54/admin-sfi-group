@@ -12,6 +12,7 @@ import FormData from '@utils/formdata';
 // -- elements
 import SectionHeader from '@elements/SectionHeader/views';
 import UploadImage from '@elements/UploadImage/views';
+import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
 const FormAboutUsSection1View = (props) => {
   const { method, confirm, notify, data, ready, loading, message, onPublish, onSubmit } = props;
@@ -121,15 +122,18 @@ const FormAboutUsSection1View = (props) => {
         <Form.Item name='image' label='Image' valuePropName='file' getValueFromEvent={(e) => e} help='1440px x 800px'>
           <UploadImage value={{ url: data?.image }} disabled={!isEdit} />
         </Form.Item>
-        <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Title is required' }]}>
-          <Input allowClear readOnly={!isEdit} />
-        </Form.Item>
-        <Form.Item
-          name='description'
-          label='Description'
-          rules={[{ required: true, message: 'Description is required' }]}>
-          <TextArea allowClear rows={3} readOnly={!isEdit} />
-        </Form.Item>
+        <TranslationTabs>
+          {(lang) => (
+            <>
+              <Form.Item
+                name={['title', lang]}
+                label='Title'
+                rules={[{ required: true, message: 'Title is required' }]}>
+                <Input allowClear readOnly={!isEdit} />
+              </Form.Item>
+            </>
+          )}
+        </TranslationTabs>
 
         <Form.Item>
           <Space size={16}>

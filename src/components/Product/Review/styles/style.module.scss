@@ -1,0 +1,102 @@
+@import '_cores/styles/_assets.scss';
+
+.profile {
+  &Image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  &Text {
+    margin-left: 16px;
+  }
+  &Name {
+    @include font-size(body);
+    font-weight: fw(medium);
+    margin-bottom: 4px;
+  }
+  &Date {
+    @include font-size(small);
+    margin-bottom: 0;
+    color: color(neutral, 6);
+  }
+}
+
+.rating {
+  margin-bottom: 16px;
+  span {
+    color: color(primary, 6);
+    font-size: 18px;
+  }
+}
+
+.star {
+  margin-right: 4px;
+  &:last-child {
+    margin-right: 0;
+  }
+  span {
+    color: color(primary, 6);
+    font-size: 14px;
+  }
+}
+
+.review {
+  &Variant {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    span {
+      display: inline-block;
+      margin-right: 8px;
+      @include font-size(caption);
+      color: color(neutral, 5);
+    }
+    ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      li {
+        position: relative;
+        color: color(neutral, 5);
+        @include font-size(caption);
+        margin: 0 16px 0 0;
+        &:last-child {
+          margin-right: 0;
+          &::after {
+            display: none;
+          }
+        }
+        &::after {
+          content: '';
+          position: absolute;
+          right: -8px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 2px;
+          height: 2px;
+          border-radius: 50%;
+          background-color: color(neutral, 5);
+        }
+      }
+    }
+  }
+  &Text {
+    @include font-size(body);
+    @include multiline-ellipsis(2);
+    margin-bottom: 16px;
+  }
+  &Image {
+    display: block;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+  }
+}
+
+.table {
+  :global(.ant-table-cell) {
+    vertical-align: top;
+  }
+}

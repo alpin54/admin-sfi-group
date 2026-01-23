@@ -61,19 +61,26 @@ const CareerWorkplaceView = (props) => {
         icon: <DeleteOutlined />,
         content: `Are you sure you want to delete ${item.name.toLocaleLowerCase()}?`,
         onSuccess: async () => {
-          const response = await onDelete(item.id);
-          if (response && !response.error) {
-            notify({
-              type: 'success',
-              message: 'Data deleted successfully'
-            });
-          } else {
-            notify({
-              type: 'error',
-              message: response.error || 'Failed to delete data'
-            });
-          }
+          notify({
+            type: 'success',
+            message: 'Data deleted successfully'
+          });
+          await onDelete(item.id);
         }
+        // onSuccess: async () => {
+        //   const response = await onDelete(item.id);
+        //   if (response && !response.error) {
+        //     notify({
+        //       type: 'success',
+        //       message: 'Data deleted successfully'
+        //     });
+        //   } else {
+        //     notify({
+        //       type: 'error',
+        //       message: response.error || 'Failed to delete data'
+        //     });
+        //   }
+        // }
       });
     },
     [confirm, notify, onDelete]
@@ -89,19 +96,26 @@ const CareerWorkplaceView = (props) => {
         icon: <WarningOutlined />,
         content: `Are you sure you want to ${title.toLowerCase()} ${item.name.toLocaleLowerCase()}?`,
         onSuccess: async () => {
-          const response = await onStatus(payload);
-          if (response && !response.error) {
-            notify({
-              type: 'success',
-              message: `Data ${title.toLowerCase()} successfully`
-            });
-          } else {
-            notify({
-              type: 'error',
-              message: response.error || `Failed to ${title.toLowerCase()} data`
-            });
-          }
+          notify({
+            type: 'success',
+            message: `Data ${title.toLowerCase()} successfully`
+          });
+          await onStatus(payload);
         }
+        // onSuccess: async () => {
+        //   const response = await onStatus(payload);
+        //   if (response && !response.error) {
+        //     notify({
+        //       type: 'success',
+        //       message: `Data ${title.toLowerCase()} successfully`
+        //     });
+        //   } else {
+        //     notify({
+        //       type: 'error',
+        //       message: response.error || `Failed to ${title.toLowerCase()} data`
+        //     });
+        //   }
+        // }
       });
     },
     [confirm, notify, onStatus, user]
@@ -143,7 +157,7 @@ const CareerWorkplaceView = (props) => {
             />
           </Tooltip>
           <Tooltip title='Delete'>
-            <Button size='small' type='text' danger icon={<DeleteOutlined />} onClick={() => handleDelete(record)} />
+            <Button size='small' type='text' icon={<DeleteOutlined />} onClick={() => handleDelete(record)} />
           </Tooltip>
         </Space>
       )
@@ -159,9 +173,9 @@ const CareerWorkplaceView = (props) => {
           <Breadcrumb items={[{ title: <Link href='/career'>Career</Link> }, { title: 'Workplace' }]} />
         </div>
 
-        <Row gutter={[16, 16]} className='row-container' style={{ marginBottom: 12, alignItems: 'center' }}>
+        <Row gutter={[16, 16]} className='row-container'>
           <Col>
-            <Button type='primary' icon={<PlusOutlined />} onClick={() => handleShowModal('add')}>
+            <Button type='primary' onClick={() => handleShowModal('add')}>
               Add Workplace
             </Button>
           </Col>

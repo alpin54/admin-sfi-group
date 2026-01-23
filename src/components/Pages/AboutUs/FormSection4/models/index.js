@@ -2,39 +2,35 @@
 import httpRequest from '@api/httpRequest';
 import ENDPOINT from '@api/endPoint';
 
-const handleSingle = async () => {
+const handleList = async () => {
   return await httpRequest({
     method: 'get',
-    url: ENDPOINT.ABOUT_SECTION_DESCRIPTION
+    url: ENDPOINT.CAREER_BANNER
   });
 };
 
-const handlePublish = async (payload) => {
+const handleDelete = async (id) => {
   return await httpRequest({
-    method: 'put',
-    url: ENDPOINT.ABOUT_SECTION_DESCRIPTION,
-    data: payload,
-    headers: {
-      'Content-Type': 'multipart/form-data'
+    method: 'delete',
+    url: ENDPOINT.CAREER_BANNER,
+    data: {
+      id
     }
   });
 };
 
-const handleSubmit = async (payload) => {
+const handleStatus = async (payload) => {
   return await httpRequest({
     method: 'put',
-    url: ENDPOINT.ABOUT_SECTION_DESCRIPTION,
-    data: payload,
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+    url: ENDPOINT.CAREER_BANNER,
+    data: payload
   });
 };
 
-const aboutSectionDescriptionModel = {
-  single: handleSingle,
-  publish: handlePublish,
-  submit: handleSubmit
+const careerBannerModel = {
+  list: handleList,
+  delete: handleDelete,
+  status: handleStatus
 };
 
-export default aboutSectionDescriptionModel;
+export default careerBannerModel;

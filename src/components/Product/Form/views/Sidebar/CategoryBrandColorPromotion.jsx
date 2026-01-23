@@ -19,4 +19,4 @@ const CategoryBrandColorPromotion = ({ name, placeholder, treeData, viewOnly, re
   );
 };
 
-export { CategoryBrandColorPromotion };
+export default CategoryBrandColorPromotion;

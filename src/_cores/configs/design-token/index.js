@@ -70,6 +70,9 @@ const DesignToken = {
     },
     Progress: {
       defaultColor: '#dc8622'
+    },
+    Rate: {
+      iconColor: '#dc8622'
     }
   }
 };

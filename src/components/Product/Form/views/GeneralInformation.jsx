@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Form, Input, Row, Col, Switch, Button, Table, Modal, Space } from 'antd';
 
 // -- icons
-import { EditOutlined, EyeOutlined, EyeInvisibleOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, EyeOutlined, EyeInvisibleOutlined, DeleteOutlined } from '@ant-design/icons';
 
 // -- styles
 import style from '@components/Product/Form/styles/style.module.scss';
@@ -12,11 +12,14 @@ import style from '@components/Product/Form/styles/style.module.scss';
 import TextEditor from '@elements/TextEditor/views';
 import TranslationTabs from '@elements/TranslationTabs/views';
 
-const GeneralInformation = ({ viewOnly, featureEnabled, setFeatureEnabled, formInstance }) => {
+const GeneralInformation = ({ viewOnly, featureEnabled, setFeatureEnabled, data, formInstance }) => {
   const [features, setFeatures] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingFeature, setEditingFeature] = useState(null);
   const [modalForm] = Form.useForm();
+
+  console.log('formInstance', formInstance?.getFieldsValue());
+  console.log('data', data);
 
   // Load features from form when data is available
   useEffect(() => {
@@ -162,20 +165,20 @@ const GeneralInformation = ({ viewOnly, featureEnabled, setFeatureEnabled, formI
           <>
             <Form.Item
               label='Product Name'
-              name={[lang, 'name']}
+              name={['name', lang]}
               rules={[{ required: true, message: 'Please input product name!' }]}>
               <Input placeholder='Enter product name' disabled={viewOnly} />
             </Form.Item>
 
-            <Form.Item label='Custom URL' name={[lang, 'slug']}>
+            <Form.Item label='Custom URL' name={['slug', lang]}>
               <Input placeholder='Enter custom url' disabled={viewOnly} />
             </Form.Item>
 
             <Form.Item
               label='Deskripsi'
-              name={[lang, 'description']}
+              name={['description', lang]}
               rules={[{ required: true, message: 'Please input deskripsi!' }]}>
-              <TextEditor readOnly={viewOnly} />
+              <TextEditor disabled={viewOnly} />
             </Form.Item>
 
             <Row align='middle' gutter={[12]} className={style.row} style={{ marginBottom: 16 }}>
@@ -254,4 +257,4 @@ const GeneralInformation = ({ viewOnly, featureEnabled, setFeatureEnabled, formI
   );
 };
 
-export { GeneralInformation };
+export default GeneralInformation;

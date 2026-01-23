@@ -4,6 +4,9 @@
   :global(.ant-card-body) {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    width: 100%;
   }
 }
 
@@ -13,7 +16,15 @@
   @include font-size(body);
   color: color(neutral, 7);
   margin-bottom: 24px;
-  :global(.anticon) {
+  span {
+    @include font-size(small);
+    font-weight: fw(regular);
+    color: color(neutral, 6);
+  }
+  strong {
+    @include font-size(body);
+  }
+  span:global(.anticon) {
     margin-right: 8px;
     @include font-size(h6);
     color: color(primary, 6);
@@ -26,18 +37,27 @@
 
 .label {
   color: color(neutral, 7);
-  margin-bottom: 12px;
+  margin-bottom: 0;
+  span {
+    @include font-size(small);
+    font-weight: fw(regular);
+    color: color(neutral, 6);
+  }
   .secondary & {
     @include font-size(body);
     color: color(neutral, 7);
     font-weight: fw(regular);
     margin-bottom: 0;
+    span {
+      @include font-size(x-small);
+    }
   }
 }
 
 .row {
   display: flex;
   align-items: center;
+  margin-top: 12px;
   :global {
     .ant-tag {
       margin-right: 8px !important;
@@ -51,4 +71,10 @@
 .desc {
   @include font-size(small);
   margin-bottom: 0;
+}
+
+.button {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }

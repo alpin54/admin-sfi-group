@@ -1,8 +1,9 @@
 // -- libraries
 import { useEffect, useState } from 'react';
-import { Breadcrumb, Form, Button, Input, Row, Col, Card, Select, Space } from 'antd';
+import { Breadcrumb, Form, Switch, Button, Input, Row, Col, Select, Space, Collapse } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { PieChartOutlined, DownOutlined } from '@ant-design/icons';
 
 // -- styles
 import style from '@components/Career/Form/styles/style.module.scss';
@@ -15,6 +16,7 @@ import LocalStorage from '@utils/localStorage';
 
 // -- elements
 import CardUserLog from '@components/Elements/CardUserLog/widgets/Default';
+import CardSummary from '@components/Elements/CardSummary/views';
 import TextEditor from '@components/Elements/TextEditor/views';
 import TranslationTabs from '@components/Elements/TranslationTabs/views';
 
@@ -23,6 +25,8 @@ const CareerFormView = (props) => {
     slug,
     action,
     data,
+    summaryCareer,
+    summaryApplication,
     loading,
     message,
     onSubmit,
@@ -39,9 +43,29 @@ const CareerFormView = (props) => {
   const method = slug ? 'put' : 'post';
   const user = LocalStorage.get('user');
 
+  const dataSummaryCareer = summaryCareer;
+  const dataSummaryApplication = summaryApplication;
+
+  const careerTitleText = (() => {
+    if (!data) return '';
+    const maybeEn = data?.en?.title ?? data?.title?.en;
+    const maybeId = data?.id?.title ?? data?.title?.id;
+    const maybePlain = data?.title;
+
+    if (typeof maybeEn === 'string') return maybeEn;
+    if (typeof maybeId === 'string') return maybeId;
+    if (typeof maybePlain === 'string') return maybePlain;
+    return '';
+  })();
+
   // selected ids for controlled selects
-  const [selectedWorkplaceId, setSelectedWorkplaceId] = useState(undefined);
-  const [selectedJobTypeId, setSelectedJobTypeId] = useState(undefined);
+  const [selectedWorkplaceIds, setSelectedWorkplaceIds] = useState([]);
+  const [selectedJobTypeIds, setSelectedJobTypeIds] = useState([]);
+
+  // toggles
+  const [responsibilitiesEnabled, setResponsibilitiesEnabled] = useState(false);
+  const [qualificationsEnabled, setQualificationsEnabled] = useState(false);
+  const [benefitEnabled, setBenefitEnabled] = useState(false);
 
   // initialize form values and selected ids when `data` changes
   useEffect(() => {
@@ -52,26 +76,20 @@ const CareerFormView = (props) => {
     if (data) {
       const wpId = data.workplace_type_id ?? data.workplace_type?.id ?? data.workplace_type ?? undefined;
       const jobId = data.job_type_id ?? data.job_type?.id ?? data.job_type ?? undefined;
-      setSelectedWorkplaceId(wpId);
-      setSelectedJobTypeId(jobId);
+      const wpIds = Array.isArray(wpId) ? wpId : wpId != null ? [wpId] : [];
+      const jobIds = Array.isArray(jobId) ? jobId : jobId != null ? [jobId] : [];
+      setSelectedWorkplaceIds(wpIds);
+      setSelectedJobTypeIds(jobIds);
+      try {
+        formInstance.setFieldsValue({ workplace_type_id: wpIds, job_type_id: jobIds });
+      } catch {
+        // ignore
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  // when adding new, prefer to auto-select first option if available
-  useEffect(() => {
-    if (action === 'add') {
-      if ((selectedWorkplaceId === undefined || selectedWorkplaceId === null) && categoryWorkplaceOptions.length > 0) {
-        setSelectedWorkplaceId(categoryWorkplaceOptions[0].id);
-        formInstance.setFieldsValue({ workplace_type_id: categoryWorkplaceOptions[0].id });
-      }
-      if ((selectedJobTypeId === undefined || selectedJobTypeId === null) && categoryJobTypeOptions.length > 0) {
-        setSelectedJobTypeId(categoryJobTypeOptions[0].id);
-        formInstance.setFieldsValue({ job_type_id: categoryJobTypeOptions[0].id });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [action, categoryWorkplaceOptions, categoryJobTypeOptions]);
+  // NOTE: keep Job Type / Workplace empty on first open (show placeholder)
 
   useEffect(() => {
     if (message) {
@@ -86,14 +104,14 @@ const CareerFormView = (props) => {
   // Submit
   const handleFinish = async (values) => {
     try {
-      const wpId = values.workplace_type_id ?? selectedWorkplaceId;
-      const jobId = values.job_type_id ?? selectedJobTypeId;
+      const wpId = values.workplace_type_id ?? selectedWorkplaceIds;
+      const jobId = values.job_type_id ?? selectedJobTypeIds;
       const numericUserId = Number.isFinite(Number(user?.id)) ? Number(user?.id) : undefined;
 
       const payload = {
         ...values,
-        workplace_type_id: wpId !== undefined && wpId !== null ? Number(wpId) : undefined,
-        job_type_id: jobId !== undefined && jobId !== null ? Number(jobId) : undefined,
+        workplace_type_id: wpId,
+        job_type_id: jobId,
         ...(method === 'post'
           ? { status: true, ...(numericUserId !== undefined && { created_by: numericUserId }) }
           : { ...(numericUserId !== undefined && { updated_by: numericUserId }) })
@@ -140,18 +158,20 @@ const CareerFormView = (props) => {
 
   // Select handlers (update form and local state)
   const handleSelectWorkplace = (val) => {
-    setSelectedWorkplaceId(val);
-    formInstance.setFieldsValue({ workplace_type_id: val });
+    const nextVal = Array.isArray(val) ? val : val != null ? [val] : [];
+    setSelectedWorkplaceIds(nextVal);
+    formInstance.setFieldsValue({ workplace_type_id: nextVal });
     if (typeof onFilterChange === 'function') {
-      onFilterChange({ workplace_type_id: val });
+      onFilterChange({ workplace_type_id: nextVal });
     }
   };
 
   const handleSelectJobType = (val) => {
-    setSelectedJobTypeId(val);
-    formInstance.setFieldsValue({ job_type_id: val });
+    const nextVal = Array.isArray(val) ? val : val != null ? [val] : [];
+    setSelectedJobTypeIds(nextVal);
+    formInstance.setFieldsValue({ job_type_id: nextVal });
     if (typeof onFilterChange === 'function') {
-      onFilterChange({ job_type_id: val });
+      onFilterChange({ job_type_id: nextVal });
     }
   };
 
@@ -168,8 +188,8 @@ const CareerFormView = (props) => {
                   action === 'add'
                     ? 'Add Career'
                     : action === 'edit'
-                      ? `Edit ${data?.title ?? ''}`
-                      : `Details ${data?.title ?? ''}`
+                      ? `Edit ${careerTitleText}`
+                      : `Detail ${careerTitleText}`
               }
             ]}
           />
@@ -181,106 +201,223 @@ const CareerFormView = (props) => {
             <Input />
           </Form.Item>
 
+          {action === 'detail' && (
+            <Row gutter={[16, 16]} className='row-container'>
+              <Col xs={24} sm={24}>
+                <CardSummary
+                  icon={<PieChartOutlined />}
+                  title='Total Applicants'
+                  value={dataSummaryApplication?.total}
+                />
+              </Col>
+            </Row>
+          )}
+
           <Row gutter={24}>
             {/* LEFT SIDE */}
             <Col span={14}>
-              <Card title='Job Information' className={style.card}>
-                <TranslationTabs>
-                  {(lang) => (
-                    <>
-                      <Form.Item
-                        label='Position Title'
-                        name={[lang, 'title']}
-                        rules={[{ required: true, message: 'Please input title!' }]}>
-                        <Input allowClear readOnly={viewOnly} />
-                      </Form.Item>
+              <Collapse
+                className={style.collapse}
+                expandIconPosition='end'
+                expandIcon={() => <DownOutlined />}
+                defaultActiveKey={['jobInformation', 'qualificationsBenefits']}
+                items={[
+                  {
+                    key: 'jobInformation',
+                    label: 'Job Information',
+                    children: (
+                      <TranslationTabs>
+                        {(lang) => (
+                          <>
+                            <Form.Item
+                              label='Position Title'
+                              name={[lang, 'title']}
+                              rules={[{ required: true, message: 'Please input title!' }]}>
+                              <Input allowClear disabled={viewOnly} />
+                            </Form.Item>
 
-                      <Form.Item
-                        label='Overview'
-                        name={[lang, 'overview']}
-                        rules={[{ required: true, message: 'Please input overview!' }]}>
-                        <Input.TextArea readOnly={viewOnly} />
-                      </Form.Item>
+                            <Form.Item
+                              label='Overview'
+                              name={[lang, 'overview']}
+                              rules={[{ required: true, message: 'Please input overview!' }]}>
+                              <Input.TextArea disabled={viewOnly} />
+                            </Form.Item>
 
-                      <Form.Item
-                        label='Responsibilities'
-                        name={[lang, 'responsibilities']}
-                        rules={[{ required: true, message: 'Please input responsibilities!' }]}>
-                        <TextEditor readOnly={viewOnly} />
-                      </Form.Item>
-                    </>
-                  )}
-                </TranslationTabs>
-              </Card>
+                            <Form.Item
+                              label={
+                                <Switch
+                                  checked={responsibilitiesEnabled}
+                                  onChange={(checked) => {
+                                    setResponsibilitiesEnabled(checked);
+                                    if (!checked) {
+                                      // clear both languages
+                                      try {
+                                        formInstance.setFields([
+                                          { name: ['en', 'responsibilities'], value: '' },
+                                          { name: ['id', 'responsibilities'], value: '' }
+                                        ]);
+                                      } catch {
+                                        // ignore
+                                      }
+                                    }
+                                  }}
+                                  data-label='Responsibilities'
+                                  size='small'
+                                  disabled={viewOnly}
+                                />
+                              }
+                              name={[lang, 'responsibilities']}
+                              rules={
+                                responsibilitiesEnabled
+                                  ? [{ required: true, message: 'Please input responsibilities!' }]
+                                  : []
+                              }>
+                              <TextEditor readOnly={viewOnly || !responsibilitiesEnabled} />
+                            </Form.Item>
+                          </>
+                        )}
+                      </TranslationTabs>
+                    )
+                  },
+                  {
+                    key: 'qualificationsBenefits',
+                    label: 'Qualifications & Benefits',
+                    children: (
+                      <TranslationTabs>
+                        {(lang) => (
+                          <>
+                            <Form.Item
+                              label={
+                                <Switch
+                                  checked={qualificationsEnabled}
+                                  onChange={(checked) => {
+                                    setQualificationsEnabled(checked);
+                                    if (!checked) {
+                                      try {
+                                        formInstance.setFields([
+                                          { name: ['en', 'qualifications'], value: '' },
+                                          { name: ['id', 'qualifications'], value: '' }
+                                        ]);
+                                      } catch {
+                                        // ignore
+                                      }
+                                    }
+                                  }}
+                                  data-label='Qualifications'
+                                  size='small'
+                                  disabled={viewOnly}
+                                />
+                              }
+                              name={[lang, 'qualifications']}
+                              rules={
+                                qualificationsEnabled
+                                  ? [{ required: true, message: 'Please input qualifications!' }]
+                                  : []
+                              }>
+                              <TextEditor readOnly={viewOnly || !qualificationsEnabled} />
+                            </Form.Item>
 
-              <Card title='Qualifications & Benefits' className={style.card}>
-                <TranslationTabs>
-                  {(lang) => (
-                    <>
-                      <Form.Item
-                        label='Qualifications'
-                        name={[lang, 'qualifications']}
-                        rules={[{ required: true, message: 'Please input qualifications!' }]}>
-                        <TextEditor readOnly={viewOnly} />
-                      </Form.Item>
-
-                      <Form.Item
-                        label='Perks & Benefit'
-                        name={[lang, 'benefit']}
-                        rules={[{ required: true, message: 'Please input qualifications!' }]}>
-                        <TextEditor readOnly={viewOnly} />
-                      </Form.Item>
-                    </>
-                  )}
-                </TranslationTabs>
-              </Card>
+                            <Form.Item
+                              label={
+                                <Switch
+                                  checked={benefitEnabled}
+                                  onChange={(checked) => {
+                                    setBenefitEnabled(checked);
+                                    if (!checked) {
+                                      try {
+                                        formInstance.setFields([
+                                          { name: ['en', 'benefit'], value: '' },
+                                          { name: ['id', 'benefit'], value: '' }
+                                        ]);
+                                      } catch {
+                                        // ignore
+                                      }
+                                    }
+                                  }}
+                                  data-label='Perks & Benefit'
+                                  size='small'
+                                  disabled={viewOnly}
+                                />
+                              }
+                              name={[lang, 'benefit']}
+                              rules={
+                                benefitEnabled ? [{ required: true, message: 'Please input qualifications!' }] : []
+                              }>
+                              <TextEditor readOnly={viewOnly || !benefitEnabled} />
+                            </Form.Item>
+                          </>
+                        )}
+                      </TranslationTabs>
+                    )
+                  }
+                ]}
+              />
             </Col>
 
             {/* RIGHT SIDE */}
             <Col span={10}>
-              <Card title='Job Type' className={style.card}>
-                <Form.Item label='Job Type' name='job_type_name' rules={[{ required: true }]}>
-                  <Select
-                    showSearch
-                    allowClear
-                    placeholder='Select Job Type'
-                    optionFilterProp='label'
-                    options={categoryJobTypeOptions?.map((category) => ({
-                      label: category.name,
-                      value: category.id
-                    }))}
-                    onChange={handleSelectJobType}
-                    filterSort={(optionA, optionB) =>
-                      (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                    }
-                    style={{ width: '100%' }}
-                    disabled={viewOnly}
-                    value={formInstance.getFieldValue('job_type_id') ?? selectedJobTypeId}
-                  />
-                </Form.Item>
-              </Card>
-
-              <Card title='Workplace' className={style.card}>
-                <Form.Item label='Workplace' name='workplace_type_name' rules={[{ required: true }]}>
-                  <Select
-                    showSearch
-                    allowClear
-                    placeholder='Select Workplace'
-                    optionFilterProp='label'
-                    options={categoryWorkplaceOptions?.map((category) => ({
-                      label: category.name,
-                      value: category.id
-                    }))}
-                    onChange={handleSelectWorkplace}
-                    filterSort={(optionA, optionB) =>
-                      (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                    }
-                    style={{ width: '100%' }}
-                    disabled={viewOnly}
-                    value={formInstance.getFieldValue('workplace_type_id') ?? selectedWorkplaceId}
-                  />
-                </Form.Item>
-              </Card>
+              <Collapse
+                className={style.collapse}
+                expandIconPosition='end'
+                expandIcon={() => <DownOutlined />}
+                defaultActiveKey={['jobType', 'workplace']}
+                items={[
+                  {
+                    key: 'jobType',
+                    label: 'Job Type',
+                    children: (
+                      <Form.Item name='job_type_id' rules={[{ required: true, message: 'Please enter Job Type' }]}>
+                        <Select
+                          mode='multiple'
+                          showSearch
+                          allowClear
+                          placeholder='Select job type'
+                          optionFilterProp='label'
+                          options={categoryJobTypeOptions?.map((category) => ({
+                            label: category.name,
+                            value: category.id
+                          }))}
+                          onChange={handleSelectJobType}
+                          filterSort={(optionA, optionB) =>
+                            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                          }
+                          style={{ width: '100%' }}
+                          disabled={viewOnly}
+                          value={formInstance.getFieldValue('job_type_id') ?? selectedJobTypeIds}
+                        />
+                      </Form.Item>
+                    )
+                  },
+                  {
+                    key: 'workplace',
+                    label: 'Workplace',
+                    children: (
+                      <Form.Item
+                        name='workplace_type_id'
+                        rules={[{ required: true, message: 'Please enter Workplace' }]}>
+                        <Select
+                          mode='multiple'
+                          showSearch
+                          allowClear
+                          placeholder='Select workplace'
+                          optionFilterProp='label'
+                          options={categoryWorkplaceOptions?.map((category) => ({
+                            label: category.name,
+                            value: category.id
+                          }))}
+                          onChange={handleSelectWorkplace}
+                          filterSort={(optionA, optionB) =>
+                            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                          }
+                          style={{ width: '100%' }}
+                          disabled={viewOnly}
+                          value={formInstance.getFieldValue('workplace_type_id') ?? selectedWorkplaceIds}
+                        />
+                      </Form.Item>
+                    )
+                  }
+                ]}
+              />
             </Col>
           </Row>
 

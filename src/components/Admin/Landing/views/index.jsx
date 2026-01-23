@@ -90,7 +90,11 @@ const AdminLanding = (props) => {
       if (record.id !== user?.id) {
         confirm({
           icon: <DeleteOutlined />,
-          content: `Are you sure you want to delete ${record.name.toLocaleLowerCase()}?`,
+          content: (
+            <span>
+              Are you sure you want to delete <strong>{record.name}</strong>?
+            </span>
+          ),
           onSuccess: async () => {
             const response = await onDelete(record.id);
             if (response && !response.error) {
@@ -134,7 +138,11 @@ const AdminLanding = (props) => {
 
         confirm({
           icon: <WarningOutlined />,
-          content: `Are you sure you want to ${title.toLowerCase()} ${record.name.toLocaleLowerCase()}?`,
+          content: (
+            <span>
+              Are you sure you want to {title.toLowerCase()} <strong>{record.name}</strong>?
+            </span>
+          ),
           onSuccess: async () => {
             const response = await onSuspend(formData);
             if (response && !response.error) {
