@@ -12,6 +12,7 @@ dayjs.locale('id');
 
 // -- style
 import style from '@components/Admin/Landing/styles/style.module.scss';
+import { render } from 'sass';
 
 const UserLog = (props) => {
   const {
@@ -50,7 +51,7 @@ const UserLog = (props) => {
         </div>
       )
     },
-    { dataIndex: 'created_at', align: 'right' }
+    { dataIndex: 'created_at', align: 'right', render: (value) => dayjs(value).format('DD MMM YYYY, HH:mm') }
   ];
 
   return (

@@ -28,19 +28,19 @@ const UserLogWidget = () => {
   const [filters, setFilters] = useState({ start_date: null, end_date: null, role_id: null });
 
   // Fetch role options
-  const { data: roleData } = useFirstLoad(useCallback(() => roleModel.list(), []));
+  // const { data: roleData } = useFirstLoad(useCallback(() => roleModel.list(), []));
 
   // Combine parameters for API
-  const fetchParams = useMemo(
-    () => ({ page: pagination.page, limit: pagination.limit, ...filters }),
-    [pagination.page, pagination.limit, filters]
-  );
+  // const fetchParams = useMemo(
+  //   () => ({ page: pagination.page, limit: pagination.limit, ...filters }),
+  //   [pagination.page, pagination.limit, filters]
+  // );
 
-  // Create a dynamic fetcher, depending on parameters
-  const fetcher = useCallback(() => userLogModel.list(fetchParams), [fetchParams]);
+  // // Create a dynamic fetcher, depending on parameters
+  // const fetcher = useCallback(() => userLogModel.list(fetchParams), [fetchParams]);
 
   // Hook to fetch data and refetch
-  const { ready, data } = useFirstLoad(fetcher);
+  // const { ready, data } = useFirstLoad(fetcher);
 
   // Handle pagination (from View)
   const handlePageChange = (page, limit) => {
@@ -55,12 +55,12 @@ const UserLogWidget = () => {
 
   return (
     <UserLogView
-      data={data?.data || []}
-      roleOptions={roleData?.data || []}
-      loading={!ready}
+      data={dummyData?.data || []}
+      roleOptions={dummyData?.role?.data || []}
+      loading={false}
       pagination={pagination}
       filters={filters}
-      totalPage={data?.total}
+      totalPage={dummyData?.total}
       dateRange={dateRange}
       setDateRange={setDateRange}
       onPageChange={handlePageChange}

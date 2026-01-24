@@ -64,6 +64,7 @@ const HeaderSection = (props) => {
         </h4>
         <Space size='middle' align='center'>
           <Dropdown
+            style={{ cursor: 'pointer' }}
             popupRender={(menu) => (
               <div className={style.dropdownContainer}>
                 {/* Header */}
